@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float projectileSize;
     [SerializeField] private float projectileSpeed;
     private GameObject currentProjectileGO;
+    [SerializeField] private float projectileRange; //life time
+    [SerializeField] private int projectileDamage; //life time
 
     private void Awake()
     {
@@ -94,9 +96,8 @@ public class PlayerController : MonoBehaviour
         {
             if(currentChargeTime <= 0)
             {
-               currentProjectileGO = Instantiate(projectileGO, porjectileSpawnPos.position, Quaternion.identity , porjectileSpawnPos);
-                currentProjectileGO.GetComponent<PlayerProjectile>().PC = this;
-                currentProjectileGO.GetComponent<PlayerProjectile>().projectileDamage = 1;
+                currentProjectileGO = Instantiate(projectileGO, porjectileSpawnPos.position, Quaternion.identity , porjectileSpawnPos);
+                currentProjectileGO.GetComponent<PlayerProjectile>().ProjectileSetUp(this, projectileDamage, projectileRange);
             }
             if(currentChargeTime <= shootChargeTime)
             {
@@ -115,11 +116,9 @@ public class PlayerController : MonoBehaviour
     {
         if(currentChargeTime >= shootChargeTime)
         {
-            Debug.Log("Shoot!");
+            Debug.Log("ShootDir = " + shootDir);
             currentProjectileGO.transform.parent = null;
-            currentProjectileGO.GetComponent<Rigidbody>().isKinematic = false;
-            currentProjectileGO.GetComponent<Rigidbody>().linearVelocity = new Vector3(shootDir.x, 0, shootDir.y) * projectileSpeed;
-            currentProjectileGO.GetComponent<PlayerProjectile>().launched = true;
+            currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(new Vector3(shootDir.x, 0, shootDir.y), projectileSpeed);
             currentProjectileGO = null;
             currentChargeTime = 0;
         }
@@ -160,12 +159,12 @@ public class PlayerController : MonoBehaviour
         playerInput.PlayerControls.Aim.started += ctx =>
         {
             AimStarted();
+            aimPressed = true;
         };
 
         playerInput.PlayerControls.Aim.performed += ctx =>
         {
             aimDir = ctx.ReadValue<Vector2>();
-            aimPressed = aimDir.x != 0 || aimDir.y != 0;
         };
 
         playerInput.PlayerControls.Aim.canceled += ctx =>
