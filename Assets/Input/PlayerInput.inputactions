@@ -19,7 +19,16 @@
                     "type": "Value",
                     "id": "4f59696e-b4b7-443d-8741-03610a3e1113",
                     "expectedControlType": "Vector2",
-                    "processors": "InvertVector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Reload",
+                    "type": "Value",
+                    "id": "154f90e9-4124-47e1-b373-acd201b6172d",
+                    "expectedControlType": "Integer",
+                    "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 }
@@ -156,6 +165,28 @@
                     "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "7c2ea6e9-44cd-4569-8d34-dd14f73ef5b7",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a7553901-fc01-4721-ba41-cb5ca43f1d15",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

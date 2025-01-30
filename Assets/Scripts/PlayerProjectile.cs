@@ -11,6 +11,7 @@ public class PlayerProjectile : MonoBehaviour
     public int projectileDamage;
     public float lifeTime;
     private float timeLaunched = 0;
+    private Vector3 launchSize;
     private void Start()
     {
         rb = this.GetComponent<Rigidbody>();
@@ -20,7 +21,7 @@ public class PlayerProjectile : MonoBehaviour
         if (launched)
         {
             timeLaunched += Time.deltaTime;
-            this.transform.localScale = Vector3.Lerp(this.transform.localScale, Vector3.zero, (timeLaunched / lifeTime) * Time.deltaTime);
+            this.transform.localScale = Vector3.Lerp(launchSize, Vector3.zero, (timeLaunched / lifeTime));
             if(timeLaunched >= lifeTime) Destroy(this.gameObject);
         }
     }
@@ -34,7 +35,10 @@ public class PlayerProjectile : MonoBehaviour
                 other.gameObject.GetComponent<EnemyBehaviour>().SetHealth(-projectileDamage);
             }
 
-            if (!launched) PC.ResetCharge();
+            if (!launched) 
+            {
+                PC.ResetCharge();
+            } 
             else Destroy(this.gameObject);
         }
     }
@@ -47,6 +51,7 @@ public class PlayerProjectile : MonoBehaviour
     }
     public void LaunchProjectile(Vector3 direction, float speed)
     {
+        launchSize = this.gameObject.transform.localScale;
         launched = true;
         rb.isKinematic = false;
         rb.linearVelocity = direction * speed;

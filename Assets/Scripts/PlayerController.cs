@@ -1,17 +1,16 @@
 using UnityEngine;
-
+using TMPro;
 public class PlayerController : MonoBehaviour
 {
+    private PlayerInput playerInput;
     private Rigidbody rb;
 
     [Header ("Gravity Varaibles")]
     [SerializeField] private float gravityForce = -9.81f;
 
-    private PlayerInput playerInput;
-
     [Header("Move Varaibles")]
     private bool movePressed;
-    [SerializeField] private float moveSpeed;
+    [SerializeField] public float moveSpeed;
     private float currentMoveSpeed;
     [SerializeField]private float moveSpeedIncreaser;
     private Vector2 moveDir;
@@ -24,14 +23,19 @@ public class PlayerController : MonoBehaviour
 
     [Header("Shoot Variables")]
     private float currentChargeTime;
-    [SerializeField] private float shootChargeTime;
+    [SerializeField] public float shootChargeTime;
     [SerializeField] private GameObject projectileGO;
     [SerializeField] private Transform porjectileSpawnPos;
-    [SerializeField] private float projectileSize;
-    [SerializeField] private float projectileSpeed;
+    [SerializeField] public float projectileSize;
+    [SerializeField] public float projectileSpeed;
     private GameObject currentProjectileGO;
-    [SerializeField] private float projectileRange; //life time
-    [SerializeField] private int projectileDamage; //life time
+    [SerializeField] public float projectileRange; //life time
+    [SerializeField] public int projectileDamage; //life time
+
+    [Header("Ammo Variables")]
+    public int currentBullets;
+    [SerializeField] public int maxBullets;
+    [SerializeField] private TMP_Text bulletsText;
 
     private void Awake()
     {
@@ -43,7 +47,7 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        currentBullets = maxBullets;
     }
 
     // Update is called once per frame
@@ -70,6 +74,11 @@ public class PlayerController : MonoBehaviour
         Shoot();
     }
 
+    private void ReloadStarted()
+    {
+        ReloadBullets();
+    }
+
     private void AddGravityForce()
     {
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, gravityForce, rb.linearVelocity.z);
@@ -94,20 +103,23 @@ public class PlayerController : MonoBehaviour
     {
         if (aimPressed)
         {
-            if(currentChargeTime <= 0)
+            if(currentBullets > 0)
             {
-                currentProjectileGO = Instantiate(projectileGO, porjectileSpawnPos.position, Quaternion.identity , porjectileSpawnPos);
-                currentProjectileGO.GetComponent<PlayerProjectile>().ProjectileSetUp(this, projectileDamage, projectileRange);
-            }
-            if(currentChargeTime <= shootChargeTime)
-            {
-                currentChargeTime += Time.deltaTime;
-                currentProjectileGO.transform.localScale = Vector3.Lerp(currentProjectileGO.transform.localScale, new Vector3(projectileSize, projectileSize, projectileSize), (currentChargeTime / shootChargeTime) * Time.deltaTime);
-            }
-            else
-            {
-                currentProjectileGO.GetComponent<MeshRenderer>().material.color = Color.green;
-                currentProjectileGO.GetComponent<PlayerProjectile>().charged = true;
+                if (currentChargeTime <= 0)
+                {
+                    currentProjectileGO = Instantiate(projectileGO, porjectileSpawnPos.position, Quaternion.identity, porjectileSpawnPos);
+                    currentProjectileGO.GetComponent<PlayerProjectile>().ProjectileSetUp(this, projectileDamage, projectileRange);
+                }
+                if (currentChargeTime <= shootChargeTime)
+                {
+                    currentChargeTime += Time.deltaTime;
+                    currentProjectileGO.transform.localScale = Vector3.Lerp(new Vector3(0.01f, 0.01f, 0.01f), new Vector3(projectileSize, projectileSize, projectileSize), (currentChargeTime / shootChargeTime));
+                }
+                else
+                {
+                    currentProjectileGO.GetComponent<MeshRenderer>().material.color = Color.green;
+                    currentProjectileGO.GetComponent<PlayerProjectile>().charged = true;
+                }
             }
         }
     }
@@ -121,6 +133,8 @@ public class PlayerController : MonoBehaviour
             currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(new Vector3(shootDir.x, 0, shootDir.y), projectileSpeed);
             currentProjectileGO = null;
             currentChargeTime = 0;
+            --currentBullets;
+            bulletsText.text = currentBullets + "/" + maxBullets;
         }
         else
         {
@@ -130,10 +144,52 @@ public class PlayerController : MonoBehaviour
 
     public void ResetCharge()
     {
-        currentProjectileGO.transform.parent = null;
-        Destroy(currentProjectileGO);
-        currentProjectileGO = null;
+        if(currentProjectileGO != null)
+        {
+            currentProjectileGO.transform.parent = null;
+            Destroy(currentProjectileGO);
+            currentProjectileGO = null;
+        }
         currentChargeTime = 0;
+    }
+
+    private void ReloadBullets()
+    {
+        if(currentBullets < maxBullets)
+        {
+            currentBullets = maxBullets;
+            bulletsText.text = currentBullets + "/" + maxBullets;
+        }
+    }
+
+    public void SetPlayerDamage(int damageMod)
+    {
+        projectileDamage += damageMod;
+    }
+    public void SetPlayerSpeed(float speedMod)
+    {
+        moveSpeed += speedMod;
+    }
+    public void SetPlayerRange(float rangeMod)
+    {
+        projectileRange += rangeMod;
+    }
+    public void SetPlayerProjectileSize(float projectileSizeMod)
+    {
+        projectileSize += projectileSizeMod;
+    }
+    public void SetPlayerProjectileSpeed(float projectileSpeedMod)
+    {
+        projectileSpeed += projectileSpeedMod;
+    }
+    public void SetPlayerChargeTime(float chargeTimeMod)
+    {
+        if(shootChargeTime > 0.1f) shootChargeTime += chargeTimeMod;
+        if (shootChargeTime > 0.1f) shootChargeTime = 0.1f;
+    }
+    public void SetPlayerMaxBullets(int bulletsMod)
+    {
+        maxBullets += bulletsMod;
     }
 
     private void HandleInput()
@@ -174,6 +230,23 @@ public class PlayerController : MonoBehaviour
             aimDir = Vector2.zero;
 
             AimFinished();
+        };
+
+
+        playerInput.PlayerControls.Reload.started += ctx =>
+        {
+            Debug.Log("Reload started");
+            ReloadStarted();
+        };
+
+        playerInput.PlayerControls.Reload.performed += ctx =>
+        {
+
+        };
+
+        playerInput.PlayerControls.Reload.canceled += ctx =>
+        {
+
         };
 
     }
