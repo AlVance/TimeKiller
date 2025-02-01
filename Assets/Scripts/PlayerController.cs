@@ -10,9 +10,17 @@ public class PlayerController : MonoBehaviour
 
     [Header("Move Varaibles")]
     private bool movePressed;
-    [SerializeField] public float moveSpeed;
+    [SerializeField] private float m_moveSpeed;
+    public float moveSpeed
+    {
+        get { return m_moveSpeed; }
+        set
+        {
+            m_moveSpeed = value;
+            UIManager.Instance.SetCurrentSpeedText(m_moveSpeed.ToString()); 
+        }
+    }
     private float currentMoveSpeed;
-    [SerializeField]private float moveSpeedIncreaser;
     private Vector2 moveDir;
 
     [Header("Aim Varaibles")]
@@ -23,19 +31,85 @@ public class PlayerController : MonoBehaviour
 
     [Header("Shoot Variables")]
     private float currentChargeTime;
-    [SerializeField] public float shootChargeTime;
+    [SerializeField] private float m_shootChargeTime;
+    public float shootChargeTime
+    {
+        get { return m_shootChargeTime; }
+        set
+        {
+            m_shootChargeTime = value;
+            UIManager.Instance.SetCurrentChargeTimeText(m_shootChargeTime.ToString());
+        }
+    }
     [SerializeField] private GameObject projectileGO;
     [SerializeField] private Transform porjectileSpawnPos;
-    [SerializeField] public float projectileSize;
-    [SerializeField] public float projectileSpeed;
+
+   [SerializeField] private float m_projectileSize;
+   public float projectileSize
+    {
+        get { return m_projectileSize; }
+        set
+        {
+            m_projectileSize = value;
+            UIManager.Instance.SetCurrentProjectileSizeText(m_projectileSize.ToString());
+        }
+    }
+
+    [SerializeField] private float m_projectileSpeed;
+    public float projectileSpeed
+    {
+        get { return m_projectileSpeed; }
+        set
+        {
+            m_projectileSpeed = value;
+            UIManager.Instance.SetCurrentProjectileSpeedText(m_projectileSpeed.ToString());
+        }
+    }
     private GameObject currentProjectileGO;
-    [SerializeField] public float projectileRange; //life time
-    [SerializeField] public int projectileDamage; //life time
+
+    [SerializeField] private float m_projectileRange;
+    public float projectileRange
+    {
+        get { return m_projectileRange; }
+        set 
+        {
+            m_projectileRange = value;
+            UIManager.Instance.SetCurrentRangeText(m_projectileRange.ToString()); 
+        }
+    }
+
+    [SerializeField] private int m_projectileDamage;
+    public int projectileDamage
+    {
+        get { return m_projectileDamage; }
+        set
+        {
+            m_projectileDamage = value;
+            UIManager.Instance.SetCurrentDamageText(m_projectileDamage.ToString());
+        }
+    }
 
     [Header("Ammo Variables")]
-    public int currentBullets;
-    [SerializeField] public int maxBullets;
-    [SerializeField] private TMP_Text bulletsText;
+    private int m_currentBullets;
+    public int currentBullets
+    {
+        get { return m_currentBullets; }
+        set 
+        {
+            m_currentBullets = value;
+            UIManager.Instance.SetBulletsText(m_currentBullets.ToString() + "/" + m_maxBullets.ToString());
+        }
+    }
+    [SerializeField] private int m_maxBullets;
+    public int maxBullets
+    {
+        get { return m_maxBullets; }
+        set
+        {
+            m_maxBullets = value;
+            UIManager.Instance.SetBulletsText(m_currentBullets.ToString() + "/" + m_maxBullets.ToString());
+        }
+    }
 
     private void Awake()
     {
@@ -134,7 +208,6 @@ public class PlayerController : MonoBehaviour
             currentProjectileGO = null;
             currentChargeTime = 0;
             --currentBullets;
-            bulletsText.text = currentBullets + "/" + maxBullets;
         }
         else
         {
@@ -158,40 +231,8 @@ public class PlayerController : MonoBehaviour
         if(currentBullets < maxBullets)
         {
             currentBullets = maxBullets;
-            bulletsText.text = currentBullets + "/" + maxBullets;
         }
     }
-
-    public void SetPlayerDamage(int damageMod)
-    {
-        projectileDamage += damageMod;
-    }
-    public void SetPlayerSpeed(float speedMod)
-    {
-        moveSpeed += speedMod;
-    }
-    public void SetPlayerRange(float rangeMod)
-    {
-        projectileRange += rangeMod;
-    }
-    public void SetPlayerProjectileSize(float projectileSizeMod)
-    {
-        projectileSize += projectileSizeMod;
-    }
-    public void SetPlayerProjectileSpeed(float projectileSpeedMod)
-    {
-        projectileSpeed += projectileSpeedMod;
-    }
-    public void SetPlayerChargeTime(float chargeTimeMod)
-    {
-        if(shootChargeTime > 0.1f) shootChargeTime += chargeTimeMod;
-        if (shootChargeTime > 0.1f) shootChargeTime = 0.1f;
-    }
-    public void SetPlayerMaxBullets(int bulletsMod)
-    {
-        maxBullets += bulletsMod;
-    }
-
     private void HandleInput()
     {
         playerInput.PlayerControls.Move.started += ctx =>

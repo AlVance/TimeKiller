@@ -1294,6 +1294,58 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 556133172}
   m_CullTransparentMesh: 1
+--- !u!1 &558056828
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 558056830}
+  - component: {fileID: 558056829}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &558056829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558056828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d2a4381d3b8aba40a694979405b6434, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentDamageText: {fileID: 235835113}
+  currentSpeedText: {fileID: 84440842}
+  currentRangeText: {fileID: 1858969892}
+  currentProjectileSizeText: {fileID: 541667268}
+  currentProjectileSpeedText: {fileID: 1577493771}
+  currentChargeTimeText: {fileID: 1740608897}
+  bulletsText: {fileID: 472667993}
+--- !u!4 &558056830
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558056828}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1491258990}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &576789881
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,7 +1732,7 @@ RectTransform:
   m_Children:
   - {fileID: 1294517413}
   - {fileID: 1558259796}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 558056830}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2936,10 +2988,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6905120389310956165, guid: 5e537cddc441d7f43bec932d35e7af34, type: 3}
-      propertyPath: bulletsText
-      value: 
-      objectReference: {fileID: 472667993}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3020,6 +3068,6 @@ SceneRoots:
   - {fileID: 2030537443}
   - {fileID: 1897239820}
   - {fileID: 190872236}
-  - {fileID: 1491258990}
   - {fileID: 576789884}
   - {fileID: 378214459}
+  - {fileID: 558056830}

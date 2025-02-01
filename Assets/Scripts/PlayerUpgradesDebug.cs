@@ -45,43 +45,36 @@ public class PlayerUpgradesDebug : MonoBehaviour
 
     private void UpgradeDamage()
     {
-        PC.SetPlayerDamage(damageUpgrade);
-        currentDamageText.text = "Damage: " + PC.projectileDamage;
+        PC.projectileDamage +=damageUpgrade;
     }
 
     private void UpgradeSpeed()
     {
-        PC.SetPlayerSpeed(speedUpgrade);
-        currentSpeedText.text = "Speed: " + PC.moveSpeed;
+        PC.moveSpeed += speedUpgrade;
     }
 
     private void UpgradeRange()
     {
-        PC.SetPlayerRange(rangeUpgrade);
-        currentRangeText.text = "Range: " + PC.projectileRange;
+        PC.projectileRange += rangeUpgrade;
     }
 
     private void UpgradePSpeed()
     {
-        PC.SetPlayerProjectileSpeed(projectileSpeedUpgrade);
-        currentProjectileSpeedText.text = "PSpeed " + PC.projectileSpeed;
+        PC.projectileSpeed+=projectileSpeedUpgrade;
     }
 
     private void UpgradePSize()
     {
-        PC.SetPlayerProjectileSize(projectileSizeUpgrade);
-        currentProjectileSizeText.text = "PSize " + PC.projectileSize;
+        PC.projectileSize+=projectileSizeUpgrade;
     }
 
     private void UpgradeChargeTime()
     {
-        PC.SetPlayerChargeTime(chargeTimeUpgrade);
-        currentChargeTimeText.text = "ChargeTime " + PC.shootChargeTime;
+        PC.shootChargeTime -= chargeTimeUpgrade;
     }
 
     private void UpgradeMaxBullets()
     {
-        PC.SetPlayerMaxBullets(maxBulletsUpgrade);
-        bulletsText.text = PC.currentBullets + "/" + PC.maxBullets;
+        PC.maxBullets += maxBulletsUpgrade;
     }
 }
