@@ -134,6 +134,7 @@ public class PlayerController : MonoBehaviour
             m_dashSpeed = value;
         }
     }
+    private bool isDashing = false;
 
     private void Awake()
     {
@@ -155,6 +156,7 @@ public class PlayerController : MonoBehaviour
         Movement();
         Aim();
         ChargeShot();
+        Dash();
     }
 
     private void MoveStarted()
@@ -180,7 +182,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            StartCoroutine(Dash());
+            EnterDash();
         }
     }
 
@@ -265,19 +267,35 @@ public class PlayerController : MonoBehaviour
         currentBullets = maxBullets;
     }
 
-    private IEnumerator Dash()
+    Vector2 dashDir;
+    private void EnterDash()
     {
         --currentBullets;
-        Vector2 dashDir;
         if (movePressed) dashDir = moveDir;
         else dashDir = lastMoveDir;
+
+        isDashing = true;
         canMove = false;
-        //rb.linearVelocity = Vector3.zero;
-        rb.linearVelocity = new Vector3(dashDir.x, rb.linearVelocity.y, dashDir.y) * dashSpeed;
-        yield return new WaitForSeconds(dashTime);
-        canMove = true;
     }
 
+    private float currentDashTime = 0;
+    private void Dash()
+    {
+        if (isDashing)
+        {
+            currentDashTime += Time.deltaTime;
+            if(currentDashTime<= dashTime)
+            {
+                rb.linearVelocity = new Vector3(dashDir.x * dashSpeed, rb.linearVelocity.y, dashDir.y * dashSpeed);
+            }
+            else
+            {
+                canMove = true;
+                currentDashTime = 0;
+                isDashing = false;
+            }
+        }
+    }
     private void HandleInput()
     {
         playerInput.PlayerControls.Move.started += ctx =>
