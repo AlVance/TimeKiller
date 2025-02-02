@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
+
 public class PlayerController : MonoBehaviour
 {
     private PlayerInput playerInput;
@@ -10,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Move Varaibles")]
     private bool movePressed;
+    private bool canMove = true;
     [SerializeField] private float m_moveSpeed;
     public float moveSpeed
     {
@@ -22,6 +25,7 @@ public class PlayerController : MonoBehaviour
     }
     private float currentMoveSpeed;
     private Vector2 moveDir;
+    private Vector2 lastMoveDir;
 
     [Header("Aim Varaibles")]
     private bool aimPressed;
@@ -111,6 +115,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    [Header("Ammo Variables")]
+    [SerializeField] private float m_dashTime;
+    public float dashTime
+    {
+        get { return m_dashTime; }
+        set 
+        {
+            m_dashTime = value;      
+        }
+    }
+    [SerializeField] private float m_dashSpeed;
+    public float dashSpeed
+    {
+        get { return m_dashSpeed; }
+        set
+        {
+            m_dashSpeed = value;
+        }
+    }
+
     private void Awake()
     {
         playerInput = new PlayerInput();
@@ -150,7 +174,14 @@ public class PlayerController : MonoBehaviour
 
     private void ReloadStarted()
     {
-        ReloadBullets();
+        if(currentBullets <= 0)
+        {
+            ReloadBullets();
+        }
+        else
+        {
+            StartCoroutine(Dash());
+        }
     }
 
     private void AddGravityForce()
@@ -160,9 +191,12 @@ public class PlayerController : MonoBehaviour
 
     private void Movement()
     {
-        currentMoveSpeed = moveSpeed;
-        rb.linearVelocity = new Vector3(moveDir.x * currentMoveSpeed, rb.linearVelocity.y, moveDir.y * currentMoveSpeed);
-        if (movePressed && !aimPressed) this.transform.rotation = Quaternion.LookRotation(new Vector3(moveDir.x, 0, moveDir.y));
+        if (canMove)
+        {
+            currentMoveSpeed = moveSpeed;
+            rb.linearVelocity = new Vector3(moveDir.x * currentMoveSpeed, rb.linearVelocity.y, moveDir.y * currentMoveSpeed);
+            if (movePressed && !aimPressed) this.transform.rotation = Quaternion.LookRotation(new Vector3(moveDir.x, 0, moveDir.y));
+        }
     }
 
     private void Aim()
@@ -228,11 +262,22 @@ public class PlayerController : MonoBehaviour
 
     private void ReloadBullets()
     {
-        if(currentBullets < maxBullets)
-        {
-            currentBullets = maxBullets;
-        }
+        currentBullets = maxBullets;
     }
+
+    private IEnumerator Dash()
+    {
+        --currentBullets;
+        Vector2 dashDir;
+        if (movePressed) dashDir = moveDir;
+        else dashDir = lastMoveDir;
+        canMove = false;
+        //rb.linearVelocity = Vector3.zero;
+        rb.linearVelocity = new Vector3(dashDir.x, rb.linearVelocity.y, dashDir.y) * dashSpeed;
+        yield return new WaitForSeconds(dashTime);
+        canMove = true;
+    }
+
     private void HandleInput()
     {
         playerInput.PlayerControls.Move.started += ctx =>
@@ -249,6 +294,7 @@ public class PlayerController : MonoBehaviour
         playerInput.PlayerControls.Move.canceled += ctx =>
         {
             movePressed = false;
+            lastMoveDir = moveDir;
             moveDir = Vector2.zero;
         };
 
