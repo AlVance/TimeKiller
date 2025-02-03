@@ -1,18 +1,24 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using Unity.Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
     private PlayerInput playerInput;
     private Rigidbody rb;
 
+    [Header("Camera Variables")]
+    [SerializeField] private CinemachineCamera playerCCam;
+    [SerializeField] private CinemachineCamera aimCCam;
+    [SerializeField] private Transform aimTargetTr;
+
+
     [Header ("Gravity Varaibles")]
     [SerializeField] private float gravityForce = -9.81f;
 
+
     [Header("Move Varaibles")]
-    private bool movePressed;
-    private bool canMove = true;
     [SerializeField] private float m_moveSpeed;
     public float moveSpeed
     {
@@ -20,12 +26,15 @@ public class PlayerController : MonoBehaviour
         set
         {
             m_moveSpeed = value;
-            UIManager.Instance.SetCurrentSpeedText(m_moveSpeed.ToString()); 
+            UIManager.Instance.SetCurrentSpeedText(m_moveSpeed.ToString());
         }
     }
+    private bool movePressed;
+    private bool canMove = true;
     private float currentMoveSpeed;
     private Vector2 moveDir;
     private Vector2 lastMoveDir;
+
 
     [Header("Aim Varaibles")]
     private bool aimPressed;
@@ -34,7 +43,6 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Shoot Variables")]
-    private float currentChargeTime;
     [SerializeField] private float m_shootChargeTime;
     public float shootChargeTime
     {
@@ -45,11 +53,11 @@ public class PlayerController : MonoBehaviour
             UIManager.Instance.SetCurrentChargeTimeText(m_shootChargeTime.ToString());
         }
     }
+    private float currentChargeTime;
     [SerializeField] private GameObject projectileGO;
     [SerializeField] private Transform porjectileSpawnPos;
-
-   [SerializeField] private float m_projectileSize;
-   public float projectileSize
+    [SerializeField] private float m_projectileSize;
+    public float projectileSize
     {
         get { return m_projectileSize; }
         set
@@ -93,17 +101,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    [SerializeField] private float moveDirShootInertia;
+
+
     [Header("Ammo Variables")]
-    private int m_currentBullets;
-    public int currentBullets
-    {
-        get { return m_currentBullets; }
-        set 
-        {
-            m_currentBullets = value;
-            UIManager.Instance.SetBulletsText(m_currentBullets.ToString() + "/" + m_maxBullets.ToString());
-        }
-    }
     [SerializeField] private int m_maxBullets;
     public int maxBullets
     {
@@ -114,6 +115,17 @@ public class PlayerController : MonoBehaviour
             UIManager.Instance.SetBulletsText(m_currentBullets.ToString() + "/" + m_maxBullets.ToString());
         }
     }
+    private int m_currentBullets;
+    public int currentBullets
+    {
+        get { return m_currentBullets; }
+        set 
+        {
+            m_currentBullets = value;
+            UIManager.Instance.SetBulletsText(m_currentBullets.ToString() + "/" + m_maxBullets.ToString());
+        }
+    }
+
 
     [Header("Ammo Variables")]
     [SerializeField] private float m_dashTime;
@@ -136,6 +148,8 @@ public class PlayerController : MonoBehaviour
     }
     private bool isDashing = false;
 
+
+
     private void Awake()
     {
         playerInput = new PlayerInput();
@@ -146,6 +160,7 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
         currentBullets = maxBullets;
     }
 
@@ -166,12 +181,20 @@ public class PlayerController : MonoBehaviour
 
     private void AimStarted()
     {
-
+        if(currentBullets > 0)
+        {
+            Camera.main.gameObject.GetComponent<FollowObject>().targetTr = aimTargetTr;
+            //aimCCam.gameObject.SetActive(true);
+            //playerCCam.gameObject.SetActive(false);
+        }
     }
 
     private void AimFinished()
     {
         Shoot();
+        Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+        //playerCCam.gameObject.SetActive(true);
+        //aimCCam.gameObject.SetActive(false);
     }
 
     private void ReloadStarted()
@@ -240,7 +263,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("ShootDir = " + shootDir);
             currentProjectileGO.transform.parent = null;
-            currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(new Vector3(shootDir.x, 0, shootDir.y), projectileSpeed);
+            currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(new Vector3(shootDir.x, 0, shootDir.y) + (new Vector3(moveDir.x, 0, moveDir.y) * moveDirShootInertia), projectileSpeed);
             currentProjectileGO = null;
             currentChargeTime = 0;
             --currentBullets;
