@@ -5,6 +5,10 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
+    [Header("Level UI Variables")]
+    [SerializeField] private TMP_Text timerText;
+
+    [Header("Player UI Variables")]
     [SerializeField] private TMP_Text currentDamageText;
     [SerializeField] private TMP_Text currentSpeedText;
     [SerializeField] private TMP_Text currentRangeText;

@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Aim Varaibles")]
+    [SerializeField] private GameObject aimDirAidGO;
     private bool aimPressed;
     private Vector2 aimDir;
     private Vector2 shootDir;
@@ -54,6 +55,9 @@ public class PlayerController : MonoBehaviour
         }
     }
     private float currentChargeTime;
+    [SerializeField] private float moveDirShootInertia;
+
+    [Header("Projectile Variables")]
     [SerializeField] private GameObject projectileGO;
     [SerializeField] private Transform porjectileSpawnPos;
     [SerializeField] private float m_projectileSize;
@@ -100,8 +104,6 @@ public class PlayerController : MonoBehaviour
             UIManager.Instance.SetCurrentDamageText(m_projectileDamage.ToString());
         }
     }
-
-    [SerializeField] private float moveDirShootInertia;
 
 
     [Header("Ammo Variables")]
@@ -183,6 +185,7 @@ public class PlayerController : MonoBehaviour
     {
         if(currentBullets > 0)
         {
+            aimDirAidGO.SetActive(true);
             Camera.main.gameObject.GetComponent<FollowObject>().targetTr = aimTargetTr;
             //aimCCam.gameObject.SetActive(true);
             //playerCCam.gameObject.SetActive(false);
@@ -192,6 +195,7 @@ public class PlayerController : MonoBehaviour
     private void AimFinished()
     {
         Shoot();
+        aimDirAidGO.SetActive(false);
         Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
         //playerCCam.gameObject.SetActive(true);
         //aimCCam.gameObject.SetActive(false);
