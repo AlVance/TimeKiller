@@ -4,6 +4,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    public GameObject currentPlayer;
+
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -17,4 +19,6 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
     }
+
+
 }

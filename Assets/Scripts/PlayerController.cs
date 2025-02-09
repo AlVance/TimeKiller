@@ -158,6 +158,7 @@ public class PlayerController : MonoBehaviour
         HandleInput();
 
         rb = this.GetComponent<Rigidbody>();
+        GameManager.Instance.currentPlayer = this.gameObject;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

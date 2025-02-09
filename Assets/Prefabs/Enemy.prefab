@@ -82,6 +82,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7714893649797608452}
   - component: {fileID: 3494984080200066669}
+  - component: {fileID: 359902892846937032}
   - component: {fileID: 4603332130237161075}
   - component: {fileID: 4100278792310416538}
   m_Layer: 0
@@ -125,6 +126,19 @@ MonoBehaviour:
   moveSpeed: 3
   moveAlongSpline: 1
   movementSpline: {fileID: 176084798887208131}
+--- !u!114 &359902892846937032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8028937348686628383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16220f0119b6f2440ba673e293cfe329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectivePoints: 1
 --- !u!54 &4603332130237161075
 Rigidbody:
   m_ObjectHideFlags: 0

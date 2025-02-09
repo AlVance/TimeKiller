@@ -13,6 +13,7 @@ public class EnemyBehaviour : MonoBehaviour
     [SerializeField] private SplineContainer movementSpline;
     private float distancePercentageSpline;
     private float movementSplineLength;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -20,7 +21,7 @@ public class EnemyBehaviour : MonoBehaviour
         if (moveAlongSpline)
         {
             movementSplineLength = movementSpline.CalculateLength();
-            movementSpline.gameObject.transform.parent = null;
+            movementSpline.gameObject.transform.parent = this.transform.parent;
         }
         else
         {
@@ -45,6 +46,7 @@ public class EnemyBehaviour : MonoBehaviour
     private void EnemyDeath()
     {
         Destroy(this.gameObject);
+        if (this.GetComponent<Objective>() != null) this.GetComponent<Objective>().SetCompletedObjective();
     }
 
     private void MoveAlongSpline()
@@ -64,5 +66,10 @@ public class EnemyBehaviour : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        movementSpline.gameObject.GetComponent<SplineInstantiate>().Clear();
     }
 }
