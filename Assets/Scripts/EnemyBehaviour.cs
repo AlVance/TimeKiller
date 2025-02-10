@@ -1,31 +1,42 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.Splines;
+using MyBox;
+using UnityEditor.Callbacks;
 
 public class EnemyBehaviour : MonoBehaviour
 {
+    private enum enemyMovementTypes { Static, Movable };
+    [SerializeField] private enemyMovementTypes enemyMovementType = enemyMovementTypes.Static;
+
+    private enum enemyBehaviourTypes { Standard};
+    [SerializeField] private enemyBehaviourTypes enemyBehaviourType = enemyBehaviourTypes.Standard;
 
     [SerializeField] private int enemyHealth = 1;
     private int currentEnemyHealth;
 
     [Header("Movement variables")]
-    [SerializeField] private float moveSpeed = 1;
-    [SerializeField] private bool moveAlongSpline = false;
-    [SerializeField] private SplineContainer movementSpline;
+    [SerializeField, ConditionalField(nameof(enemyMovementType), false, enemyMovementTypes.Movable)] 
+    private float moveSpeed = 1;
+    [SerializeField]
+    private SplineContainer movementSpline;
     private float distancePercentageSpline;
     private float movementSplineLength;
+
+    public SplineContainer MovementSpline { get => movementSpline; set => movementSpline = value; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         currentEnemyHealth = enemyHealth;
-        if (moveAlongSpline)
+        if (enemyMovementType == enemyMovementTypes.Movable)
         {
-            movementSplineLength = movementSpline.CalculateLength();
-            movementSpline.gameObject.transform.parent = this.transform.parent;
+            movementSplineLength = MovementSpline.CalculateLength();
+            MovementSpline.gameObject.transform.parent = this.transform.parent;
         }
         else
         {
-            movementSpline.gameObject.SetActive(false);
+            MovementSpline.gameObject.SetActive(false);
         }
     }
 
@@ -51,13 +62,13 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void MoveAlongSpline()
     {
-        if (moveAlongSpline)
+        if (enemyMovementType == enemyMovementTypes.Movable)
         {
-            if (movementSpline.Spline.Closed)
+            if (MovementSpline.Spline.Closed)
             {
                 distancePercentageSpline += moveSpeed * Time.deltaTime / movementSplineLength;
 
-                Vector3 currentPos = movementSpline.EvaluatePosition(distancePercentageSpline);
+                Vector3 currentPos = MovementSpline.EvaluatePosition(distancePercentageSpline);
                 this.transform.position = currentPos;
 
                 if (distancePercentageSpline >= 1f)
@@ -70,6 +81,29 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void OnDestroy()
     {
-        movementSpline.gameObject.GetComponent<SplineInstantiate>().Clear();
+        if(MovementSpline != null) MovementSpline.gameObject.GetComponent<SplineInstantiate>().Clear();
+    }
+
+    private void OnValidate()
+    {
+        UnityEditor.EditorApplication.delayCall += OnValidateCallBack;
+    }
+
+    private void OnValidateCallBack()
+    {
+        if (this == null)
+        {
+            UnityEditor.EditorApplication.delayCall -= OnValidateCallBack;
+            return; // MissingRefException if managed in the editor - uses the overloaded Unity == operator.
+        }
+
+        if (enemyMovementType == enemyMovementTypes.Movable)
+        {
+            MovementSpline.gameObject.SetActive(true);
+        }
+        if (enemyMovementType == enemyMovementTypes.Static)
+        {
+            MovementSpline.gameObject.SetActive(false);
+        }
     }
 }
