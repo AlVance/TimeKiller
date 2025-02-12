@@ -70,7 +70,7 @@ public class PlayerUpgradesDebug : MonoBehaviour
 
     private void UpgradeChargeTime()
     {
-        PC.shootChargeTime -= chargeTimeUpgrade;
+        PC.shootChargeTime += chargeTimeUpgrade;
     }
 
     private void UpgradeMaxBullets()

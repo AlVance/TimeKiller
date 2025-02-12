@@ -158,7 +158,7 @@ public class PlayerController : MonoBehaviour
         HandleInput();
 
         rb = this.GetComponent<Rigidbody>();
-        GameManager.Instance.currentPlayer = this.gameObject;
+        GameManager.Instance.currentPlayer = this;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -324,6 +324,14 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    public void ForcedMovement(Vector3 targetPos)
+    {
+        canMove = false;
+        this.transform.position = targetPos;
+        canMove = true;
+    }
+
     private void HandleInput()
     {
         playerInput.PlayerControls.Move.started += ctx =>

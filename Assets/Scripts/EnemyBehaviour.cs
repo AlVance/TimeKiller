@@ -9,8 +9,9 @@ public class EnemyBehaviour : MonoBehaviour
     private enum enemyMovementTypes { Static, Movable };
     [SerializeField] private enemyMovementTypes enemyMovementType = enemyMovementTypes.Static;
 
-    private enum enemyBehaviourTypes { Standard};
+    private enum enemyBehaviourTypes { Standard, TpOnKill};
     [SerializeField] private enemyBehaviourTypes enemyBehaviourType = enemyBehaviourTypes.Standard;
+
 
     [SerializeField] private int enemyHealth = 1;
     private int currentEnemyHealth;
@@ -25,6 +26,8 @@ public class EnemyBehaviour : MonoBehaviour
 
     public SplineContainer MovementSpline { get => movementSpline; set => movementSpline = value; }
 
+    [Header("Visual variables")]
+    [SerializeField] private GameObject enemyModelGO;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -38,6 +41,9 @@ public class EnemyBehaviour : MonoBehaviour
         {
             MovementSpline.gameObject.SetActive(false);
         }
+
+        EnemyBehaviourTypeSetter();
+        EnemyMovementTypeSetter();
     }
 
     private void Update()
@@ -58,6 +64,11 @@ public class EnemyBehaviour : MonoBehaviour
     {
         Destroy(this.gameObject);
         if (this.GetComponent<Objective>() != null) this.GetComponent<Objective>().SetCompletedObjective();
+
+        if(enemyBehaviourType == enemyBehaviourTypes.TpOnKill)
+        {
+            GameManager.Instance.currentPlayer.ForcedMovement(this.transform.position);
+        }
     }
 
     private void MoveAlongSpline()
@@ -94,16 +105,31 @@ public class EnemyBehaviour : MonoBehaviour
         if (this == null)
         {
             UnityEditor.EditorApplication.delayCall -= OnValidateCallBack;
-            return; // MissingRefException if managed in the editor - uses the overloaded Unity == operator.
         }
-
+        EnemyMovementTypeSetter();
+        //EnemyBehaviourTypeSetter();
+        
+    }
+    private void EnemyMovementTypeSetter()
+    {
         if (enemyMovementType == enemyMovementTypes.Movable)
         {
-            MovementSpline.gameObject.SetActive(true);
+            if (MovementSpline != null) MovementSpline.gameObject.SetActive(true);
         }
         if (enemyMovementType == enemyMovementTypes.Static)
         {
-            MovementSpline.gameObject.SetActive(false);
+            if(MovementSpline != null)MovementSpline.gameObject.SetActive(false);
+        }
+    }
+    private void EnemyBehaviourTypeSetter()
+    {
+        if (enemyBehaviourType == enemyBehaviourTypes.Standard)
+        {
+            if(enemyModelGO != null) this.enemyModelGO.GetComponent<MeshRenderer>().material.color = Color.red;
+        }
+        if (enemyBehaviourType == enemyBehaviourTypes.TpOnKill)
+        {
+            if (enemyModelGO != null) this.enemyModelGO.GetComponent<MeshRenderer>().material.color = Color.magenta;
         }
     }
 }
