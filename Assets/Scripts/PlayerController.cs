@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 using Unity.Cinemachine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -231,6 +232,7 @@ public class PlayerController : MonoBehaviour
 
     private void Aim()
     {
+        Debug.Log(aimDir);
         if (aimPressed)
         {
             this.transform.rotation = Quaternion.LookRotation(new Vector3(aimDir.x, 0, aimDir.y));
@@ -361,7 +363,18 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Aim.performed += ctx =>
         {
-            aimDir = ctx.ReadValue<Vector2>();
+            if (Mouse.current.leftButton.isPressed)
+            {
+                Vector2 tempAimDir = ctx.ReadValue<Vector2>();
+                tempAimDir.x -= Screen.width / 2;
+                tempAimDir.y -= Screen.height / 2;
+                aimDir = tempAimDir.normalized;
+            }
+            else
+            {
+                aimDir = ctx.ReadValue<Vector2>();
+            }
+            
         };
 
         playerInput.PlayerControls.Aim.canceled += ctx =>

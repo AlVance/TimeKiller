@@ -5,6 +5,9 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
+    [Header("Game UI Variables")]
+    [SerializeField] private GameObject mobileControlsUI;
+
     [Header("Level UI Variables")]
     [SerializeField] private TMP_Text timerText;
 
@@ -29,6 +32,12 @@ public class UIManager : MonoBehaviour
         {
             Instance = this;
         }
+    }
+
+    private void Start()
+    {
+        if (Application.isMobilePlatform) mobileControlsUI.SetActive(true);
+        else mobileControlsUI.SetActive(false);
     }
 
     public void SetCurrentDamageText(string newText)
