@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    private bool controllerStopped = false;
     private PlayerInput playerInput;
     private Rigidbody rb;
 
@@ -159,7 +160,7 @@ public class PlayerController : MonoBehaviour
         HandleInput();
 
         rb = this.GetComponent<Rigidbody>();
-        GameManager.Instance.currentPlayer = this;
+        if(GameManager.Instance != null) GameManager.Instance.currentPlayer = this;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -171,12 +172,16 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        AddGravityForce();
         Movement();
         Aim();
         ChargeShot();
         Dash();
     }
+    private void FixedUpdate()
+    {
+        AddGravityForce();
+    }
+
 
     private void MoveStarted()
     {
@@ -217,7 +222,9 @@ public class PlayerController : MonoBehaviour
 
     private void AddGravityForce()
     {
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, gravityForce, rb.linearVelocity.z);
+        if(rb.linearVelocity.y > gravityForce) rb.linearVelocity += new Vector3(0, gravityForce, 0);
+        else rb.linearVelocity = new Vector3(rb.linearVelocity.x, gravityForce, rb.linearVelocity.z);
+
     }
 
     private void Movement()
@@ -232,7 +239,6 @@ public class PlayerController : MonoBehaviour
 
     private void Aim()
     {
-        Debug.Log(aimDir);
         if (aimPressed)
         {
             this.transform.rotation = Quaternion.LookRotation(new Vector3(aimDir.x, 0, aimDir.y));

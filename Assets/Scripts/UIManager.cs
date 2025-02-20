@@ -9,7 +9,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject mobileControlsUI;
 
     [Header("Level UI Variables")]
-    [SerializeField] private TMP_Text timerText;
+    [SerializeField] private TMP_Text currentTimeText;
+    [SerializeField] private TMP_Text levelTimeText;
 
     [Header("Player UI Variables")]
     [SerializeField] private TMP_Text currentDamageText;
@@ -67,5 +68,15 @@ public class UIManager : MonoBehaviour
     public void SetBulletsText(string newText)
     {
         bulletsText.text = newText;
+    }
+
+    public void SetCurrentTimeText(string newText)
+    {
+        currentTimeText.text = newText;
+    }
+
+    public void SetLevelTimeText(string newText)
+    {
+        levelTimeText.text = newText;
     }
 }

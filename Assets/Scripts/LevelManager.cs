@@ -9,6 +9,8 @@ public class LevelManager : MonoBehaviour
     public GameObject currentLevelGO;
     private int currentLevel = 0;
 
+    [SerializeField] private float startLevelTime = 3f;
+
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -42,7 +44,26 @@ public class LevelManager : MonoBehaviour
             Destroy(currentLevelGO);
         }
         
-        currentLevelGO = Instantiate(levelsGO[currentLevel]);         
+        currentLevelGO = Instantiate(levelsGO[currentLevel]);
+        StartCoroutine(OnLevelStarted());
+    }
+
+    private IEnumerator OnLevelStarted()
+    {
+        TimeManager.Instance.levelTime = currentLevelGO.GetComponent<Level>().levelTime;
+        if (GameManager.Instance != null) GameManager.Instance.currentPlayer.transform.position = currentLevelGO.GetComponent<Level>().playerStartTr.position;
+
+        yield return new WaitForSeconds(startLevelTime);
+        GameManager.Instance.currentPlayer.enabled = true;
+        TimeManager.Instance.timerStarted = true;
+    }
+
+    public void OnLevelEnded()
+    {
+        GameManager.Instance.currentPlayer.enabled = false;
+        TimeManager.Instance.timerStarted = false;
+        TimeManager.Instance.currentTime += TimeManager.Instance.levelTime;
+        SetNextLevel();
     }
 
     private IEnumerator DestroyGOWithDelay(GameObject GO)
