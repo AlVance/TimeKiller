@@ -45,15 +45,25 @@ public class LevelManager : MonoBehaviour
         }
         
         currentLevelGO = Instantiate(levelsGO[currentLevel]);
+        currentLevelGO.GetComponent<Level>().lM = this;
+
         StartCoroutine(OnLevelStarted());
     }
 
     private IEnumerator OnLevelStarted()
     {
+        GameManager.Instance.currentPlayer.enabled = false;
         TimeManager.Instance.levelTime = currentLevelGO.GetComponent<Level>().levelTime;
         if (GameManager.Instance != null) GameManager.Instance.currentPlayer.transform.position = currentLevelGO.GetComponent<Level>().playerStartTr.position;
 
-        yield return new WaitForSeconds(startLevelTime);
+        UIManager.Instance.startLevelTimerText.gameObject.SetActive(true);
+        for (int i = 0; i < startLevelTime; i++)
+        {
+            UIManager.Instance.SetStartLevelTimerText((startLevelTime - i).ToString("0"));
+            yield return new WaitForSeconds(1f);
+        }
+
+        UIManager.Instance.startLevelTimerText.gameObject.SetActive(false);
         GameManager.Instance.currentPlayer.enabled = true;
         TimeManager.Instance.timerStarted = true;
     }

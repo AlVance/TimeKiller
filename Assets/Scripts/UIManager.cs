@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     [Header("Level UI Variables")]
     [SerializeField] private TMP_Text currentTimeText;
     [SerializeField] private TMP_Text levelTimeText;
+    [SerializeField] public TMP_Text startLevelTimerText;
 
     [Header("Player UI Variables")]
     [SerializeField] private TMP_Text currentDamageText;
@@ -78,5 +79,10 @@ public class UIManager : MonoBehaviour
     public void SetLevelTimeText(string newText)
     {
         levelTimeText.text = newText;
+    }
+
+    public void SetStartLevelTimerText(string newtext)
+    {
+        startLevelTimerText.text = newtext;
     }
 }

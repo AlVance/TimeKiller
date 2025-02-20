@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    private bool controllerStopped = false;
     private PlayerInput playerInput;
     private Rigidbody rb;
 
@@ -194,8 +193,6 @@ public class PlayerController : MonoBehaviour
         {
             aimDirAidGO.SetActive(true);
             Camera.main.gameObject.GetComponent<FollowObject>().targetTr = aimTargetTr;
-            //aimCCam.gameObject.SetActive(true);
-            //playerCCam.gameObject.SetActive(false);
         }
     }
 
@@ -204,8 +201,6 @@ public class PlayerController : MonoBehaviour
         Shoot();
         aimDirAidGO.SetActive(false);
         Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
-        //playerCCam.gameObject.SetActive(true);
-        //aimCCam.gameObject.SetActive(false);
     }
 
     private void ReloadStarted()
@@ -413,11 +408,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
+        rb.linearVelocity = Vector3.zero;
         playerInput.PlayerControls.Enable();
     }
 
     private void OnDisable()
     {
+        rb.linearVelocity = Vector3.zero;
         playerInput.PlayerControls.Disable();
     }
 }
