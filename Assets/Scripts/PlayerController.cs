@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        AddGravityForce();
+        if(!isDashing)AddGravityForce();
     }
 
 
@@ -318,7 +318,7 @@ public class PlayerController : MonoBehaviour
             currentDashTime += Time.deltaTime;
             if(currentDashTime<= dashTime)
             {
-                rb.linearVelocity = new Vector3(dashDir.x * dashSpeed, rb.linearVelocity.y, dashDir.y * dashSpeed);
+                rb.linearVelocity = new Vector3(dashDir.x * dashSpeed, 0, dashDir.y * dashSpeed);
             }
             else
             {
