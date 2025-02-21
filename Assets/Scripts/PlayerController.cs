@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
 
     [Header ("Gravity Varaibles")]
     [SerializeField] private float gravityForce = -9.81f;
+    [SerializeField] private float maxFallSpeed;
 
 
     [Header("Move Varaibles")]
@@ -217,8 +218,8 @@ public class PlayerController : MonoBehaviour
 
     private void AddGravityForce()
     {
-        if(rb.linearVelocity.y > gravityForce) rb.linearVelocity += new Vector3(0, gravityForce, 0);
-        else rb.linearVelocity = new Vector3(rb.linearVelocity.x, gravityForce, rb.linearVelocity.z);
+        if(rb.linearVelocity.y > maxFallSpeed) rb.linearVelocity += new Vector3(0, gravityForce, 0);
+        else rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
 
     }
 

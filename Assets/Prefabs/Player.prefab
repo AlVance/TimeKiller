@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startTime: 5
+  timerStarted: 0
 --- !u!1 &1004316095166301462
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +134,8 @@ MonoBehaviour:
   playerCCam: {fileID: 6303863611376040797}
   aimCCam: {fileID: 2898980658817259702}
   aimTargetTr: {fileID: 6076535337570582238}
-  gravityForce: -9.81
+  gravityForce: -4
+  maxFallSpeed: -50
   m_moveSpeed: 12
   aimDirAidGO: {fileID: 7249654577470585348}
   m_shootChargeTime: 0.8
