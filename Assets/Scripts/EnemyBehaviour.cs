@@ -27,7 +27,9 @@ public class EnemyBehaviour : MonoBehaviour
     public SplineContainer MovementSpline { get => movementSpline; set => movementSpline = value; }
 
     [Header("Visual variables")]
-    [SerializeField] private GameObject enemyModelGO;
+    private GameObject enemyModelGO;
+    [SerializeField] private GameObject enemyStandardModelGO;
+    [SerializeField] private GameObject enemyTpOnKillModelGO;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -107,7 +109,7 @@ public class EnemyBehaviour : MonoBehaviour
             UnityEditor.EditorApplication.delayCall -= OnValidateCallBack;
         }
         EnemyMovementTypeSetter();
-        //EnemyBehaviourTypeSetter();
+        EnemyBehaviourTypeSetter();
         
     }
     private void EnemyMovementTypeSetter()
@@ -123,13 +125,16 @@ public class EnemyBehaviour : MonoBehaviour
     }
     private void EnemyBehaviourTypeSetter()
     {
+        if (enemyModelGO != null) enemyModelGO.SetActive(false);
         if (enemyBehaviourType == enemyBehaviourTypes.Standard)
-        {
-            if(enemyModelGO != null) this.enemyModelGO.GetComponent<MeshRenderer>().material.color = Color.red;
+        {            
+            enemyModelGO = enemyStandardModelGO;
+            if (enemyModelGO != null) enemyModelGO.SetActive(true);
         }
         if (enemyBehaviourType == enemyBehaviourTypes.TpOnKill)
         {
-            if (enemyModelGO != null) this.enemyModelGO.GetComponent<MeshRenderer>().material.color = Color.magenta;
+            enemyModelGO = enemyTpOnKillModelGO;
+            if (enemyModelGO != null) enemyModelGO.SetActive(true);
         }
     }
 }

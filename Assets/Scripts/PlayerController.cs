@@ -58,6 +58,8 @@ public class PlayerController : MonoBehaviour
     }
     private float currentChargeTime;
     [SerializeField] private float moveDirShootInertia;
+    private bool shootCD = false;
+    [SerializeField] private float shootCDTime;
 
     [Header("Projectile Variables")]
     [SerializeField] private GameObject projectileGO;
@@ -243,7 +245,7 @@ public class PlayerController : MonoBehaviour
 
     private void ChargeShot()
     {
-        if (aimPressed)
+        if (aimPressed && !shootCD)
         {
             if(currentBullets > 0)
             {
@@ -259,8 +261,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    currentProjectileGO.GetComponent<MeshRenderer>().material.color = Color.green;
-                    currentProjectileGO.GetComponent<PlayerProjectile>().charged = true;
+                    currentProjectileGO.GetComponent<PlayerProjectile>().SetCharged();
                 }
             }
         }
@@ -281,6 +282,7 @@ public class PlayerController : MonoBehaviour
         {
             ResetCharge();
         }
+        StartCoroutine(ShootCD());
     }
 
     public void ResetCharge()
@@ -292,6 +294,13 @@ public class PlayerController : MonoBehaviour
             currentProjectileGO = null;
         }
         currentChargeTime = 0;
+    }
+
+    private IEnumerator ShootCD()
+    {
+        shootCD = true;
+        yield return new WaitForSeconds(shootCDTime);
+        shootCD = false;
     }
 
     private void ReloadBullets()

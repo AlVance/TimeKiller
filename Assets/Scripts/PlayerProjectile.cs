@@ -56,4 +56,10 @@ public class PlayerProjectile : MonoBehaviour
         rb.isKinematic = false;
         rb.linearVelocity = direction * speed;
     }
+
+    public void SetCharged()
+    {
+        this.GetComponent<MeshRenderer>().material.color = Color.green;
+        charged = true;
+    }
 }

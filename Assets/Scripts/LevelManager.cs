@@ -52,11 +52,14 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator OnLevelStarted()
     {
+        yield return new WaitForEndOfFrame();
+
         GameManager.Instance.currentPlayer.enabled = false;
         TimeManager.Instance.levelTime = currentLevelGO.GetComponent<Level>().levelTime;
-        if (GameManager.Instance != null) GameManager.Instance.currentPlayer.transform.position = currentLevelGO.GetComponent<Level>().playerStartTr.position;
+        GameManager.Instance.currentPlayer.gameObject.transform.position = currentLevelGO.GetComponent<Level>().playerStartTr.position;
 
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(true);
+
         for (int i = 0; i < startLevelTime; i++)
         {
             UIManager.Instance.SetStartLevelTimerText((startLevelTime - i).ToString("0"));
