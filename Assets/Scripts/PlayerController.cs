@@ -19,6 +19,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float gravityForce = -9.81f;
     [SerializeField] private float maxFallSpeed;
 
+    [Header("Ground Check Variables")]
+    [SerializeField] private Transform groundCheckOriginTr;
+    [SerializeField] private float groundCheckDistance;
+    [SerializeField] private LayerMask groundCheckLayersToIgnore;
+    private bool isGrounded;
 
     [Header("Move Varaibles")]
     [SerializeField] private float m_moveSpeed;
@@ -186,6 +191,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         if(!isDashing)AddGravityForce();
+        GroundCheck();
     }
 
 
@@ -222,10 +228,29 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void GroundCheck()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(groundCheckOriginTr.position, Vector3.down, out hit, groundCheckDistance, groundCheckLayersToIgnore))
+        {
+            isGrounded = true;
+        }
+        else isGrounded = false;
+
+        Debug.DrawRay(groundCheckOriginTr.position, Vector3.down * groundCheckDistance, Color.green);
+    }
+
     private void AddGravityForce()
     {
-        if(rb.linearVelocity.y > maxFallSpeed) rb.linearVelocity += new Vector3(0, gravityForce, 0);
-        else rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
+        if (!isGrounded)
+        {
+            if (rb.linearVelocity.y > maxFallSpeed) rb.linearVelocity += new Vector3(0, gravityForce, 0);
+            else rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
+        }
+        else
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, rb.linearVelocity.z);
+        }
 
     }
 
