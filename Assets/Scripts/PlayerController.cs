@@ -119,6 +119,7 @@ public class PlayerController : MonoBehaviour
         {
             m_maxBullets = value;
             UIManager.Instance.SetBulletsText(m_currentBullets.ToString() + "/" + m_maxBullets.ToString());
+            UIManager.Instance.SetNewMaxBulletsImg(m_maxBullets);
         }
     }
     private int m_currentBullets;
@@ -129,11 +130,12 @@ public class PlayerController : MonoBehaviour
         {
             m_currentBullets = value;
             UIManager.Instance.SetBulletsText(m_currentBullets.ToString() + "/" + m_maxBullets.ToString());
+            UIManager.Instance.SetCurrentBulletsImg(m_currentBullets, m_maxBullets);
         }
     }
 
 
-    [Header("Ammo Variables")]
+    [Header("Dash Variables")]
     [SerializeField] private float m_dashTime;
     public float dashTime
     {
@@ -162,12 +164,14 @@ public class PlayerController : MonoBehaviour
         HandleInput();
 
         rb = this.GetComponent<Rigidbody>();
-        if(GameManager.Instance != null) GameManager.Instance.currentPlayer = this;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (GameManager.Instance != null) GameManager.Instance.currentPlayer = this;
         Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+
+        maxBullets = m_maxBullets;
         currentBullets = maxBullets;
     }
 
@@ -315,6 +319,7 @@ public class PlayerController : MonoBehaviour
         if (movePressed) dashDir = moveDir;
         else dashDir = lastMoveDir;
 
+        rb.linearVelocity = Vector3.zero;
         isDashing = true;
         canMove = false;
     }
@@ -327,7 +332,7 @@ public class PlayerController : MonoBehaviour
             currentDashTime += Time.deltaTime;
             if(currentDashTime<= dashTime)
             {
-                rb.linearVelocity = new Vector3(dashDir.x * dashSpeed, 0, dashDir.y * dashSpeed);
+                rb.linearVelocity = new Vector3(dashDir.x * dashSpeed, rb.linearVelocity.y, dashDir.y * dashSpeed);
             }
             else
             {

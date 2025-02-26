@@ -21,6 +21,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text currentProjectileSpeedText;
     [SerializeField] private TMP_Text currentChargeTimeText;
     [SerializeField] private TMP_Text bulletsText;
+    [SerializeField] private GameObject bulletsUIContainerGO;
+    [SerializeField] private GameObject bulletImage;
 
     private void Awake()
     {
@@ -84,5 +86,31 @@ public class UIManager : MonoBehaviour
     public void SetStartLevelTimerText(string newtext)
     {
         startLevelTimerText.text = newtext;
+    }
+
+    public void SetNewMaxBulletsImg(int maxBullets)
+    {
+        int y = bulletsUIContainerGO.transform.childCount;
+        for (int i = 0; i < maxBullets - y; i++)
+        {
+            Instantiate(bulletImage, bulletsUIContainerGO.transform);
+        }
+    }
+
+    public void SetCurrentBulletsImg(int currentBullets, int maxBullets)
+    {
+        if(maxBullets - currentBullets > 0)
+        {
+            for (int i = 0; i < maxBullets - currentBullets; i++)
+            {
+                if (bulletsUIContainerGO.transform.GetChild(bulletsUIContainerGO.transform.childCount - 1 - i) != null) 
+                    bulletsUIContainerGO.transform.GetChild(bulletsUIContainerGO.transform.childCount - 1 - i).gameObject.SetActive(false);
+            }
+        }
+        for (int i = 0; i < currentBullets; i++)
+        {
+            if(bulletsUIContainerGO.transform.GetChild(i) == null) Instantiate(bulletImage, bulletsUIContainerGO.transform);
+            bulletsUIContainerGO.transform.GetChild(i).gameObject.SetActive(true);
+        }
     }
 }
