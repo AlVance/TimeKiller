@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     [Header("Ground Check Variables")]
     [SerializeField] private Transform groundCheckOriginTr;
     [SerializeField] private float groundCheckDistance;
-    [SerializeField] private LayerMask groundCheckLayersToIgnore;
+    [SerializeField] private LayerMask groundCheckLayersToCheck;
     private bool isGrounded;
 
     [Header("Move Varaibles")]
@@ -231,7 +231,7 @@ public class PlayerController : MonoBehaviour
     private void GroundCheck()
     {
         RaycastHit hit;
-        if (Physics.Raycast(groundCheckOriginTr.position, Vector3.down, out hit, groundCheckDistance, groundCheckLayersToIgnore))
+        if (Physics.Raycast(groundCheckOriginTr.position, Vector3.down, out hit, groundCheckDistance, groundCheckLayersToCheck))
         {
             isGrounded = true;
         }
