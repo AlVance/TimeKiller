@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
-using Unity.Cinemachine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -9,21 +8,22 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private Rigidbody rb;
 
+
     [Header("Camera Variables")]
-    [SerializeField] private CinemachineCamera playerCCam;
-    [SerializeField] private CinemachineCamera aimCCam;
     [SerializeField] private Transform aimTargetTr;
 
 
     [Header ("Gravity Varaibles")]
-    [SerializeField] private float gravityForce = -9.81f;
+    [SerializeField] private float gravityForce;
     [SerializeField] private float maxFallSpeed;
+
 
     [Header("Ground Check Variables")]
     [SerializeField] private Transform groundCheckOriginTr;
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private LayerMask groundCheckLayersToCheck;
     private bool isGrounded;
+
 
     [Header("Move Varaibles")]
     [SerializeField] private float m_moveSpeed;
@@ -65,6 +65,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveDirShootInertia;
     private bool shootCD = false;
     [SerializeField] private float shootCDTime;
+
 
     [Header("Projectile Variables")]
     [SerializeField] private GameObject projectileGO;
@@ -274,7 +275,7 @@ public class PlayerController : MonoBehaviour
 
     private void ChargeShot()
     {
-        if (aimPressed && !shootCD)
+        if (aimPressed && !shootCD && !isDashing)
         {
             if(currentBullets > 0)
             {
@@ -300,7 +301,6 @@ public class PlayerController : MonoBehaviour
     {
         if(currentChargeTime >= shootChargeTime)
         {
-            Debug.Log("ShootDir = " + shootDir);
             currentProjectileGO.transform.parent = null;
             currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(new Vector3(shootDir.x, 0, shootDir.y) + (new Vector3(moveDir.x, 0, moveDir.y) * moveDirShootInertia), projectileSpeed);
             currentProjectileGO = null;
@@ -344,6 +344,7 @@ public class PlayerController : MonoBehaviour
         if (movePressed) dashDir = moveDir;
         else dashDir = lastMoveDir;
 
+        ResetCharge();
         rb.linearVelocity = Vector3.zero;
         isDashing = true;
         canMove = false;
@@ -372,6 +373,13 @@ public class PlayerController : MonoBehaviour
     {
         canMove = false;
         this.transform.position = targetPos;
+        canMove = true;
+    }
+
+    public void ResetPlayer()
+    {
+        ResetCharge();
+        currentBullets = maxBullets;
         canMove = true;
     }
 
@@ -430,7 +438,6 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Reload.started += ctx =>
         {
-            Debug.Log("Reload started");
             ReloadStarted();
         };
 

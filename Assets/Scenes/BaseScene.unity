@@ -3108,7 +3108,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1549827507971658855}
-  - component: {fileID: 1549827507971658856}
   m_Layer: 0
   m_Name: AmmoCountUI
   m_TagString: Untagged
@@ -3132,22 +3131,6 @@ Transform:
   - {fileID: 4838046665615455904}
   m_Father: {fileID: 558056830}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1549827507971658856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1284498600621720506}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7597e4a5ede0d5b4b93eb5b79050efe0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetTr: {fileID: 1455268217}
-  followOffset: {x: 0, y: 0.05, z: 0}
-  followSmooth: 0
-  followSpeed: 0
 --- !u!223 &2202256401731092018
 Canvas:
   m_ObjectHideFlags: 0
@@ -3237,6 +3220,8 @@ GameObject:
   - component: {fileID: 2202256401731092018}
   - component: {fileID: 6089721602487753749}
   - component: {fileID: 3967032951917935061}
+  - component: {fileID: 6089721602487753750}
+  - component: {fileID: 6089721602487753751}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -3267,6 +3252,34 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 1
+--- !u!114 &6089721602487753750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5366513656472218301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc908b006038c984baeb42660232ac4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6089721602487753751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5366513656472218301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7597e4a5ede0d5b4b93eb5b79050efe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetTr: {fileID: 1455268217}
+  followOffset: {x: 0, y: 2, z: 0}
+  followSmooth: 0
+  followSpeed: 0
 --- !u!224 &6660657985986949032
 RectTransform:
   m_ObjectHideFlags: 0
