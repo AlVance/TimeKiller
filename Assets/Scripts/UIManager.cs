@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class UIManager : MonoBehaviour
@@ -23,6 +24,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text bulletsText;
     [SerializeField] private GameObject bulletsUIContainerGO;
     [SerializeField] private GameObject bulletImage;
+
+    [Header("Reload QTE UI Variables")]
+    [SerializeField] private float maxPoint;
+    [SerializeField] private GameObject ReloadQTEGO;
+    [SerializeField] private GameObject valueBarGO;
+
 
     private void Awake()
     {
@@ -112,5 +119,15 @@ public class UIManager : MonoBehaviour
             if(bulletsUIContainerGO.transform.GetChild(i) == null) Instantiate(bulletImage, bulletsUIContainerGO.transform);
             bulletsUIContainerGO.transform.GetChild(i).gameObject.SetActive(true);
         }
+    }
+
+    public void SetReloadValueBar(float newValue)
+    {
+        valueBarGO.GetComponent<RectTransform>().anchoredPosition = new Vector3(newValue * maxPoint, valueBarGO.GetComponent<RectTransform>().anchoredPosition.y, 0);
+    }
+
+    public void SetReloadQTEActive(bool isActive)
+    {
+        ReloadQTEGO.SetActive(isActive);
     }
 }

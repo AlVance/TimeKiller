@@ -140,6 +140,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    [Header("Reload Variables")]
+    [SerializeField] private float reloadBarSpeed;
+    private float reloadBarCurrentValue = 0;
+    private bool isReloading = false;
 
     [Header("Dash Variables")]
     [SerializeField] private float m_dashTime;
@@ -188,6 +192,7 @@ public class PlayerController : MonoBehaviour
         Aim();
         ChargeShot();
         Dash();
+        ReloadQTE();
     }
     private void FixedUpdate()
     {
@@ -219,13 +224,20 @@ public class PlayerController : MonoBehaviour
 
     private void ReloadStarted()
     {
-        if(currentBullets <= 0)
+        if (!isReloading)
         {
-            ReloadBullets();
+            if (currentBullets <= 0)
+            {
+                ReloadBullets();
+            }
+            else
+            {
+                EnterDash();
+            }
         }
         else
         {
-            EnterDash();
+            StopReloadQTE();
         }
     }
 
@@ -334,8 +346,30 @@ public class PlayerController : MonoBehaviour
 
     private void ReloadBullets()
     {
-        currentBullets = maxBullets;
+        reloadBarCurrentValue = 1;
+        UIManager.Instance.SetReloadValueBar(reloadBarCurrentValue);
+        UIManager.Instance.SetReloadQTEActive(true);
+        isReloading = true;        
     }
+    
+    private void ReloadQTE()
+    {
+        if (isReloading)
+        {
+            reloadBarCurrentValue -= reloadBarSpeed * Time.deltaTime;
+            UIManager.Instance.SetReloadValueBar(reloadBarCurrentValue);
+            if (reloadBarCurrentValue <= 0) StopReloadQTE();
+        }
+    }
+    private void StopReloadQTE()
+    {
+        currentBullets = maxBullets;
+        isReloading = false;
+        UIManager.Instance.SetReloadQTEActive(false);
+        UIManager.Instance.SetReloadValueBar(1);
+    }
+
+
 
     Vector2 dashDir;
     private void EnterDash()
