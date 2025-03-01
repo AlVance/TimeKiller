@@ -113,7 +113,7 @@ public class UIManager : MonoBehaviour
         //        bulletsUIContainerGO.transform.GetChild(bulletsUIContainerGO.transform.childCount - 1 - i).gameObject.SetActive(false);
         //}
     }
-    public void SetReloadedBulletsImg(int currentBullets)
+    public void SetReloadedBulletsImg(int currentBullets, int maxBullets)
     {
         if (currentBullets > bulletsUIContainerGO.transform.childCount)
         {
@@ -125,7 +125,12 @@ public class UIManager : MonoBehaviour
         }
         for (int i = 0; i < currentBullets; i++)
         {
+            bulletsUIContainerGO.transform.GetChild(i).gameObject.GetComponent<Image>().color = Color.white;
             bulletsUIContainerGO.transform.GetChild(i).gameObject.SetActive(true);
+            if(i >= maxBullets)
+            {
+                bulletsUIContainerGO.transform.GetChild(i).gameObject.GetComponent<Image>().color = Color.blue;
+            }
         }
         //Deactivate ammo while using it
         //if (maxBullets - currentBullets > 0)

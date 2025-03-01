@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                UIManager.Instance.SetReloadedBulletsImg(value);
+                UIManager.Instance.SetReloadedBulletsImg(value, maxBullets);
             }
             m_currentBullets = value;
             UIManager.Instance.SetBulletsText(m_currentBullets.ToString() + "/" + m_maxBullets.ToString());
@@ -451,6 +451,9 @@ public class PlayerController : MonoBehaviour
         ResetCharge();
         currentBullets = maxBullets;
         canMove = true;
+        isReloading = false;
+        UIManager.Instance.SetReloadQTEActive(false);
+        reloadBarCurrentValue = 1;
     }
 
     private void HandleInput()
