@@ -134,15 +134,43 @@ public class PlayerController : MonoBehaviour
         get { return m_currentBullets; }
         set 
         {
+            if(value < m_currentBullets)
+            {
+                UIManager.Instance.SetUsedBulletsImg(m_currentBullets);
+            }
+            else
+            {
+                UIManager.Instance.SetReloadedBulletsImg(value);
+            }
             m_currentBullets = value;
             UIManager.Instance.SetBulletsText(m_currentBullets.ToString() + "/" + m_maxBullets.ToString());
-            UIManager.Instance.SetCurrentBulletsImg(m_currentBullets, m_maxBullets);
         }
     }
 
+
     [Header("Reload Variables")]
-    [SerializeField] private float reloadBarSpeed;
+    [SerializeField] private float m_reloadBarSpeed;
+    private float reloadBarSpeed
+    {
+        get { return m_reloadBarSpeed; }
+        set
+        {
+            m_reloadBarSpeed = value;
+            UIManager.Instance.SetReloadValueBar(m_reloadBarSpeed);
+        }
+    }
     private float reloadBarCurrentValue = 0;
+    [SerializeField] private float m_successReloadRate;
+    private float successReloadRate
+    {
+        get { return m_successReloadRate; }
+        set
+        {
+            m_successReloadRate = value;
+            UIManager.Instance.SetReloadSuccessBar(m_successReloadRate);
+        }
+    }
+    [SerializeField] private int extraBulletsOnSuccess;
     private bool isReloading = false;
 
     [Header("Dash Variables")]
@@ -183,6 +211,7 @@ public class PlayerController : MonoBehaviour
 
         maxBullets = m_maxBullets;
         currentBullets = maxBullets;
+        successReloadRate = m_successReloadRate;
     }
 
     // Update is called once per frame
@@ -363,10 +392,17 @@ public class PlayerController : MonoBehaviour
     }
     private void StopReloadQTE()
     {
-        currentBullets = maxBullets;
+        if(reloadBarCurrentValue < successReloadRate + 0.1f && reloadBarCurrentValue > 0.1f)
+        {
+            currentBullets = maxBullets + extraBulletsOnSuccess;
+        }
+        else
+        {
+            currentBullets = maxBullets;
+        }
         isReloading = false;
         UIManager.Instance.SetReloadQTEActive(false);
-        UIManager.Instance.SetReloadValueBar(1);
+        reloadBarCurrentValue = 1;
     }
 
 

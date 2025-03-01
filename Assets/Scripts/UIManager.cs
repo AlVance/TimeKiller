@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float maxPoint;
     [SerializeField] private GameObject ReloadQTEGO;
     [SerializeField] private GameObject valueBarGO;
-
+    [SerializeField] private GameObject successBarGO;
 
     private void Awake()
     {
@@ -104,21 +104,46 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetCurrentBulletsImg(int currentBullets, int maxBullets)
+    public void SetUsedBulletsImg(int lastBullets)
     {
-        if(maxBullets - currentBullets > 0)
+        bulletsUIContainerGO.transform.GetChild(lastBullets - 1).gameObject.SetActive(false);
+        //for (int i = 0; i < lastBullets - newBullets; i++)
+        //{
+        //    if (bulletsUIContainerGO.transform.GetChild(bulletsUIContainerGO.transform.childCount - 1 - i) != null)
+        //        bulletsUIContainerGO.transform.GetChild(bulletsUIContainerGO.transform.childCount - 1 - i).gameObject.SetActive(false);
+        //}
+    }
+    public void SetReloadedBulletsImg(int currentBullets)
+    {
+        if (currentBullets > bulletsUIContainerGO.transform.childCount)
         {
-            for (int i = 0; i < maxBullets - currentBullets; i++)
+            int a = currentBullets - bulletsUIContainerGO.transform.childCount;
+            for (int i = 0; i < a; i++)
             {
-                if (bulletsUIContainerGO.transform.GetChild(bulletsUIContainerGO.transform.childCount - 1 - i) != null) 
-                    bulletsUIContainerGO.transform.GetChild(bulletsUIContainerGO.transform.childCount - 1 - i).gameObject.SetActive(false);
+                Instantiate(bulletImage, bulletsUIContainerGO.transform);
             }
         }
         for (int i = 0; i < currentBullets; i++)
         {
-            if(bulletsUIContainerGO.transform.GetChild(i) == null) Instantiate(bulletImage, bulletsUIContainerGO.transform);
             bulletsUIContainerGO.transform.GetChild(i).gameObject.SetActive(true);
         }
+        //Deactivate ammo while using it
+        //if (maxBullets - currentBullets > 0)
+        //{
+        //    for (int i = 0; i < maxBullets - currentBullets; i++)
+        //    {
+        //        if (bulletsUIContainerGO.transform.GetChild(bulletsUIContainerGO.transform.childCount - 1 - i) != null) 
+        //            bulletsUIContainerGO.transform.GetChild(bulletsUIContainerGO.transform.childCount - 1 - i).gameObject.SetActive(false);
+        //    }
+        //}
+        //else
+        //{
+        //    for (int i = 0; i < currentBullets; i++)
+        //    {
+        //        bulletsUIContainerGO.transform.GetChild(i).gameObject.SetActive(true);
+        //    }
+        //}
+        
     }
 
     public void SetReloadValueBar(float newValue)
@@ -129,5 +154,10 @@ public class UIManager : MonoBehaviour
     public void SetReloadQTEActive(bool isActive)
     {
         ReloadQTEGO.SetActive(isActive);
+    }
+
+    public void SetReloadSuccessBar(float newSuccessValue)
+    {
+        successBarGO.GetComponent<RectTransform>().sizeDelta = new Vector2((newSuccessValue - 0.1f) * maxPoint, successBarGO.GetComponent<RectTransform>().sizeDelta.y);
     }
 }
