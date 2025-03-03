@@ -8,14 +8,18 @@ public class FollowObject : MonoBehaviour
     [SerializeField] private bool followSmooth;
     [SerializeField] private float followSpeed;
 
-    // Update is called once per frame
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         if (!followSmooth)
         {
             this.transform.position = targetTr.position + followOffset;
         }
-        else
+    }
+    // Update is called once per frame
+    private void FixedUpdate()
+    {
+        
+        if(followSmooth)
         {
             this.transform.position += ((targetTr.position + followOffset) - this.transform.position) * followSpeed * Time.deltaTime;
         }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class UIManager : MonoBehaviour
@@ -21,6 +22,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text currentProjectileSpeedText;
     [SerializeField] private TMP_Text currentChargeTimeText;
     [SerializeField] private TMP_Text bulletsText;
+    [SerializeField] private GameObject bulletsUIContainerGO;
+    [SerializeField] private GameObject bulletImage;
+
+    [Header("Reload QTE UI Variables")]
+    [SerializeField] private float maxPoint;
+    [SerializeField] private GameObject ReloadQTEGO;
+    [SerializeField] private GameObject valueBarGO;
+    [SerializeField] private GameObject successBarGO;
 
     private void Awake()
     {
@@ -84,5 +93,76 @@ public class UIManager : MonoBehaviour
     public void SetStartLevelTimerText(string newtext)
     {
         startLevelTimerText.text = newtext;
+    }
+
+    public void SetNewMaxBulletsImg(int maxBullets)
+    {
+        int y = bulletsUIContainerGO.transform.childCount;
+        for (int i = 0; i < maxBullets - y; i++)
+        {
+            Instantiate(bulletImage, bulletsUIContainerGO.transform);
+        }
+    }
+
+    public void SetUsedBulletsImg(int lastBullets)
+    {
+        bulletsUIContainerGO.transform.GetChild(lastBullets - 1).gameObject.SetActive(false);
+        //for (int i = 0; i < lastBullets - newBullets; i++)
+        //{
+        //    if (bulletsUIContainerGO.transform.GetChild(bulletsUIContainerGO.transform.childCount - 1 - i) != null)
+        //        bulletsUIContainerGO.transform.GetChild(bulletsUIContainerGO.transform.childCount - 1 - i).gameObject.SetActive(false);
+        //}
+    }
+    public void SetReloadedBulletsImg(int currentBullets, int maxBullets)
+    {
+        if (currentBullets > bulletsUIContainerGO.transform.childCount)
+        {
+            int a = currentBullets - bulletsUIContainerGO.transform.childCount;
+            for (int i = 0; i < a; i++)
+            {
+                Instantiate(bulletImage, bulletsUIContainerGO.transform);
+            }
+        }
+        for (int i = 0; i < currentBullets; i++)
+        {
+            bulletsUIContainerGO.transform.GetChild(i).gameObject.GetComponent<Image>().color = Color.white;
+            bulletsUIContainerGO.transform.GetChild(i).gameObject.SetActive(true);
+            if(i >= maxBullets)
+            {
+                bulletsUIContainerGO.transform.GetChild(i).gameObject.GetComponent<Image>().color = Color.blue;
+            }
+        }
+        //Deactivate ammo while using it
+        //if (maxBullets - currentBullets > 0)
+        //{
+        //    for (int i = 0; i < maxBullets - currentBullets; i++)
+        //    {
+        //        if (bulletsUIContainerGO.transform.GetChild(bulletsUIContainerGO.transform.childCount - 1 - i) != null) 
+        //            bulletsUIContainerGO.transform.GetChild(bulletsUIContainerGO.transform.childCount - 1 - i).gameObject.SetActive(false);
+        //    }
+        //}
+        //else
+        //{
+        //    for (int i = 0; i < currentBullets; i++)
+        //    {
+        //        bulletsUIContainerGO.transform.GetChild(i).gameObject.SetActive(true);
+        //    }
+        //}
+        
+    }
+
+    public void SetReloadValueBar(float newValue)
+    {
+        valueBarGO.GetComponent<RectTransform>().anchoredPosition = new Vector3(newValue * maxPoint, valueBarGO.GetComponent<RectTransform>().anchoredPosition.y, 0);
+    }
+
+    public void SetReloadQTEActive(bool isActive)
+    {
+        ReloadQTEGO.SetActive(isActive);
+    }
+
+    public void SetReloadSuccessBar(float newSuccessValue)
+    {
+        successBarGO.GetComponent<RectTransform>().sizeDelta = new Vector2((newSuccessValue - 0.1f) * maxPoint, successBarGO.GetComponent<RectTransform>().sizeDelta.y);
     }
 }

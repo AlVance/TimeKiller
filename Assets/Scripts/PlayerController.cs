@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
-using Unity.Cinemachine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -9,15 +8,21 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private Rigidbody rb;
 
+
     [Header("Camera Variables")]
-    [SerializeField] private CinemachineCamera playerCCam;
-    [SerializeField] private CinemachineCamera aimCCam;
     [SerializeField] private Transform aimTargetTr;
 
 
     [Header ("Gravity Varaibles")]
-    [SerializeField] private float gravityForce = -9.81f;
+    [SerializeField] private float gravityForce;
     [SerializeField] private float maxFallSpeed;
+
+
+    [Header("Ground Check Variables")]
+    [SerializeField] private Transform groundCheckOriginTr;
+    [SerializeField] private float groundCheckDistance;
+    [SerializeField] private LayerMask groundCheckLayersToCheck;
+    private bool isGrounded;
 
 
     [Header("Move Varaibles")]
@@ -60,6 +65,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveDirShootInertia;
     private bool shootCD = false;
     [SerializeField] private float shootCDTime;
+
 
     [Header("Projectile Variables")]
     [SerializeField] private GameObject projectileGO;
@@ -119,6 +125,7 @@ public class PlayerController : MonoBehaviour
         {
             m_maxBullets = value;
             UIManager.Instance.SetBulletsText(m_currentBullets.ToString() + "/" + m_maxBullets.ToString());
+            UIManager.Instance.SetNewMaxBulletsImg(m_maxBullets);
         }
     }
     private int m_currentBullets;
@@ -127,13 +134,46 @@ public class PlayerController : MonoBehaviour
         get { return m_currentBullets; }
         set 
         {
+            if(value < m_currentBullets)
+            {
+                UIManager.Instance.SetUsedBulletsImg(m_currentBullets);
+            }
+            else
+            {
+                UIManager.Instance.SetReloadedBulletsImg(value, maxBullets);
+            }
             m_currentBullets = value;
             UIManager.Instance.SetBulletsText(m_currentBullets.ToString() + "/" + m_maxBullets.ToString());
         }
     }
 
 
-    [Header("Ammo Variables")]
+    [Header("Reload Variables")]
+    [SerializeField] private float m_reloadBarSpeed;
+    private float reloadBarSpeed
+    {
+        get { return m_reloadBarSpeed; }
+        set
+        {
+            m_reloadBarSpeed = value;
+            UIManager.Instance.SetReloadValueBar(m_reloadBarSpeed);
+        }
+    }
+    private float reloadBarCurrentValue = 0;
+    [SerializeField] private float m_successReloadRate;
+    private float successReloadRate
+    {
+        get { return m_successReloadRate; }
+        set
+        {
+            m_successReloadRate = value;
+            UIManager.Instance.SetReloadSuccessBar(m_successReloadRate);
+        }
+    }
+    [SerializeField] private int extraBulletsOnSuccess;
+    private bool isReloading = false;
+
+    [Header("Dash Variables")]
     [SerializeField] private float m_dashTime;
     public float dashTime
     {
@@ -162,13 +202,16 @@ public class PlayerController : MonoBehaviour
         HandleInput();
 
         rb = this.GetComponent<Rigidbody>();
-        if(GameManager.Instance != null) GameManager.Instance.currentPlayer = this;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (GameManager.Instance != null) GameManager.Instance.currentPlayer = this;
         Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+
+        maxBullets = m_maxBullets;
         currentBullets = maxBullets;
+        successReloadRate = m_successReloadRate;
     }
 
     // Update is called once per frame
@@ -178,10 +221,12 @@ public class PlayerController : MonoBehaviour
         Aim();
         ChargeShot();
         Dash();
+        ReloadQTE();
     }
     private void FixedUpdate()
     {
         if(!isDashing)AddGravityForce();
+        GroundCheck();
     }
 
 
@@ -208,20 +253,46 @@ public class PlayerController : MonoBehaviour
 
     private void ReloadStarted()
     {
-        if(currentBullets <= 0)
+        if (!isReloading)
         {
-            ReloadBullets();
+            if (currentBullets <= 0)
+            {
+                ReloadBullets();
+            }
+            else
+            {
+                EnterDash();
+            }
         }
         else
         {
-            EnterDash();
+            StopReloadQTE();
         }
+    }
+
+    private void GroundCheck()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(groundCheckOriginTr.position, Vector3.down, out hit, groundCheckDistance, groundCheckLayersToCheck))
+        {
+            isGrounded = true;
+        }
+        else isGrounded = false;
+
+        Debug.DrawRay(groundCheckOriginTr.position, Vector3.down * groundCheckDistance, Color.green);
     }
 
     private void AddGravityForce()
     {
-        if(rb.linearVelocity.y > maxFallSpeed) rb.linearVelocity += new Vector3(0, gravityForce, 0);
-        else rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
+        if (!isGrounded)
+        {
+            if (rb.linearVelocity.y > maxFallSpeed) rb.linearVelocity += new Vector3(0, gravityForce, 0);
+            else rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
+        }
+        else
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, rb.linearVelocity.z);
+        }
 
     }
 
@@ -245,7 +316,7 @@ public class PlayerController : MonoBehaviour
 
     private void ChargeShot()
     {
-        if (aimPressed && !shootCD)
+        if (aimPressed && !shootCD && !isDashing)
         {
             if(currentBullets > 0)
             {
@@ -271,7 +342,6 @@ public class PlayerController : MonoBehaviour
     {
         if(currentChargeTime >= shootChargeTime)
         {
-            Debug.Log("ShootDir = " + shootDir);
             currentProjectileGO.transform.parent = null;
             currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(new Vector3(shootDir.x, 0, shootDir.y) + (new Vector3(moveDir.x, 0, moveDir.y) * moveDirShootInertia), projectileSpeed);
             currentProjectileGO = null;
@@ -305,8 +375,37 @@ public class PlayerController : MonoBehaviour
 
     private void ReloadBullets()
     {
-        currentBullets = maxBullets;
+        reloadBarCurrentValue = 1;
+        UIManager.Instance.SetReloadValueBar(reloadBarCurrentValue);
+        UIManager.Instance.SetReloadQTEActive(true);
+        isReloading = true;        
     }
+    
+    private void ReloadQTE()
+    {
+        if (isReloading)
+        {
+            reloadBarCurrentValue -= reloadBarSpeed * Time.deltaTime;
+            UIManager.Instance.SetReloadValueBar(reloadBarCurrentValue);
+            if (reloadBarCurrentValue <= 0) StopReloadQTE();
+        }
+    }
+    private void StopReloadQTE()
+    {
+        if(reloadBarCurrentValue < successReloadRate + 0.1f && reloadBarCurrentValue > 0.1f)
+        {
+            currentBullets = maxBullets + extraBulletsOnSuccess;
+        }
+        else
+        {
+            currentBullets = maxBullets;
+        }
+        isReloading = false;
+        UIManager.Instance.SetReloadQTEActive(false);
+        reloadBarCurrentValue = 1;
+    }
+
+
 
     Vector2 dashDir;
     private void EnterDash()
@@ -315,6 +414,8 @@ public class PlayerController : MonoBehaviour
         if (movePressed) dashDir = moveDir;
         else dashDir = lastMoveDir;
 
+        ResetCharge();
+        rb.linearVelocity = Vector3.zero;
         isDashing = true;
         canMove = false;
     }
@@ -327,7 +428,7 @@ public class PlayerController : MonoBehaviour
             currentDashTime += Time.deltaTime;
             if(currentDashTime<= dashTime)
             {
-                rb.linearVelocity = new Vector3(dashDir.x * dashSpeed, 0, dashDir.y * dashSpeed);
+                rb.linearVelocity = new Vector3(dashDir.x * dashSpeed, rb.linearVelocity.y, dashDir.y * dashSpeed);
             }
             else
             {
@@ -343,6 +444,16 @@ public class PlayerController : MonoBehaviour
         canMove = false;
         this.transform.position = targetPos;
         canMove = true;
+    }
+
+    public void ResetPlayer()
+    {
+        ResetCharge();
+        currentBullets = maxBullets;
+        canMove = true;
+        isReloading = false;
+        UIManager.Instance.SetReloadQTEActive(false);
+        reloadBarCurrentValue = 1;
     }
 
     private void HandleInput()
@@ -400,7 +511,6 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Reload.started += ctx =>
         {
-            Debug.Log("Reload started");
             ReloadStarted();
         };
 

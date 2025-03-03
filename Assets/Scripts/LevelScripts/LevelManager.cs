@@ -6,7 +6,7 @@ public class LevelManager : MonoBehaviour
     public static LevelManager Instance { get; private set; }
 
     [SerializeField] private GameObject[] levelsGO;
-    public GameObject currentLevelGO;
+    [HideInInspector] public GameObject currentLevelGO;
     private int currentLevel = 0;
 
     [SerializeField] private float startLevelTime = 3f;
@@ -57,6 +57,7 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.currentPlayer.enabled = false;
         TimeManager.Instance.levelTime = currentLevelGO.GetComponent<Level>().levelTime;
         GameManager.Instance.currentPlayer.gameObject.transform.position = currentLevelGO.GetComponent<Level>().playerStartTr.position;
+        GameManager.Instance.currentPlayer.ResetPlayer();
 
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(true);
 
