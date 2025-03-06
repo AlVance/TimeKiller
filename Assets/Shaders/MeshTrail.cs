@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class MeshTrail : MonoBehaviour
 { 
-    public float activeTime = 2f;
+    public float activeTime = 0.5f;
     public float meshResfreshRate = 0.1f;
-    public float destroyTime = 0.3f;
+    public float destroyTime = 0.2f;
 
     public Material trailMaterial;
 
