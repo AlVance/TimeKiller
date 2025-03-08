@@ -300,8 +300,9 @@ public class PlayerController : MonoBehaviour
     {
         if (canMove)
         {
-            currentMoveSpeed = moveSpeed;
-            rb.linearVelocity = new Vector3(moveDir.x * currentMoveSpeed, rb.linearVelocity.y, moveDir.y * currentMoveSpeed);
+            //currentMoveSpeed = moveSpeed;
+            //rb.linearVelocity = new Vector3(moveDir.x * currentMoveSpeed, rb.linearVelocity.y, moveDir.y * currentMoveSpeed);
+            rb.AddForce(new Vector3(moveDir.x, 0, moveDir.y) * 2);
             if (movePressed && !aimPressed) this.transform.rotation = Quaternion.LookRotation(new Vector3(moveDir.x, 0, moveDir.y));
         }
     }
