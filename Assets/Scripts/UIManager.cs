@@ -13,6 +13,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text currentTimeText;
     [SerializeField] private TMP_Text levelTimeText;
     [SerializeField] public TMP_Text startLevelTimerText;
+    [SerializeField] private Slider levelTimerSlider;
+    [SerializeField] private Slider[] globalTimerSliders;
 
     [Header("Player UI Variables")]
     [SerializeField] private TMP_Text currentDamageText;
@@ -80,14 +82,23 @@ public class UIManager : MonoBehaviour
         bulletsText.text = newText;
     }
 
-    public void SetCurrentTimeText(string newText)
+    public void SetCurrentTimeText(float newTime)
     {
-        currentTimeText.text = newText;
+        currentTimeText.text = newTime.ToString("0.0");
+        for (int i = 0; i < globalTimerSliders.Length; i++)
+        {
+            globalTimerSliders[i].value = newTime;
+        }
     }
 
-    public void SetLevelTimeText(string newText)
+    public void SetLevelTimeText(float newLevelTime)
     {
-        levelTimeText.text = newText;
+        levelTimeText.text = newLevelTime.ToString("0.0");
+        levelTimerSlider.value = newLevelTime;
+    }
+    public void SetLevelTimerSliderMaxValue(float newValue)
+    {
+        levelTimerSlider.maxValue = newValue;
     }
 
     public void SetStartLevelTimerText(string newtext)

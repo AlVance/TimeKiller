@@ -13,7 +13,7 @@ public class TimeManager : MonoBehaviour
         set 
         { 
             m_currentTime = value;
-            UIManager.Instance.SetCurrentTimeText(m_currentTime.ToString("0.0"));
+            UIManager.Instance.SetCurrentTimeText(m_currentTime);
         }
     }
 
@@ -24,7 +24,7 @@ public class TimeManager : MonoBehaviour
         set 
         {
             m_levelTime = value;
-            UIManager.Instance.SetLevelTimeText(m_levelTime.ToString("0.0"));
+            UIManager.Instance.SetLevelTimeText(m_levelTime);
         }
     }
 

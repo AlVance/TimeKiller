@@ -28,7 +28,7 @@ public class PlayerProjectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag != "Player")
+        if(other.gameObject.tag == "Enemy" || other.gameObject.layer == LayerMask.NameToLayer("Floor"))
         {
             if (other.gameObject.tag == "Enemy" && charged)
             {

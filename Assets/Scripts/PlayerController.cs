@@ -232,7 +232,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         if(!isDashing)AddGravityForce();
-        //GroundCheck();
+        GroundCheck();
         Movement();
         FloatOnGround();
     }
