@@ -6,8 +6,10 @@ public class PlayerMovement : MonoBehaviour
 {
     private PlayerInput playerInput;
 
-    [SerializeField] private float acc;
+    [SerializeField] private float accelerationSpeed;
+    [SerializeField] private float maxAccelerationForce;
     [SerializeField] private float maxSpeed;
+    [SerializeField] private float decc;
     private bool movePressed;
     private Vector2 moveDir;
 
@@ -26,28 +28,33 @@ public class PlayerMovement : MonoBehaviour
         playerInput = new PlayerInput();
         playerInput.PlayerControls.Enable();
         HandleInput();
+        rb = this.GetComponent<Rigidbody>();
     }
     private void Start()
     {
-        rb = this.GetComponent<Rigidbody>();
+        
     }
     private void FixedUpdate()
     {
         FloatOnGround();
-        Movement();    
+        Movement();
+        rb.linearVelocity += new Vector3(0, -1f, 0);
     }
 
+    Vector3 m_GoalVel;
     private void Movement()
     {
-        if (movePressed)
-        {
-            rb.AddForce(new Vector3(moveDir.x, 0, moveDir.y) * acc);
-            if (rb.linearVelocity.x > maxSpeed) rb.linearVelocity = new Vector3(maxSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
-            else if(rb.linearVelocity.x < -maxSpeed) rb.linearVelocity = new Vector3(-maxSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
-            if (rb.linearVelocity.z > maxSpeed) rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, maxSpeed);
-            else if (rb.linearVelocity.z < -maxSpeed) rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, -maxSpeed);
-            this.transform.rotation = Quaternion.LookRotation(new Vector3(moveDir.x, 0, moveDir.y));
-        }
+        Vector3 unitGoal = new Vector3(moveDir.x, 0, moveDir.y);
+        Vector3 goalVel = unitGoal * maxSpeed;
+
+        m_GoalVel = Vector3.MoveTowards(m_GoalVel, goalVel, accelerationSpeed * Time.fixedDeltaTime);
+
+        Vector3 neededAccel = (m_GoalVel - new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z)) / Time.fixedDeltaTime;
+
+        neededAccel = Vector3.ClampMagnitude(neededAccel, maxAccelerationForce);
+        rb.AddForce(neededAccel * rb.mass);
+
+        if(moveDir != Vector2.zero) this.transform.rotation = Quaternion.LookRotation(new Vector3(moveDir.x, 0, moveDir.y));
     }
 
     private void FloatOnGround()
@@ -76,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
 
             rb.AddForce(rayDir * springForce);
 
-            Debug.DrawLine(this.transform.position, this.transform.position + (rayDir * springForce), Color.yellow);
+            Debug.DrawLine(this.transform.position, this.transform.position + (rayDir * springForce / 2), Color.yellow);
         }
     }
 

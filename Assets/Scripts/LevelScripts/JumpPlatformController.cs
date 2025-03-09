@@ -8,8 +8,8 @@ public class JumpPlatformController : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            other.gameObject.GetComponent<Rigidbody>().linearVelocity += Jumpdirection.normalized * Jumpspeed;
-            //other.gameObject.GetComponent<Rigidbody>().AddForce(Jumpdirection.normalized * Jumpspeed);
+            //other.gameObject.GetComponent<Rigidbody>().linearVelocity += Jumpdirection.normalized * Jumpspeed;
+            other.gameObject.GetComponent<Rigidbody>().AddForce(Jumpdirection.normalized * Jumpspeed);
         }
     }
 }
