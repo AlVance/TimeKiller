@@ -12,7 +12,8 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _AYUDA_A
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -42,11 +43,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AYUDA: 0
+    - _Glitch_power: 0.03
+    - _Noise_scale: 800
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Shading_size: 0.24
+    - _isDashing: 0
     m_Colors:
-    - _Light_intensity: {r: 0.02, g: 0.76, b: 0, a: 0}
+    - _Light_intensity: {r: 0.11, g: 1.24, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &3035128376397175365

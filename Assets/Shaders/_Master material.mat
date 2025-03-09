@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6827097795196223066
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 9
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -7,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Dissolve material
-  m_Shader: {fileID: -6465566751694194690, guid: 5729f4bea55d7a249a1d4521eead2e0b, type: 3}
+  m_Name: _Master material
+  m_Shader: {fileID: -6465566751694194690, guid: 29c115ded06c81145a4eef2cd895a054, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,8 +37,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _SampleTexture2D_ab6f95b6b2b24de9918cada81ac168de_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 117be8abb88a80b499467d3a4e1dc1ff, type: 3}
+    - _Main_texture:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -42,30 +55,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Cutoff_height: 1.02
-    - _Edge_width: 0.05
-    - _Noise_Scale: 30
-    - _Noise_Strength: 0.3
-    - _Noise_height: 3.35
-    - _Noise_strength: 0.45
+    - _Glitch_power: 0.01
+    - _Noise_scale: 1000
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _isUpwards: 1
+    - _Shading_size: 0.49
+    - _isDashing: 0
     m_Colors:
-    - _Base_Color: {r: 0.4475317, g: 0, b: 1, a: 1}
-    - _Edge_color: {r: 1.4293314, g: 0.12612987, b: 2.4308662, a: 1}
+    - _Emission_color: {r: 2.297397, g: 0.3336468, b: 0, a: 1}
+    - _Light_intensity: {r: 0.3, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &6041172153038030085
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 9
