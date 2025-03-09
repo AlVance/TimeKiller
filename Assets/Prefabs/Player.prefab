@@ -561,14 +561,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aimTargetTr: {fileID: 6076535337570582238}
-  gravityForce: -3
-  maxFallSpeed: -40
+  groundRayDistance: 2
+  rideHeight: 1.5
+  rideSpringStength: 250
+  rideSpringDamper: 8
+  gravityForce: -2
+  maxFallSpeed: -35
   groundCheckOriginTr: {fileID: 3148131557680886516}
-  groundCheckDistance: 0.3
+  groundCheckDistance: 1.5
   groundCheckLayersToCheck:
     serializedVersion: 2
     m_Bits: 8
-  m_moveSpeed: 14
+  m_maxSpeed: 12
+  accelerationSpeed: 150
+  maxAccelerationForce: 125
   aimDirAidGO: {fileID: 7249654577470585348}
   m_shootChargeTime: 0.8
   moveDirShootInertia: 0.2
@@ -632,7 +638,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 1.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2567690767963608012

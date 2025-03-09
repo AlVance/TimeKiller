@@ -9,7 +9,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float accelerationSpeed;
     [SerializeField] private float maxAccelerationForce;
     [SerializeField] private float maxSpeed;
-    [SerializeField] private float decc;
     private bool movePressed;
     private Vector2 moveDir;
 

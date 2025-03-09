@@ -25,7 +25,7 @@ public class PlayerUpgradesDebug : MonoBehaviour
     private void Start()
     {
         currentDamageText.text = "Damage: " + PC.projectileDamage;
-        currentSpeedText.text = "Speed: " + PC.moveSpeed;
+        currentSpeedText.text = "Speed: " + PC.maxSpeed;
         currentRangeText.text = "Range: " + PC.projectileRange;
         currentProjectileSpeedText.text = "PSpeed " + PC.projectileSpeed;
         currentProjectileSizeText.text = "PSize " + PC.projectileSize;
@@ -50,7 +50,7 @@ public class PlayerUpgradesDebug : MonoBehaviour
 
     private void UpgradeSpeed()
     {
-        PC.moveSpeed += speedUpgrade;
+        PC.maxSpeed += speedUpgrade;
     }
 
     private void UpgradeRange()

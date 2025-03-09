@@ -14,6 +14,11 @@ public class PlayerController : MonoBehaviour
 
 
     [Header ("Gravity Varaibles")]
+    [SerializeField] private float groundRayDistance;
+    [SerializeField] private float rideHeight;
+    [SerializeField] private float rideSpringStength;
+    [SerializeField] private float rideSpringDamper;
+    private RaycastHit groundHit;
     [SerializeField] private float gravityForce;
     [SerializeField] private float maxFallSpeed;
 
@@ -26,19 +31,21 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Move Varaibles")]
-    [SerializeField] private float m_moveSpeed;
-    public float moveSpeed
+    [SerializeField] private float m_maxSpeed;
+    public float maxSpeed
     {
-        get { return m_moveSpeed; }
+        get { return m_maxSpeed; }
         set
         {
-            m_moveSpeed = value;
-            UIManager.Instance.SetCurrentSpeedText(m_moveSpeed.ToString());
+            m_maxSpeed = value;
+            UIManager.Instance.SetCurrentSpeedText(m_maxSpeed.ToString());
         }
     }
+    [SerializeField] private float accelerationSpeed;
+    [SerializeField] private float maxAccelerationForce;
     private bool movePressed;
     private bool canMove = true;
-    private float currentMoveSpeed;
+
     private Vector2 moveDir;
     private Vector2 lastMoveDir;
 
@@ -217,7 +224,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Movement();
         Aim();
         ChargeShot();
         Dash();
@@ -226,7 +232,9 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         if(!isDashing)AddGravityForce();
-        GroundCheck();
+        //GroundCheck();
+        Movement();
+        FloatOnGround();
     }
 
 
@@ -279,30 +287,72 @@ public class PlayerController : MonoBehaviour
         }
         else isGrounded = false;
 
-        Debug.DrawRay(groundCheckOriginTr.position, Vector3.down * groundCheckDistance, Color.green);
+        Debug.DrawRay(groundCheckOriginTr.position, Vector3.down * groundCheckDistance, Color.red);
     }
 
     private void AddGravityForce()
     {
-        if (!isGrounded)
+        if (rb.linearVelocity.y > maxFallSpeed) rb.linearVelocity += new Vector3(0, gravityForce, 0);
+        else rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
+        //if (!isGrounded)
+        //{
+        //    if (rb.linearVelocity.y > maxFallSpeed) rb.linearVelocity += new Vector3(0, gravityForce, 0);
+        //    else rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
+        //}
+        //else
+        //{
+        //    rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, rb.linearVelocity.z);
+        //}
+    }
+    private void FloatOnGround()
+    {
+        if (Physics.Raycast(this.transform.position, Vector3.down, out groundHit, groundRayDistance))
         {
-            if (rb.linearVelocity.y > maxFallSpeed) rb.linearVelocity += new Vector3(0, gravityForce, 0);
-            else rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
-        }
-        else
-        {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, rb.linearVelocity.z);
-        }
+            if (!groundHit.collider.isTrigger)
+            {
+                Vector3 vel = rb.linearVelocity;
+                Vector3 rayDir = transform.TransformDirection(Vector3.down);
 
+                Vector3 otherVel = Vector3.zero;
+                Rigidbody hitbody = groundHit.rigidbody;
+                if (hitbody != null)
+                {
+                    otherVel = hitbody.linearVelocity;
+                }
+
+                float rayDirVel = Vector3.Dot(rayDir, vel);
+                float otherDirVel = Vector3.Dot(rayDir, otherVel);
+
+                float relVel = rayDirVel - otherDirVel;
+
+                float x = groundHit.distance - rideHeight;
+                float springForce = (x * rideSpringStength) - (relVel * rideSpringDamper);
+
+                rb.AddForce(rayDir * springForce);
+
+                Debug.DrawLine(this.transform.position, this.transform.position + (rayDir * springForce / 2), Color.yellow);
+            }
+            
+        }
     }
 
+    Vector3 m_GoalVel;
     private void Movement()
     {
         if (canMove)
         {
             //currentMoveSpeed = moveSpeed;
             //rb.linearVelocity = new Vector3(moveDir.x * currentMoveSpeed, rb.linearVelocity.y, moveDir.y * currentMoveSpeed);
-            rb.AddForce(new Vector3(moveDir.x, 0, moveDir.y) * 2);
+            Vector3 unitGoal = new Vector3(moveDir.x, 0, moveDir.y);
+            Vector3 goalVel = unitGoal * maxSpeed;
+
+            m_GoalVel = Vector3.MoveTowards(m_GoalVel, goalVel, accelerationSpeed * Time.fixedDeltaTime);
+
+            Vector3 neededAccel = (m_GoalVel - new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z)) / Time.fixedDeltaTime;
+
+            neededAccel = Vector3.ClampMagnitude(neededAccel, maxAccelerationForce);
+            rb.AddForce(neededAccel * rb.mass);
+
             if (movePressed && !aimPressed) this.transform.rotation = Quaternion.LookRotation(new Vector3(moveDir.x, 0, moveDir.y));
         }
     }
