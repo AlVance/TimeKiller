@@ -73,6 +73,7 @@ public class LevelManager : MonoBehaviour
     {
         UIManager.Instance.SetLevelOverviewActive(false);
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(true);
+        if (Application.isMobilePlatform) UIManager.Instance.SetMobileGameplayControlsActive(true);
 
         for (int i = 0; i < startLevelTime; i++)
         {
@@ -94,9 +95,10 @@ public class LevelManager : MonoBehaviour
 
     public void SetLevelPuntuationScreen()
     {
+        if (Application.isMobilePlatform) UIManager.Instance.SetMobileGameplayControlsActive(false);
         UIManager.Instance.SetPuntuationScreenActive(true);
         TimeManager.Instance.currentTime += TimeManager.Instance.levelTime;
-        UIManager.Instance.SetCurrentTimeText(TimeManager.Instance.currentTime);
+        TimeManager.Instance.levelTime = 0;
     }
 
     public void GoToInbetweenLevels()

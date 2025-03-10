@@ -54,8 +54,8 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        if (Application.isMobilePlatform) mobileControlsUI.SetActive(true);
-        else mobileControlsUI.SetActive(false);
+        //if (Application.isMobilePlatform) mobileControlsUI.SetActive(true);
+        //else mobileControlsUI.SetActive(false);
     }
 
     public void SetCurrentDamageText(string newText)
@@ -193,5 +193,10 @@ public class UIManager : MonoBehaviour
     public void SetLevelOverviewActive(bool isActive)
     {
         levelOverviewUI.SetActive(isActive);
+    }
+
+    public void SetMobileGameplayControlsActive(bool isActive)
+    {
+        mobileControlsUI.SetActive(isActive);
     }
 }
