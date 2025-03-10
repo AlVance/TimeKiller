@@ -9,6 +9,11 @@ public class UIManager : MonoBehaviour
     [Header("Game UI Variables")]
     [SerializeField] private GameObject mobileControlsUI;
 
+    [Header("UI Transitions")]
+    [SerializeField] private GameObject endLevelScreenUI;
+    [SerializeField] private GameObject inBetweenLevelsScreenUI;
+    [SerializeField] private GameObject levelOverviewUI;
+
     [Header("Level UI Variables")]
     [SerializeField] private TMP_Text currentTimeText;
     [SerializeField] private TMP_Text levelTimeText;
@@ -175,5 +180,18 @@ public class UIManager : MonoBehaviour
     public void SetReloadSuccessBar(float newSuccessValue)
     {
         successBarGO.GetComponent<RectTransform>().sizeDelta = new Vector2((newSuccessValue - 0.1f) * maxPoint, successBarGO.GetComponent<RectTransform>().sizeDelta.y);
+    }
+
+    public void SetPuntuationScreenActive(bool isActive)
+    {
+        endLevelScreenUI.SetActive(isActive);
+    }
+    public void SetInBetweenLevelsScreenActive(bool isActive)
+    {
+        inBetweenLevelsScreenUI.SetActive(isActive);
+    }
+    public void SetLevelOverviewActive(bool isActive)
+    {
+        levelOverviewUI.SetActive(isActive);
     }
 }

@@ -28,7 +28,7 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        SetNextLevel();
+        GoToInbetweenLevels();
     }
     public void SetNextLevel()
     {
@@ -47,10 +47,10 @@ public class LevelManager : MonoBehaviour
         currentLevelGO = Instantiate(levelsGO[currentLevel]);
         currentLevelGO.GetComponent<Level>().lM = this;
 
-        StartCoroutine(OnLevelStarted());
+        StartCoroutine(OnLevelStartSetUp());
     }
 
-    private IEnumerator OnLevelStarted()
+    private IEnumerator OnLevelStartSetUp()
     {
         yield return new WaitForEndOfFrame();
 
@@ -62,6 +62,16 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.currentPlayer.gameObject.transform.position = currentLevelGO.GetComponent<Level>().playerStartTr.position;
         GameManager.Instance.currentPlayer.ResetPlayer();
 
+        UIManager.Instance.SetInBetweenLevelsScreenActive(false);
+        UIManager.Instance.SetLevelOverviewActive(true);
+    }
+    public void StartLevelGameplay()
+    {
+        StartCoroutine(_StartLevelGameplay());
+    }
+    private IEnumerator _StartLevelGameplay()
+    {
+        UIManager.Instance.SetLevelOverviewActive(false);
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(true);
 
         for (int i = 0; i < startLevelTime; i++)
@@ -79,9 +89,20 @@ public class LevelManager : MonoBehaviour
     {
         GameManager.Instance.currentPlayer.enabled = false;
         TimeManager.Instance.timerStarted = false;
+        SetLevelPuntuationScreen();
+    }
+
+    public void SetLevelPuntuationScreen()
+    {
+        UIManager.Instance.SetPuntuationScreenActive(true);
         TimeManager.Instance.currentTime += TimeManager.Instance.levelTime;
         UIManager.Instance.SetCurrentTimeText(TimeManager.Instance.currentTime);
-        SetNextLevel();
+    }
+
+    public void GoToInbetweenLevels()
+    {
+        UIManager.Instance.SetPuntuationScreenActive(false);
+        UIManager.Instance.SetInBetweenLevelsScreenActive(true);
     }
 
     private IEnumerator DestroyGOWithDelay(GameObject GO)

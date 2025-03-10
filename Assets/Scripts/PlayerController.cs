@@ -261,7 +261,7 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if(!isDashing || !isFlying) AddGravityForce();
+        if(!isDashing && !isFlying) AddGravityForce();
         GroundCheck();
         Movement();
         FloatOnGround();
@@ -311,7 +311,7 @@ public class PlayerController : MonoBehaviour
 
     private void ReloadEnded()
     {
-        EndFly();
+        //EndFly();
     }
 
     private void GroundCheck()
