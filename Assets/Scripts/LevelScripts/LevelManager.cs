@@ -57,6 +57,7 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.currentPlayer.enabled = false;
         TimeManager.Instance.levelTime = currentLevelGO.GetComponent<Level>().levelTime;
         UIManager.Instance.SetLevelTimerSliderMaxValue(currentLevelGO.GetComponent<Level>().levelTime);
+        UIManager.Instance.SetLevelTimeText(currentLevelGO.GetComponent<Level>().levelTime);
         UIManager.Instance.SetCurrentTimeText(TimeManager.Instance.currentTime);
         GameManager.Instance.currentPlayer.gameObject.transform.position = currentLevelGO.GetComponent<Level>().playerStartTr.position;
         GameManager.Instance.currentPlayer.ResetPlayer();

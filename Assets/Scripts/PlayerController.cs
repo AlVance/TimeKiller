@@ -201,7 +201,36 @@ public class PlayerController : MonoBehaviour
     }
     private bool isDashing = false;
 
-
+    [Header("Fly Variables")]
+    [SerializeField] private float m_maxFuel;
+    public float maxFuel
+    {
+        get { return m_maxFuel; }
+        set
+        {
+            m_maxFuel = value;
+        }
+    }
+    private float currentFuel = 0;
+    [SerializeField] private float m_fuelBurnSpeed;
+    public float fuelBurnSpeed
+    {
+        get { return m_fuelBurnSpeed; }
+        set
+        {
+            m_fuelBurnSpeed = value;
+        }
+    }
+    [SerializeField] private float m_flySpeed;
+    public float flySpeed
+    {
+        get { return m_flySpeed; }
+        set
+        {
+            m_flySpeed = value;
+        }
+    }
+    private bool isFlying = false;
 
     private void Awake()
     {
@@ -228,10 +257,11 @@ public class PlayerController : MonoBehaviour
         ChargeShot();
         Dash();
         ReloadQTE();
+        //Fly();
     }
     private void FixedUpdate()
     {
-        if(!isDashing)AddGravityForce();
+        if(!isDashing || !isFlying) AddGravityForce();
         GroundCheck();
         Movement();
         FloatOnGround();
@@ -276,6 +306,12 @@ public class PlayerController : MonoBehaviour
         {
             StopReloadQTE();
         }
+        //EnterFly();
+    }
+
+    private void ReloadEnded()
+    {
+        EndFly();
     }
 
     private void GroundCheck()
@@ -490,6 +526,35 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void EnterFly()
+    {
+        if (currentFuel > 0)
+        {
+            isFlying = true;
+        }
+    }
+    private void Fly()
+    {
+        if(isFlying && currentFuel > 0)
+        {
+            currentFuel -= fuelBurnSpeed * Time.deltaTime;
+            rb.linearVelocity = new Vector3(moveDir.x * flySpeed, 2, moveDir.y * flySpeed);
+        }
+        else
+        {
+            EndFly();
+            if(currentFuel < maxFuel && isGrounded) currentFuel += fuelBurnSpeed * Time.deltaTime;
+        }
+    }
+
+    private void EndFly()
+    {
+        if (isFlying)
+        {
+            isFlying = false;
+        }
+    }
+
     public void ForcedMovement(Vector3 targetPos)
     {
         canMove = false;
@@ -572,7 +637,7 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Reload.canceled += ctx =>
         {
-
+            ReloadEnded();
         };
 
     }
