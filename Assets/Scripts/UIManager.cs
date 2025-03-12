@@ -38,6 +38,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject valueBarGO;
     [SerializeField] private GameObject successBarGO;
 
+    [Header("Fly UI Variables")]
+    [SerializeField] private Slider flyFuelSlider;
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -181,6 +183,16 @@ public class UIManager : MonoBehaviour
     {
         successBarGO.GetComponent<RectTransform>().sizeDelta = new Vector2((newSuccessValue - 0.1f) * maxPoint, successBarGO.GetComponent<RectTransform>().sizeDelta.y);
     }
+
+    public void SetFlyFuelSlderValue(float newValue)
+    {
+        flyFuelSlider.value = newValue;
+    }
+    public void SetFlyFuelSliderMaxValue(float newMaxValue)
+    {
+        flyFuelSlider.maxValue = newMaxValue;
+    }
+
 
     public void SetPuntuationScreenActive(bool isActive)
     {
