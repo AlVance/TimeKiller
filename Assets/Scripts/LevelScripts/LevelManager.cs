@@ -54,7 +54,7 @@ public class LevelManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        GameManager.Instance.currentPlayer.enabled = false;
+        //GameManager.Instance.currentPlayer.enabled = false;
         TimeManager.Instance.levelTime = currentLevelGO.GetComponent<Level>().levelTime;
         UIManager.Instance.SetLevelTimerSliderMaxValue(currentLevelGO.GetComponent<Level>().levelTime);
         UIManager.Instance.SetLevelTimeText(currentLevelGO.GetComponent<Level>().levelTime);
@@ -82,14 +82,13 @@ public class LevelManager : MonoBehaviour
         }
 
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(false);
-        GameManager.Instance.currentPlayer.enabled = true;
-        TimeManager.Instance.timerStarted = true;
+        GameManager.Instance.levelStarted = true;
     }
 
     public void OnLevelEnded()
     {
-        GameManager.Instance.currentPlayer.enabled = false;
-        TimeManager.Instance.timerStarted = false;
+        GameManager.Instance.levelStarted = false;
+
         SetLevelPuntuationScreen();
     }
 

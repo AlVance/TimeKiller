@@ -603,6 +603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentPlayer: {fileID: 0}
+  levelStarted: 0
 --- !u!4 &190872236
 Transform:
   m_ObjectHideFlags: 0
@@ -4318,18 +4319,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6905120389310956165, guid: 5e537cddc441d7f43bec932d35e7af34, type: 3}
-      propertyPath: m_maxFuel
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6905120389310956165, guid: 5e537cddc441d7f43bec932d35e7af34, type: 3}
-      propertyPath: m_flySpeed
-      value: 28
-      objectReference: {fileID: 0}
-    - target: {fileID: 6905120389310956165, guid: 5e537cddc441d7f43bec932d35e7af34, type: 3}
-      propertyPath: m_fuelBurnSpeed
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5815,7 +5804,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelsGO:
-  - {fileID: 8454349058028808683, guid: 88801f3f451d50446b544b5f1cd3acf4, type: 3}
+  - {fileID: 8454349058028808683, guid: b98a4a3fae05baf48a11ace11e5b8b0c, type: 3}
   currentLevelGO: {fileID: 0}
   startLevelTime: 3
 --- !u!4 &1773843551
