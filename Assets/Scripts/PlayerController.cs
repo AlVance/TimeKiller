@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 moveDir;
     private Vector2 lastMoveDir;
-
+    private float currentMaxSpeed;
 
     [Header("Aim Varaibles")]
     [SerializeField] private GameObject aimDirAidGO;
@@ -209,9 +209,19 @@ public class PlayerController : MonoBehaviour
         set
         {
             m_maxFuel = value;
+            UIManager.Instance.SetFlyFuelSliderMaxValue(m_maxFuel);
         }
     }
-    private float currentFuel = 0;
+    private float m_currentFuel = 0;
+    private float currentFuel
+    {
+        get { return m_currentFuel; }
+        set
+        {
+            m_currentFuel = value;
+            UIManager.Instance.SetFlyFuelSlderValue(m_currentFuel);
+        }
+    }
     [SerializeField] private float m_fuelBurnSpeed;
     public float fuelBurnSpeed
     {
@@ -221,6 +231,17 @@ public class PlayerController : MonoBehaviour
             m_fuelBurnSpeed = value;
         }
     }
+    [SerializeField] private float m_fuelRecoverSpeed;
+    public float fuelRecoverSpeed
+    {
+        get { return m_fuelRecoverSpeed; }
+        set
+        {
+            m_fuelRecoverSpeed = value;
+        }
+    }
+
+
     [SerializeField] private float m_flySpeed;
     public float flySpeed
     {
@@ -248,6 +269,9 @@ public class PlayerController : MonoBehaviour
         maxBullets = m_maxBullets;
         currentBullets = maxBullets;
         successReloadRate = m_successReloadRate;
+        maxFuel = m_maxFuel;
+        currentFuel = maxFuel;
+        currentMaxSpeed = maxSpeed;
     }
 
     // Update is called once per frame
@@ -317,7 +341,7 @@ public class PlayerController : MonoBehaviour
 
     private void ReloadEnded()
     {
-        //EndFly();
+        EndFly();
     }
 
     private void GroundCheck()
@@ -375,7 +399,7 @@ public class PlayerController : MonoBehaviour
         if (canMove)
         {
             Vector3 unitGoal = new Vector3(moveDir.x, 0, moveDir.y);
-            Vector3 goalVel = unitGoal * maxSpeed;
+            Vector3 goalVel = unitGoal * currentMaxSpeed;
 
             m_GoalVel = Vector3.MoveTowards(m_GoalVel, goalVel, accelerationSpeed * Time.fixedDeltaTime);
 
@@ -398,7 +422,7 @@ public class PlayerController : MonoBehaviour
 
     private void ChargeShot()
     {
-        if (aimPressed && !shootCD && !isDashing)
+        if (aimPressed && !shootCD && !isDashing && !isFlying)
         {
             if(currentBullets > 0)
             {
@@ -526,6 +550,9 @@ public class PlayerController : MonoBehaviour
         if (currentFuel > 0)
         {
             isFlying = true;
+            currentMaxSpeed = flySpeed;
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+            ResetCharge();
         }
     }
     private void Fly()
@@ -533,19 +560,19 @@ public class PlayerController : MonoBehaviour
         if(isFlying && currentFuel > 0)
         {
             currentFuel -= fuelBurnSpeed * Time.deltaTime;
-            rb.linearVelocity = new Vector3(moveDir.x * flySpeed, 2, moveDir.y * flySpeed);
         }
         else
         {
             EndFly();
-            if(currentFuel < maxFuel && isGrounded) currentFuel += fuelBurnSpeed * Time.deltaTime;
+            if(currentFuel < maxFuel && isGrounded) currentFuel += fuelRecoverSpeed * Time.deltaTime;
         }
     }
 
-    private void EndFly()
+    public void EndFly()
     {
         if (isFlying)
         {
+            currentMaxSpeed = maxSpeed;
             isFlying = false;
         }
     }
@@ -559,8 +586,10 @@ public class PlayerController : MonoBehaviour
 
     public void ResetPlayer()
     {
+        rb.linearVelocity = Vector3.zero;
         ResetCharge();
         currentBullets = maxBullets;
+        currentFuel = maxFuel;
         canMove = true;
         isReloading = false;
         UIManager.Instance.SetReloadQTEActive(false);
