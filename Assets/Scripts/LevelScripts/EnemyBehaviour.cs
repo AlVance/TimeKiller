@@ -46,6 +46,7 @@ public class EnemyBehaviour : MonoBehaviour
         {
             movementSplineLength = MovementSpline.CalculateLength();
             MovementSpline.gameObject.transform.parent = this.transform.parent;
+            this.transform.position = MovementSpline.EvaluatePosition(0);
         }
         else
         {
@@ -54,6 +55,8 @@ public class EnemyBehaviour : MonoBehaviour
 
         EnemyVisualSetter();
         EnemyMovementTypeSetter();
+
+        
     }
 
     private void Update()
@@ -62,7 +65,11 @@ public class EnemyBehaviour : MonoBehaviour
         {
             MoveAlongSpline();
             Shoot();
-        }       
+        }
+        if (canShoot)
+        {
+            enemyGunGO.transform.position = this.gameObject.transform.position;
+        }
     }
 
     public void SetHealth(int healthModfier)

@@ -270,8 +270,7 @@ public class PlayerController : MonoBehaviour
             GroundCheck();
             Movement();
             FloatOnGround();
-        }
-        
+        }        
     }
 
 

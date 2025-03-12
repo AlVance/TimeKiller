@@ -603,6 +603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentPlayer: {fileID: 0}
+  levelStarted: 0
 --- !u!4 &190872236
 Transform:
   m_ObjectHideFlags: 0
@@ -4317,18 +4318,6 @@ PrefabInstance:
     - target: {fileID: 4556464428590179113, guid: 5e537cddc441d7f43bec932d35e7af34, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6905120389310956165, guid: 5e537cddc441d7f43bec932d35e7af34, type: 3}
-      propertyPath: m_maxFuel
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6905120389310956165, guid: 5e537cddc441d7f43bec932d35e7af34, type: 3}
-      propertyPath: m_flySpeed
-      value: 28
-      objectReference: {fileID: 0}
-    - target: {fileID: 6905120389310956165, guid: 5e537cddc441d7f43bec932d35e7af34, type: 3}
-      propertyPath: m_fuelBurnSpeed
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
