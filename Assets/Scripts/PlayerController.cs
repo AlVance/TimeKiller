@@ -253,18 +253,25 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Aim();
-        ChargeShot();
-        Dash();
-        ReloadQTE();
-        //Fly();
+        if (GameManager.Instance.levelStarted)
+        {
+            Aim();
+            ChargeShot();
+            Dash();
+            ReloadQTE();
+            //Fly();
+        }
     }
     private void FixedUpdate()
     {
-        if(!isDashing && !isFlying) AddGravityForce();
-        GroundCheck();
-        Movement();
-        FloatOnGround();
+        if (GameManager.Instance.levelStarted)
+        {
+            if (!isDashing && !isFlying) AddGravityForce();
+            GroundCheck();
+            Movement();
+            FloatOnGround();
+        }
+        
     }
 
 
@@ -330,15 +337,6 @@ public class PlayerController : MonoBehaviour
     {
         if (rb.linearVelocity.y > maxFallSpeed) rb.linearVelocity += new Vector3(0, gravityForce, 0);
         else rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
-        //if (!isGrounded)
-        //{
-        //    if (rb.linearVelocity.y > maxFallSpeed) rb.linearVelocity += new Vector3(0, gravityForce, 0);
-        //    else rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
-        //}
-        //else
-        //{
-        //    rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, rb.linearVelocity.z);
-        //}
     }
     private void FloatOnGround()
     {
@@ -377,8 +375,6 @@ public class PlayerController : MonoBehaviour
     {
         if (canMove)
         {
-            //currentMoveSpeed = moveSpeed;
-            //rb.linearVelocity = new Vector3(moveDir.x * currentMoveSpeed, rb.linearVelocity.y, moveDir.y * currentMoveSpeed);
             Vector3 unitGoal = new Vector3(moveDir.x, 0, moveDir.y);
             Vector3 goalVel = unitGoal * maxSpeed;
 

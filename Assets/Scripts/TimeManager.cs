@@ -50,7 +50,7 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
-        if (timerStarted)
+        if (GameManager.Instance.levelStarted)
         {
             if (levelTime > 0) levelTime -= Time.deltaTime;
             else
