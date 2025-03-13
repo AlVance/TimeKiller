@@ -253,6 +253,9 @@ public class PlayerController : MonoBehaviour
     }
     private bool isFlying = false;
 
+
+    [Header("Animation variables")]
+    [SerializeField] private Animator anim;
     private void Awake()
     {
         playerInput = new PlayerInput();
@@ -285,16 +288,17 @@ public class PlayerController : MonoBehaviour
             ReloadQTE();
             //Fly();
         }
+        HandleAnimations();
     }
     private void FixedUpdate()
     {
         if (GameManager.Instance.levelStarted)
         {
-            if (!isDashing && !isFlying) AddGravityForce();
             GroundCheck();
             Movement();
             FloatOnGround();
-        }        
+        }
+        if (!isDashing && !isFlying) AddGravityForce();
     }
 
 
@@ -666,6 +670,13 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    private void HandleAnimations()
+    {
+        anim.SetBool("isGrounded", isGrounded);
+        anim.SetBool("isDashing", isDashing);
+        //anim.SetBool("isDashing", isFlying);
+        anim.SetBool("isMoving", canMove && m_GoalVel.magnitude > 0);
+    }
     private void OnEnable()
     {
         rb.linearVelocity = Vector3.zero;

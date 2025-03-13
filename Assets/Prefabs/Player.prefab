@@ -519,6 +519,7 @@ GameObject:
   - component: {fileID: 6905120389310956165}
   - component: {fileID: 2411601841555775349}
   - component: {fileID: 4709698155667123392}
+  - component: {fileID: 480179525920997536}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -591,9 +592,11 @@ MonoBehaviour:
   extraBulletsOnSuccess: 1
   m_dashTime: 0.2
   m_dashSpeed: 30
-  m_maxFuel: 0.3
+  m_maxFuel: 1
   m_fuelBurnSpeed: 1
-  m_flySpeed: 28
+  m_fuelRecoverSpeed: 0.5
+  m_flySpeed: 24
+  anim: {fileID: 480179525920997536}
 --- !u!54 &2411601841555775349
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -644,6 +647,28 @@ CapsuleCollider:
   m_Height: 1.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &480179525920997536
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2389697036688943303}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a3ae978ec8e113f41b9886e48f6d17a5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2567690767963608012
 GameObject:
   m_ObjectHideFlags: 0
