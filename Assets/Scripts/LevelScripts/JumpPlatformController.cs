@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class JumpPlatformController : MonoBehaviour
 {
-    [SerializeField] Vector3 Jumpdirection;
+    //[SerializeField] Vector3 Jumpdirection;
     [SerializeField] Transform JumpDirectionTr;
     [SerializeField] float Jumpspeed;
     private void OnTriggerEnter(Collider other)

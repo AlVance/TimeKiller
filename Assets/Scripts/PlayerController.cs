@@ -284,9 +284,9 @@ public class PlayerController : MonoBehaviour
         {
             Aim();
             ChargeShot();
-            Dash();
+            //Dash();
             ReloadQTE();
-            //Fly();
+            Fly();
         }
         HandleAnimations();
     }
@@ -297,8 +297,9 @@ public class PlayerController : MonoBehaviour
             GroundCheck();
             Movement();
             FloatOnGround();
+            if (!isDashing && !isFlying) AddGravityForce();
         }
-        if (!isDashing && !isFlying) AddGravityForce();
+        
     }
 
 
@@ -325,22 +326,22 @@ public class PlayerController : MonoBehaviour
 
     private void ReloadStarted()
     {
-        if (!isReloading)
-        {
-            if (currentBullets <= 0)
-            {
-                ReloadBullets();
-            }
-            else
-            {
-                EnterDash();
-            }
-        }
-        else
-        {
-            StopReloadQTE();
-        }
-        //EnterFly();
+        //if (!isReloading)
+        //{
+        //    if (currentBullets <= 0)
+        //    {
+        //        ReloadBullets();
+        //    }
+        //    else
+        //    {
+        //        EnterDash();
+        //    }
+        //}
+        //else
+        //{
+        //    StopReloadQTE();
+        //}
+        EnterFly();
     }
 
     private void ReloadEnded()
@@ -673,8 +674,8 @@ public class PlayerController : MonoBehaviour
     private void HandleAnimations()
     {
         anim.SetBool("isGrounded", isGrounded);
-        anim.SetBool("isDashing", isDashing);
-        //anim.SetBool("isDashing", isFlying);
+        //anim.SetBool("isDashing", isDashing);
+        anim.SetBool("isDashing", isFlying);
         anim.SetBool("isMoving", canMove && m_GoalVel.magnitude > 0);
     }
     private void OnEnable()
