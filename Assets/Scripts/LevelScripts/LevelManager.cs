@@ -30,7 +30,7 @@ public class LevelManager : MonoBehaviour
     {
         GoToInbetweenLevels();
     }
-    public void SetNextLevel()
+    private void SetNextLevel()
     {
         if(currentLevelGO != null)
         {
@@ -53,17 +53,13 @@ public class LevelManager : MonoBehaviour
     private IEnumerator OnLevelStartSetUp()
     {
         yield return new WaitForEndOfFrame();
-
+        GameManager.Instance.currentPlayer.gameObject.transform.position = currentLevelGO.GetComponent<Level>().playerStartTr.position;
+        GameManager.Instance.currentPlayer.ResetPlayer();
         //GameManager.Instance.currentPlayer.enabled = false;
         TimeManager.Instance.levelTime = currentLevelGO.GetComponent<Level>().levelTime;
         UIManager.Instance.SetLevelTimerSliderMaxValue(currentLevelGO.GetComponent<Level>().levelTime);
         UIManager.Instance.SetLevelTimeText(currentLevelGO.GetComponent<Level>().levelTime);
-        UIManager.Instance.SetCurrentTimeText(TimeManager.Instance.currentTime);
-        GameManager.Instance.currentPlayer.gameObject.transform.position = currentLevelGO.GetComponent<Level>().playerStartTr.position;
-        GameManager.Instance.currentPlayer.ResetPlayer();
-
-        UIManager.Instance.SetInBetweenLevelsScreenActive(false);
-        UIManager.Instance.SetLevelOverviewActive(true);
+        UIManager.Instance.SetCurrentTimeText(TimeManager.Instance.currentTime);       
     }
     public void StartLevelGameplay()
     {
@@ -104,8 +100,13 @@ public class LevelManager : MonoBehaviour
     {
         UIManager.Instance.SetPuntuationScreenActive(false);
         UIManager.Instance.SetInBetweenLevelsScreenActive(true);
+        SetNextLevel();
     }
-
+    public void GoToLevelOverview()
+    {
+        UIManager.Instance.SetInBetweenLevelsScreenActive(false);
+        UIManager.Instance.SetLevelOverviewActive(true);
+    }
     private IEnumerator DestroyGOWithDelay(GameObject GO)
     {
         yield return new WaitForEndOfFrame();

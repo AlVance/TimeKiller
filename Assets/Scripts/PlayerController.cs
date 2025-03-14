@@ -324,6 +324,11 @@ public class PlayerController : MonoBehaviour
     private void AimFinished()
     {
         Shoot();
+        EndAim();
+    }
+
+    private void EndAim()
+    {
         aimDirAidGO.SetActive(false);
         Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
     }
@@ -474,7 +479,7 @@ public class PlayerController : MonoBehaviour
             currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(new Vector3(shootDir.x, 0, shootDir.y) + (new Vector3(moveDir.x, 0, moveDir.y) * moveDirShootInertia), projectileSpeed);
             currentProjectileGO = null;
             currentChargeTime = 0;
-            --currentBullets;
+            //--currentBullets;
         }
         else
         {
@@ -575,6 +580,7 @@ public class PlayerController : MonoBehaviour
             currentMaxSpeed = flySpeed;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
             ResetCharge();
+            EndAim();
             Camera.main.gameObject.GetComponent<FollowObject>().targetTr = aimTargetTr;
         }
     }
