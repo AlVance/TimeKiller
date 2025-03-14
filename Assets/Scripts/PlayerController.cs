@@ -19,7 +19,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rideSpringStength;
     [SerializeField] private float rideSpringDamper;
     private RaycastHit groundHit;
+    private float currentGravityForce = 0;
     [SerializeField] private float gravityForce;
+    [SerializeField] private float dashGravityForce;
     [SerializeField] private float maxFallSpeed;
 
 
@@ -275,6 +277,7 @@ public class PlayerController : MonoBehaviour
         maxFuel = m_maxFuel;
         currentFuel = maxFuel;
         currentMaxSpeed = maxSpeed;
+        currentGravityForce = gravityForce;
     }
 
     // Update is called once per frame
@@ -297,7 +300,8 @@ public class PlayerController : MonoBehaviour
             GroundCheck();
             Movement();
             FloatOnGround();
-            if (!isDashing && !isFlying) AddGravityForce();
+            //if (!isDashing && !isFlying) AddGravityForce();
+            AddGravityForce();
         }
         
     }
@@ -310,7 +314,7 @@ public class PlayerController : MonoBehaviour
 
     private void AimStarted()
     {
-        if(currentBullets > 0)
+        if(currentBullets > 0 && (!isFlying && !isDashing))
         {
             aimDirAidGO.SetActive(true);
             Camera.main.gameObject.GetComponent<FollowObject>().targetTr = aimTargetTr;
@@ -363,7 +367,20 @@ public class PlayerController : MonoBehaviour
 
     private void AddGravityForce()
     {
-        if (rb.linearVelocity.y > maxFallSpeed) rb.linearVelocity += new Vector3(0, gravityForce, 0);
+        if ((isDashing || isFlying) && rb.linearVelocity.y <= 0)
+        {
+            currentGravityForce = 0;
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+        }
+        else if ((isDashing || isFlying) && rb.linearVelocity.y > 0)
+        {
+            currentGravityForce = dashGravityForce;
+        }
+        else
+        {
+            currentGravityForce = gravityForce;
+        }
+        if (rb.linearVelocity.y > maxFallSpeed) rb.linearVelocity += new Vector3(0, currentGravityForce, 0);
         else rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
     }
     private void FloatOnGround()
@@ -419,7 +436,7 @@ public class PlayerController : MonoBehaviour
 
     private void Aim()
     {
-        if (aimPressed)
+        if (aimPressed && (!isFlying && !isDashing))
         {
             this.transform.rotation = Quaternion.LookRotation(new Vector3(aimDir.x, 0, aimDir.y));
         }
@@ -558,6 +575,7 @@ public class PlayerController : MonoBehaviour
             currentMaxSpeed = flySpeed;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
             ResetCharge();
+            Camera.main.gameObject.GetComponent<FollowObject>().targetTr = aimTargetTr;
         }
     }
     private void Fly()
@@ -579,6 +597,7 @@ public class PlayerController : MonoBehaviour
         {
             currentMaxSpeed = maxSpeed;
             isFlying = false;
+            Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
         }
     }
 
