@@ -5,6 +5,7 @@ public class JumpPlatformController : MonoBehaviour
     //[SerializeField] Vector3 Jumpdirection;
     [SerializeField] Transform JumpDirectionTr;
     [SerializeField] float Jumpspeed;
+    [SerializeField] ParticleSystem particle;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
@@ -14,6 +15,8 @@ public class JumpPlatformController : MonoBehaviour
             _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
             //_rb.AddForce(Jumpdirection.normalized * Jumpspeed);
             _rb.AddForce(JumpDirectionTr.up.normalized * Jumpspeed);
+
+            particle.Play();
         }
     }
 }
