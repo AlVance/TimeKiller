@@ -257,7 +257,12 @@ public class PlayerController : MonoBehaviour
         }
     }
     private bool isFlying = false;
+    private bool canFly = true;
 
+    [Header("Hit variables")]
+    [SerializeField] private float stunnedTime;
+    [SerializeField] private float hitForce;
+    private bool canGetHitted = true;
 
     [Header("Animation variables")]
     [SerializeField] private Animator anim;
@@ -580,7 +585,7 @@ public class PlayerController : MonoBehaviour
 
     private void EnterFly()
     {
-        if (currentFuel > 0)
+        if (currentFuel > 0 && canFly)
         {
             isFlying = true;
             currentMaxSpeed = flySpeed;
@@ -592,7 +597,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Fly()
     {
-        if(isFlying && currentFuel > 0)
+        if(isFlying && currentFuel > 0 && canFly)
         {
             currentFuel -= fuelBurnSpeed * Time.deltaTime;
         }
@@ -630,6 +635,23 @@ public class PlayerController : MonoBehaviour
         isReloading = false;
         UIManager.Instance.SetReloadQTEActive(false);
         reloadBarCurrentValue = 1;
+    }
+
+    public void GetHit(Vector3 hitPos)
+    {
+        if(canGetHitted)StartCoroutine(_GetHit(hitPos));
+    }
+    private IEnumerator _GetHit(Vector3 hitPos)
+    {
+        canGetHitted = false;
+        ResetPlayer();
+        canFly = false;
+        canMove = false;
+        rb.AddForce((this.transform.position - hitPos) * hitForce);
+        yield return new WaitForSeconds(stunnedTime);
+        canFly = true;
+        canMove = true;
+        canGetHitted = true;
     }
 
     private Vector3 GetV3RelativeToCamera(Vector2 baseDir)
@@ -729,6 +751,15 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isDashing", isFlying);
         anim.SetBool("isMoving", canMove && m_GoalVel.magnitude > 0);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Enemy")
+        {
+            GetHit(other.gameObject.transform.position);
+        }
+    }
+
     private void OnEnable()
     {
         rb.linearVelocity = Vector3.zero;
