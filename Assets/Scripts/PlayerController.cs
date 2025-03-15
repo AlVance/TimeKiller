@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 aimDir;
     private Vector3 aimDirRelativeToCam;
     private Vector2 shootDir;
+    private Vector3 shootDirRelativeToCam;
 
 
     [Header("Shoot Variables")]
@@ -481,7 +482,7 @@ public class PlayerController : MonoBehaviour
         {
             currentProjectileGO.transform.parent = null;
             //currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(new Vector3(shootDir.x, 0, shootDir.y) + (new Vector3(moveDir.x, 0, moveDir.y) * moveDirShootInertia), projectileSpeed);
-            currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(new Vector3(shootDir.x, 0, shootDir.y) + moveDirRelativeToCam * moveDirShootInertia, projectileSpeed);
+            currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(shootDirRelativeToCam + moveDirRelativeToCam * moveDirShootInertia, projectileSpeed);
             currentProjectileGO = null;
             currentChargeTime = 0;
             //--currentBullets;
@@ -696,6 +697,7 @@ public class PlayerController : MonoBehaviour
         playerInput.PlayerControls.Aim.canceled += ctx =>
         {
             shootDir = aimDir;
+            shootDirRelativeToCam = GetV3RelativeToCamera(shootDir);
             aimPressed = false;
             aimDir = Vector2.zero;
             aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
