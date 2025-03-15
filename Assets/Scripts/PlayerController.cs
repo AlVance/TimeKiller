@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour
     private bool canMove = true;
 
     private Vector2 moveDir;
+    private Vector3 moveDirRelativeToCam;
     private Vector2 lastMoveDir;
     private float currentMaxSpeed;
 
@@ -56,6 +57,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject aimDirAidGO;
     private bool aimPressed;
     private Vector2 aimDir;
+    private Vector3 aimDirRelativeToCam;
     private Vector2 shootDir;
 
 
@@ -425,7 +427,8 @@ public class PlayerController : MonoBehaviour
     {
         if (canMove)
         {
-            Vector3 unitGoal = new Vector3(moveDir.x, 0, moveDir.y);
+            //Vector3 unitGoal = new Vector3(moveDir.x, 0, moveDir.y);
+            Vector3 unitGoal = moveDirRelativeToCam;
             Vector3 goalVel = unitGoal * currentMaxSpeed;
 
             m_GoalVel = Vector3.MoveTowards(m_GoalVel, goalVel, accelerationSpeed * Time.fixedDeltaTime);
@@ -435,7 +438,7 @@ public class PlayerController : MonoBehaviour
             neededAccel = Vector3.ClampMagnitude(neededAccel, maxAccelerationForce);
             rb.AddForce(neededAccel * rb.mass);
 
-            if (movePressed && !aimPressed) this.transform.rotation = Quaternion.LookRotation(new Vector3(moveDir.x, 0, moveDir.y));
+            if (movePressed && !aimPressed) this.transform.rotation = Quaternion.LookRotation(moveDirRelativeToCam);
         }
     }
 
@@ -443,7 +446,8 @@ public class PlayerController : MonoBehaviour
     {
         if (aimPressed && (!isFlying && !isDashing))
         {
-            this.transform.rotation = Quaternion.LookRotation(new Vector3(aimDir.x, 0, aimDir.y));
+            //this.transform.rotation = Quaternion.LookRotation(new Vector3(aimDir.x, 0, aimDir.y));
+            this.transform.rotation = Quaternion.LookRotation(aimDirRelativeToCam);
         }
     }
 
@@ -476,7 +480,8 @@ public class PlayerController : MonoBehaviour
         if(currentChargeTime >= shootChargeTime)
         {
             currentProjectileGO.transform.parent = null;
-            currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(new Vector3(shootDir.x, 0, shootDir.y) + (new Vector3(moveDir.x, 0, moveDir.y) * moveDirShootInertia), projectileSpeed);
+            //currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(new Vector3(shootDir.x, 0, shootDir.y) + (new Vector3(moveDir.x, 0, moveDir.y) * moveDirShootInertia), projectileSpeed);
+            currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(new Vector3(shootDir.x, 0, shootDir.y) + moveDirRelativeToCam * moveDirShootInertia, projectileSpeed);
             currentProjectileGO = null;
             currentChargeTime = 0;
             //--currentBullets;
@@ -626,6 +631,21 @@ public class PlayerController : MonoBehaviour
         reloadBarCurrentValue = 1;
     }
 
+    private Vector3 GetV3RelativeToCamera(Vector2 baseDir)
+    {
+        Vector3 camForward = Camera.main.transform.forward;
+        Vector3 camRight = Camera.main.transform.right;
+        camForward.y = 0;
+        camRight.y = 0;
+        camForward = camForward.normalized;
+        camRight = camRight.normalized;
+
+        Vector3 forwardRelativeVertical = baseDir.y * camForward;
+        Vector3 rightRelativeVertical = baseDir.x * camRight;
+
+        Vector3 cameraRelativeDir = (forwardRelativeVertical + rightRelativeVertical).normalized;
+        return cameraRelativeDir;
+    }
     private void HandleInput()
     {
         playerInput.PlayerControls.Move.started += ctx =>
@@ -637,6 +657,8 @@ public class PlayerController : MonoBehaviour
         {
             moveDir = ctx.ReadValue<Vector2>();
             movePressed = moveDir.x != 0 || moveDir.y != 0;
+
+            moveDirRelativeToCam = GetV3RelativeToCamera(moveDir);
         };
         //When the move input is canceled it resets the move direction to 0 and the moving bool to false
         playerInput.PlayerControls.Move.canceled += ctx =>
@@ -644,6 +666,7 @@ public class PlayerController : MonoBehaviour
             movePressed = false;
             lastMoveDir = moveDir;
             moveDir = Vector2.zero;
+            moveDirRelativeToCam = GetV3RelativeToCamera(moveDir);
         };
 
 
@@ -665,8 +688,9 @@ public class PlayerController : MonoBehaviour
             else
             {
                 aimDir = ctx.ReadValue<Vector2>();
-            }
-            
+            } 
+            aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
+
         };
 
         playerInput.PlayerControls.Aim.canceled += ctx =>
@@ -674,7 +698,7 @@ public class PlayerController : MonoBehaviour
             shootDir = aimDir;
             aimPressed = false;
             aimDir = Vector2.zero;
-
+            aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
             AimFinished();
         };
 
