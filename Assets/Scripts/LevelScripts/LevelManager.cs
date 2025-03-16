@@ -59,7 +59,14 @@ public class LevelManager : MonoBehaviour
         TimeManager.Instance.levelTime = currentLevelGO.GetComponent<Level>().levelTime;
         UIManager.Instance.SetLevelTimerSliderMaxValue(currentLevelGO.GetComponent<Level>().levelTime);
         UIManager.Instance.SetLevelTimeText(currentLevelGO.GetComponent<Level>().levelTime);
-        UIManager.Instance.SetCurrentTimeText(TimeManager.Instance.currentTime);       
+        UIManager.Instance.SetCurrentTimeText(TimeManager.Instance.currentTime);
+
+        if (currentLevelGO.GetComponent<Level>().levelCamValues != null && 
+            (currentLevelGO.GetComponent<Level>().levelCamValues.position != Vector3.zero || currentLevelGO.GetComponent<Level>().levelCamValues.rotation != Quaternion.Euler(Vector3.zero)))
+        {
+            Camera.main.gameObject.GetComponent<FollowObject>().followOffset = currentLevelGO.GetComponent<Level>().levelCamValues.position;
+            Camera.main.gameObject.transform.rotation = currentLevelGO.GetComponent<Level>().levelCamValues.rotation;
+        } 
     }
     public void StartLevelGameplay()
     {

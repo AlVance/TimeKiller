@@ -3,7 +3,7 @@ using UnityEngine;
 public class FollowObject : MonoBehaviour
 {
     [SerializeField] public Transform targetTr;
-    [SerializeField] private Vector3 followOffset;
+    [SerializeField] public Vector3 followOffset;
 
     [SerializeField] private bool followSmooth;
     [SerializeField] private float followSpeed;
