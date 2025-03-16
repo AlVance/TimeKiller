@@ -258,6 +258,7 @@ public class PlayerController : MonoBehaviour
     }
     private bool isFlying = false;
     private bool canFly = true;
+    public bool switchPlatformState;
 
     [Header("Hit variables")]
     [SerializeField] private float stunnedTime;
@@ -593,6 +594,15 @@ public class PlayerController : MonoBehaviour
             ResetCharge();
             EndAim();
             Camera.main.gameObject.GetComponent<FollowObject>().targetTr = aimTargetTr;
+            //Cambia el estado de las plataformas cambiables
+            if (switchPlatformState)
+            {
+                switchPlatformState = false;
+            }
+            else
+            {
+                switchPlatformState = true;
+            }
         }
     }
     private void Fly()
