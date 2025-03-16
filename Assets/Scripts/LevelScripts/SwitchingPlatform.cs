@@ -3,16 +3,18 @@ using UnityEngine;
 
 public class SwitchingPlatform : MonoBehaviour
 {
-
     [SerializeField] private GameObject switchingPlatformVisual;
     [SerializeField] private Animator switchingPlatformAnimator;
+    private bool switchPlatformState = false;
 
-
-    private void Update()
+    private void Start()
     {
-        switchingPlatformAnimator.SetBool("SwitchingPlatformState", GameManager.Instance.currentPlayer.switchPlatformState);
+        GameManager.Instance.currentPlayer.OnStartFlyEvent.AddListener(ChangePlatformState);
     }
 
-
-
+    private void ChangePlatformState()
+    {
+        switchPlatformState = !switchPlatformState;
+        switchingPlatformAnimator.SetBool("SwitchingPlatformState", switchPlatformState);
+    }
 }

@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class PlayerVFX : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem leftFootStepPS;
-    [SerializeField] private ParticleSystem rightFootStepPS;
-    public void PlayLeftFootStepParticles()
+    [SerializeField] private GameObject footStepPS;
+    [SerializeField] private Transform leftFootTr;
+    [SerializeField] private Transform rightFootTr;
+    public void PlayLeftFootstepParticles()
     {
-        leftFootStepPS.Play();
+        Instantiate(footStepPS, leftFootTr.transform.position, rightFootTr.rotation);
     }
-
-    public void PlayRightFootStepParticles()
+    public void PlayRightFootstepParticles()
     {
-        rightFootStepPS.Play();
+        Instantiate(footStepPS, rightFootTr.transform.position, leftFootTr.rotation);
     }
 }

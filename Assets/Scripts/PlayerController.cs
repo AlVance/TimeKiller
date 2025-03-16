@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
@@ -267,6 +268,10 @@ public class PlayerController : MonoBehaviour
 
     [Header("Animation variables")]
     [SerializeField] private Animator anim;
+
+    [Header("Player Events")]
+    public UnityEvent OnStartFlyEvent;
+
     private void Awake()
     {
         playerInput = new PlayerInput();
@@ -594,15 +599,8 @@ public class PlayerController : MonoBehaviour
             ResetCharge();
             EndAim();
             Camera.main.gameObject.GetComponent<FollowObject>().targetTr = aimTargetTr;
-            //Cambia el estado de las plataformas cambiables
-            if (switchPlatformState)
-            {
-                switchPlatformState = false;
-            }
-            else
-            {
-                switchPlatformState = true;
-            }
+
+            OnStartFlyEvent.Invoke();
         }
     }
     private void Fly()
