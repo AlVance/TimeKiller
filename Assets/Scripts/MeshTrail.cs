@@ -11,10 +11,15 @@ public class MeshTrail : MonoBehaviour
     private bool isTrailActive = false;
     private MeshRenderer[] meshes;
 
+    [SerializeField] Color[] sandColors;
+    int nColor = 0;
+
     private void Start()
     {  
         meshes = GetComponentsInChildren<MeshRenderer>();
         GameManager.Instance.currentPlayer.OnStartFlyEvent.AddListener(ActivateSandevistan);
+        Debug.Log(sandColors.Length);
+
     }
 
     private void ActivateSandevistan()
@@ -29,19 +34,22 @@ public class MeshTrail : MonoBehaviour
             GameObject go = new GameObject();
             go.transform.SetPositionAndRotation(meshes[i].transform.position, meshes[i].transform.rotation);
             go.transform.localScale = (meshes[i].transform.localScale * transform.localScale.x);
-
             MeshRenderer mr = go.AddComponent<MeshRenderer>();
             MeshFilter mf = go.AddComponent<MeshFilter>();
 
-            Mesh _mesh = new Mesh();
+            //Mesh _mesh = new Mesh();
             //meshes[i].BakeMesh(_mesh);
             mf.mesh = meshes[i].GetComponent<MeshFilter>().mesh;
             mr.material = trailMaterial;
 
+            Color sandColor = sandColors[nColor];
+
+            mr.material.SetColor("_Emission_color", sandColor);
             Destroy(go, destroyTime);
         }
         yield return new WaitForSeconds(meshResfreshRate);
+        nColor = nColor >= sandColors.Length - 1 ? 0 : ++nColor;
 
-        if(GameManager.Instance.currentPlayer.isFlying) StartCoroutine(ActivateTrail());
+        if (GameManager.Instance.currentPlayer.isFlying) StartCoroutine(ActivateTrail());
     }
 }

@@ -38,14 +38,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Glitch_power: 0.01
+    - _Alpha: 0.5
+    - _Glitch_power: 0.015
     - _Glitch_speed: 37.81
     - _Glith_power: 0.6
     - _Noise_scale: 857.99
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Emission_color: {r: 4, g: 0.1826264, b: 0, a: 0}
+    - _BaseColor: {r: 0, g: 0, b: 0, a: 0.6431373}
+    - _Base_color: {r: 0.8490566, g: 0, b: 0, a: 1}
+    - _Emission_color: {r: 5.9921565, g: 5.9921565, b: 5.9921565, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &1663289043690138499

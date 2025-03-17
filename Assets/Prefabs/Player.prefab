@@ -1739,9 +1739,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a495c22729160f4b89d916872d093ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshResfreshRate: 0.1
+  meshResfreshRate: 0.05
   destroyTime: 0.4
   trailMaterial: {fileID: 2100000, guid: 977fbd2448f304649a489b70ca859b8d, type: 2}
+  sandColors:
+  - {r: 1, g: 0, b: 0.8057232, a: 1}
+  - {r: 0.57939434, g: 0, b: 1, a: 1}
+  - {r: 0, g: 0.013665199, b: 1, a: 1}
+  - {r: 0, g: 1, b: 0.29993725, a: 1}
+  - {r: 0.90346205, g: 1, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0.2502222, a: 1}
 --- !u!1 &8713618556237790782
 GameObject:
   m_ObjectHideFlags: 0
