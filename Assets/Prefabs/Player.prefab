@@ -599,6 +599,7 @@ MonoBehaviour:
   m_fuelBurnSpeed: 1
   m_fuelRecoverSpeed: 0.5
   m_flySpeed: 24
+  isFlying: 0
   switchPlatformState: 0
   stunnedTime: 0.2
   hitForce: 65
@@ -1689,6 +1690,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9088105192991257912}
+  - component: {fileID: 8993291382650042542}
   m_Layer: 0
   m_Name: PlayerModel 1
   m_TagString: Untagged
@@ -1725,6 +1727,21 @@ Transform:
   - {fileID: 1704565821979021393}
   m_Father: {fileID: 4556464428590179113}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &8993291382650042542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8454592584219635586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a495c22729160f4b89d916872d093ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshResfreshRate: 0.1
+  destroyTime: 0.4
+  trailMaterial: {fileID: 2100000, guid: 977fbd2448f304649a489b70ca859b8d, type: 2}
 --- !u!1 &8713618556237790782
 GameObject:
   m_ObjectHideFlags: 0
