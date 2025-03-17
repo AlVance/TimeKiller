@@ -257,7 +257,7 @@ public class PlayerController : MonoBehaviour
             m_flySpeed = value;
         }
     }
-    private bool isFlying = false;
+    public bool isFlying = false;
     private bool canFly = true;
     public bool switchPlatformState;
 
@@ -278,11 +278,12 @@ public class PlayerController : MonoBehaviour
         HandleInput();
 
         rb = this.GetComponent<Rigidbody>();
+        if (GameManager.Instance != null) GameManager.Instance.currentPlayer = this;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (GameManager.Instance != null) GameManager.Instance.currentPlayer = this;
+        
         Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
 
         maxBullets = m_maxBullets;

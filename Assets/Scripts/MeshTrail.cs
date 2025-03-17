@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class MeshTrail : MonoBehaviour
 { 
-    public float activeTime = 0.5f;
     public float meshResfreshRate = 0.1f;
     public float destroyTime = 0.2f;
 
@@ -13,43 +12,36 @@ public class MeshTrail : MonoBehaviour
     private MeshRenderer[] meshes;
 
     private void Start()
-    {
+    {  
         meshes = GetComponentsInChildren<MeshRenderer>();
-    }
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && !isTrailActive)
-        {
-            isTrailActive = true;
-            StartCoroutine(ActivateTrail(activeTime));
-        }
+        GameManager.Instance.currentPlayer.OnStartFlyEvent.AddListener(ActivateSandevistan);
     }
 
-    IEnumerator ActivateTrail(float timeActive)
+    private void ActivateSandevistan()
     {
-        while (timeActive > 0)
+        StartCoroutine(ActivateTrail());
+    }
+    
+    IEnumerator ActivateTrail()
+    {
+        for (int i = 0; i < meshes.Length; i++)
         {
-            timeActive -= meshResfreshRate;
+            GameObject go = new GameObject();
+            go.transform.SetPositionAndRotation(meshes[i].transform.position, meshes[i].transform.rotation);
+            go.transform.localScale = (meshes[i].transform.localScale * transform.localScale.x);
 
-            for (int i = 0; i < meshes.Length; i++) {
-                GameObject go = new GameObject();
-                go.transform.SetPositionAndRotation(meshes[i].transform.position, meshes[i].transform.rotation);
-                go.transform.localScale = (meshes[i].transform.localScale * transform.localScale.x);
+            MeshRenderer mr = go.AddComponent<MeshRenderer>();
+            MeshFilter mf = go.AddComponent<MeshFilter>();
 
-                MeshRenderer mr = go.AddComponent<MeshRenderer>();
-                MeshFilter   mf = go.AddComponent<MeshFilter>();
+            Mesh _mesh = new Mesh();
+            //meshes[i].BakeMesh(_mesh);
+            mf.mesh = meshes[i].GetComponent<MeshFilter>().mesh;
+            mr.material = trailMaterial;
 
-                Mesh _mesh = new Mesh();
-                //meshes[i].BakeMesh(_mesh);
-                mf.mesh = meshes[i].GetComponent<MeshFilter>().mesh;
-                mr.material = trailMaterial;
-
-                Destroy(go, destroyTime);
-            }
-
-            yield return new WaitForSeconds(meshResfreshRate);
+            Destroy(go, destroyTime);
         }
+        yield return new WaitForSeconds(meshResfreshRate);
 
-        isTrailActive = false;
+        if(GameManager.Instance.currentPlayer.isFlying) StartCoroutine(ActivateTrail());
     }
 }
