@@ -5,10 +5,14 @@ public class SwitchingPlatform : MonoBehaviour
 {
     [SerializeField] private GameObject switchingPlatformVisual;
     [SerializeField] private Animator switchingPlatformAnimator;
-    private bool switchPlatformState = false;
+    [SerializeField] private bool switchPlatformState = false;
 
     private void Start()
     {
+        if (switchPlatformState)
+        {
+            switchingPlatformAnimator.SetBool("SwitchingPlatformState", switchPlatformState);
+        }
         GameManager.Instance.currentPlayer.OnStartFlyEvent.AddListener(ChangePlatformState);
     }
 
