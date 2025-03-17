@@ -49,8 +49,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   JumpDirectionTr: {fileID: 5804761965303155730}
-  Jumpspeed: 2000
+  Jumpspeed: 2500
   particle: {fileID: 1007327427283542789}
+  blockInputTime: 0.1
 --- !u!65 &5509516445451792062
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -70,8 +71,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 2.3107033, z: 2}
-  m_Center: {x: 0, y: 1.0053511, z: 0}
+  m_Size: {x: 1.5, y: 2.3, z: 1.5}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &4409203823412669845
 GameObject:
   m_ObjectHideFlags: 0

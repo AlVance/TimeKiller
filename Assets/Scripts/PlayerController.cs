@@ -366,7 +366,10 @@ public class PlayerController : MonoBehaviour
         //}
         EnterFly();
     }
-
+    private void ReloadPerformed()
+    {
+        if (!isFlying) EnterFly();
+    }
     private void ReloadEnded()
     {
         EndFly();
@@ -653,15 +656,30 @@ public class PlayerController : MonoBehaviour
     {
         canGetHitted = false;
         ResetPlayer();
-        canFly = false;
-        canMove = false;
+        //canFly = false;
+        //canMove = false;
         rb.AddForce((this.transform.position - hitPos) * hitForce);
-        yield return new WaitForSeconds(stunnedTime);
-        canFly = true;
-        canMove = true;
+        BlockPlayer(stunnedTime);
+        yield return new WaitForSeconds(0f);
+        //canFly = true;
+        //canMove = true;
         canGetHitted = true;
     }
-
+    public void BlockPlayer(float blockTime)
+    {
+        StopCoroutine(_BlockPlayer(blockTime));
+        StartCoroutine(_BlockPlayer(blockTime));
+    }
+    private IEnumerator _BlockPlayer(float blockTime)
+    {
+        canFly = false;
+        //canMove = false;
+        currentMaxSpeed = 0;
+        yield return new WaitForSeconds(blockTime);
+        canFly = true;
+        currentMaxSpeed = maxSpeed;
+        //canMove = true;
+    }
     private Vector3 GetV3RelativeToCamera(Vector2 baseDir)
     {
         Vector3 camForward = Camera.main.transform.forward;
@@ -742,7 +760,7 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Reload.performed += ctx =>
         {
-
+            ReloadPerformed();
         };
 
         playerInput.PlayerControls.Reload.canceled += ctx =>
