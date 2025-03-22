@@ -456,7 +456,7 @@ public class PlayerController : MonoBehaviour
             neededAccel = Vector3.ClampMagnitude(neededAccel, maxAccelerationForce);
             rb.AddForce(neededAccel * rb.mass);
 
-            if (!isAiming) this.transform.rotation = Quaternion.LookRotation(moveDirRelativeToCam);
+            if (!isAiming && moveDirRelativeToCam != Vector3.zero) this.transform.rotation = Quaternion.LookRotation(moveDirRelativeToCam);
         }
     }
 
@@ -733,7 +733,8 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Aim.performed += ctx =>
         {
-            if (Mouse.current.leftButton.isPressed && !Application.isMobilePlatform)
+#if !PLATFORM_ANDROID
+            if (Mouse.current.leftButton.isPressed)
             {
                 Vector2 tempAimDir = ctx.ReadValue<Vector2>();
                 tempAimDir.x -= Screen.width / 2;
@@ -743,7 +744,10 @@ public class PlayerController : MonoBehaviour
             else
             {
                 aimDir = ctx.ReadValue<Vector2>();
-            } 
+            }
+#else
+            aimDir = ctx.ReadValue<Vector2>();
+#endif
             aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
 
         };
