@@ -61,6 +61,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 aimDirRelativeToCam;
     private Vector2 shootDir;
     private Vector3 shootDirRelativeToCam;
+    private bool isAiming = false;
 
 
     [Header("Shoot Variables")]
@@ -268,6 +269,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Animation variables")]
     [SerializeField] private Animator anim;
+    [SerializeField] private GameObject backGunGO;
 
     [Header("Player Events")]
     public UnityEvent OnStartFlyEvent;
@@ -454,7 +456,7 @@ public class PlayerController : MonoBehaviour
             neededAccel = Vector3.ClampMagnitude(neededAccel, maxAccelerationForce);
             rb.AddForce(neededAccel * rb.mass);
 
-            if (movePressed && !aimPressed) this.transform.rotation = Quaternion.LookRotation(moveDirRelativeToCam);
+            if (!isAiming) this.transform.rotation = Quaternion.LookRotation(moveDirRelativeToCam);
         }
     }
 
@@ -462,9 +464,12 @@ public class PlayerController : MonoBehaviour
     {
         if (aimPressed && (!isFlying && !isDashing))
         {
+            if (!isAiming) AimStarted();
             //this.transform.rotation = Quaternion.LookRotation(new Vector3(aimDir.x, 0, aimDir.y));
             this.transform.rotation = Quaternion.LookRotation(aimDirRelativeToCam);
+            isAiming = true;
         }
+        else isAiming = false;
     }
 
     private void ChargeShot()
@@ -728,7 +733,7 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Aim.performed += ctx =>
         {
-            if (Mouse.current.leftButton.isPressed)
+            if (Mouse.current.leftButton.isPressed && !Application.isMobilePlatform)
             {
                 Vector2 tempAimDir = ctx.ReadValue<Vector2>();
                 tempAimDir.x -= Screen.width / 2;
@@ -777,6 +782,16 @@ public class PlayerController : MonoBehaviour
         //anim.SetBool("isDashing", isDashing);
         anim.SetBool("isDashing", isFlying);
         anim.SetBool("isMoving", canMove && m_GoalVel.magnitude > 0);
+        if (!isAiming)
+        {
+            anim.SetLayerWeight(1, 0f);
+            backGunGO.SetActive(true);
+        }
+        else 
+        {
+            anim.SetLayerWeight(1, 100f);
+            backGunGO.SetActive(false);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

@@ -2,7 +2,9 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Splines;
 using MyBox;
+#if UNITY_EDITOR
 using UnityEditor.Callbacks;
+#endif
 
 public class EnemyBehaviour : MonoBehaviour
 {
@@ -137,7 +139,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         if(MovementSpline != null) MovementSpline.gameObject.GetComponent<SplineInstantiate>().Clear();
     }
-
+#if UNITY_EDITOR
     private void OnValidate()
     {
         UnityEditor.EditorApplication.delayCall += OnValidateCallBack;
@@ -153,6 +155,7 @@ public class EnemyBehaviour : MonoBehaviour
         EnemyVisualSetter();
         
     }
+#endif
     private void EnemyMovementTypeSetter()
     {
         if (enemyMovementType == enemyMovementTypes.Movable)
