@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform groundCheckOriginTr;
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private LayerMask groundCheckLayersToCheck;
-    private bool isGrounded;
+    public bool isGrounded;
 
 
     [Header("Move Varaibles")]
@@ -285,10 +285,6 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
-        //Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
-        //CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
-
         maxBullets = m_maxBullets;
         currentBullets = maxBullets;
         successReloadRate = m_successReloadRate;
@@ -617,7 +613,9 @@ public class PlayerController : MonoBehaviour
     {
         if(isFlying && currentFuel > 0 && canFly)
         {
-            currentFuel -= fuelBurnSpeed * Time.deltaTime;
+            if(m_GoalVel.magnitude > 0) currentFuel -= fuelBurnSpeed * Time.deltaTime;
+            else currentFuel -= fuelBurnSpeed / 4 * Time.deltaTime;
+
         }
         else
         {

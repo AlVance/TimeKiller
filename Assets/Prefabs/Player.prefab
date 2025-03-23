@@ -787,6 +787,92 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.000054777833, y: 0.002786492, z: 0.0000207728}
     m_Extent: {x: 0.0021862814, y: 0.004390671, z: 0.0034729773}
   m_DirtyAABB: 0
+--- !u!1 &1520611908003941240
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8769928413507222991}
+  - component: {fileID: 1697023785132922278}
+  - component: {fileID: 6990464784358562501}
+  m_Layer: 0
+  m_Name: BlobShadowGO
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8769928413507222991
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1520611908003941240}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.108, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.01, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4556464428590179113}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &1697023785132922278
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1520611908003941240}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &6990464784358562501
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1520611908003941240}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: ae2e3e0370243a049ae94c5c4be0298d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &1632528852007733473
 GameObject:
   m_ObjectHideFlags: 0
@@ -1058,6 +1144,7 @@ GameObject:
   - component: {fileID: 6905120389310956165}
   - component: {fileID: 2411601841555775349}
   - component: {fileID: 4709698155667123392}
+  - component: {fileID: 8548522797890374881}
   - component: {fileID: 2434632405498806347}
   m_Layer: 0
   m_Name: Player
@@ -1084,6 +1171,7 @@ Transform:
   - {fileID: 6076535337570582238}
   - {fileID: 3935866120995680974}
   - {fileID: 3148131557680886516}
+  - {fileID: 8769928413507222991}
   - {fileID: 8604775186498780578}
   - {fileID: 2225591854260285851}
   m_Father: {fileID: 0}
@@ -1113,6 +1201,7 @@ MonoBehaviour:
   groundCheckLayersToCheck:
     serializedVersion: 2
     m_Bits: 8
+  isGrounded: 0
   m_maxSpeed: 12
   accelerationSpeed: 120
   maxAccelerationForce: 100
@@ -1195,6 +1284,21 @@ CapsuleCollider:
   m_Height: 1.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8548522797890374881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2389697036688943303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d54bc54c7080b4c9a3b5cc453d5a52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pC: {fileID: 6905120389310956165}
+  shadow: {fileID: 1520611908003941240}
+  offset: 0.5
 --- !u!114 &2434632405498806347
 MonoBehaviour:
   m_ObjectHideFlags: 0
