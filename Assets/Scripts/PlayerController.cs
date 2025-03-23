@@ -286,7 +286,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         
-        Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+        //Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+        //CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
 
         maxBullets = m_maxBullets;
         currentBullets = maxBullets;
@@ -334,7 +335,7 @@ public class PlayerController : MonoBehaviour
         if(currentBullets > 0 && (!isFlying && !isDashing))
         {
             aimDirAidGO.SetActive(true);
-            Camera.main.gameObject.GetComponent<FollowObject>().targetTr = aimTargetTr;
+            CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
         }
     }
 
@@ -347,7 +348,7 @@ public class PlayerController : MonoBehaviour
     private void EndAim()
     {
         aimDirAidGO.SetActive(false);
-        Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+        CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
     }
 
     private void ReloadStarted()
@@ -607,7 +608,7 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
             ResetCharge();
             EndAim();
-            Camera.main.gameObject.GetComponent<FollowObject>().targetTr = aimTargetTr;
+            CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
 
             OnStartFlyEvent.Invoke();
         }
@@ -631,7 +632,7 @@ public class PlayerController : MonoBehaviour
         {
             currentMaxSpeed = maxSpeed;
             isFlying = false;
-            Camera.main.gameObject.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+            CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
         }
     }
 
@@ -688,8 +689,8 @@ public class PlayerController : MonoBehaviour
     }
     private Vector3 GetV3RelativeToCamera(Vector2 baseDir)
     {
-        Vector3 camForward = Camera.main.transform.forward;
-        Vector3 camRight = Camera.main.transform.right;
+        Vector3 camForward = CameraManager.Instance.currentCam.transform.forward;
+        Vector3 camRight = CameraManager.Instance.currentCam.transform.right;
         camForward.y = 0;
         camRight.y = 0;
         camForward = camForward.normalized;
@@ -727,7 +728,7 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Aim.started += ctx =>
         {
-            AimStarted();
+            if (GameManager.Instance.levelStarted) AimStarted();
             aimPressed = true;
         };
 

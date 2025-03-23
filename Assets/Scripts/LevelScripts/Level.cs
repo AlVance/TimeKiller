@@ -6,7 +6,7 @@ public class Level : MonoBehaviour
     [SerializeField] public Transform playerStartTr;
     [SerializeField] private int objectivesToFinish;
     [SerializeField] public int levelTime;
-    [SerializeField] public Transform levelCamValues;
+    [SerializeField] public GameObject levelCam;
     private int currentObjectives = 0;
 
     public void SetCurrentObjectivesInt(int currentObjMod)
