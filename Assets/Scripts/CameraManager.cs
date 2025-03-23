@@ -23,7 +23,7 @@ public class CameraManager : MonoBehaviour
     {
         newCam.SetActive(true);
         if(newCam.GetComponent<FollowObject>() != null && newCam.GetComponent<FollowObject>().followPlayer) newCam.GetComponent<FollowObject>().targetTr = GameManager.Instance.currentPlayer.gameObject.transform;
-        if(currentCam != null)currentCam.SetActive(false);
+        if(currentCam != null && currentCam != newCam)currentCam.SetActive(false);
         currentCam = newCam;
     }
 }
