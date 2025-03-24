@@ -9,14 +9,14 @@ public class MeshTrail : MonoBehaviour
     public Material trailMaterial;
 
     private bool isTrailActive = false;
-    private MeshRenderer[] meshes;
+    private SkinnedMeshRenderer[] meshes;
 
     [SerializeField] Color[] sandColors;
     int nColor = 0;
 
     private void Start()
     {  
-        meshes = GetComponentsInChildren<MeshRenderer>();
+        meshes = GetComponentsInChildren<SkinnedMeshRenderer>();
         GameManager.Instance.currentPlayer.OnStartFlyEvent.AddListener(ActivateSandevistan);
         Debug.Log(sandColors.Length);
 
@@ -33,13 +33,13 @@ public class MeshTrail : MonoBehaviour
         {
             GameObject go = new GameObject();
             go.transform.SetPositionAndRotation(meshes[i].transform.position, meshes[i].transform.rotation);
-            go.transform.localScale = (meshes[i].transform.localScale * transform.localScale.x);
+            //go.transform.localScale = (meshes[i].transform.localScale * transform.localScale.x);
             MeshRenderer mr = go.AddComponent<MeshRenderer>();
             MeshFilter mf = go.AddComponent<MeshFilter>();
 
-            //Mesh _mesh = new Mesh();
-            //meshes[i].BakeMesh(_mesh);
-            mf.mesh = meshes[i].GetComponent<MeshFilter>().mesh;
+            Mesh _mesh = new Mesh();
+            meshes[i].BakeMesh(_mesh);
+            mf.mesh = _mesh;
             mr.material = trailMaterial;
 
             Color sandColor = sandColors[nColor];
