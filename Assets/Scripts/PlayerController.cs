@@ -266,6 +266,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float hitForce;
     private bool canGetHitted = true;
 
+    [Header("Ledge grab variables")]
+    [SerializeField] private Transform upRayTr;
+    [SerializeField] private Transform frontRayTr;
+    [SerializeField] private float upRayDistance;
+    [SerializeField] private float frontRayDistance;
+
     [Header("Animation variables")]
     [SerializeField] private Animator anim;
     [SerializeField] private GameObject backGunGO;
@@ -315,6 +321,7 @@ public class PlayerController : MonoBehaviour
             FloatOnGround();
             //if (!isDashing && !isFlying) AddGravityForce();
             AddGravityForce();
+            CheckLedgeGrab();
         }
         
     }
@@ -630,6 +637,24 @@ public class PlayerController : MonoBehaviour
             currentMaxSpeed = maxSpeed;
             isFlying = false;
             CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+        }
+    }
+
+    private void CheckLedgeGrab()
+    {
+        Ray upRay = new Ray(upRayTr.position, Vector3.down * upRayDistance);
+        Ray frontRay = new Ray(frontRayTr.position, this.transform.forward * frontRayDistance);
+        RaycastHit upRayHit;
+        RaycastHit frontRayHit;
+
+        Debug.DrawRay(upRayTr.position, Vector3.down * upRayDistance, Color.green);
+        Debug.DrawRay(frontRayTr.position, this.transform.forward * frontRayDistance, Color.green);
+
+        if(Physics.Raycast(upRay, out upRayHit, groundCheckLayersToCheck) && Physics.Raycast(frontRay, out frontRayHit, groundCheckLayersToCheck) && m_GoalVel.magnitude > 0)
+        {
+            //Debug.Log("Up:" + upRayHit.transform);
+            //Debug.Log("Front:" + frontRayHit.transform);
+            //Debug.Log("LedgeGrab");
         }
     }
 

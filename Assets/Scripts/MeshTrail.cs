@@ -18,7 +18,6 @@ public class MeshTrail : MonoBehaviour
     {  
         meshes = GetComponentsInChildren<SkinnedMeshRenderer>();
         GameManager.Instance.currentPlayer.OnStartFlyEvent.AddListener(ActivateSandevistan);
-        Debug.Log(sandColors.Length);
 
     }
 
