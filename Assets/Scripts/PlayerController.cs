@@ -477,7 +477,7 @@ public class PlayerController : MonoBehaviour
                 if (currentChargeTime <= 0)
                 {
                     currentProjectileGO = Instantiate(projectileGO, porjectileSpawnPos.position, Quaternion.identity, porjectileSpawnPos);
-                    currentProjectileGO.GetComponent<PlayerProjectile>().ProjectileSetUp(this, projectileDamage, projectileRange);
+                    currentProjectileGO.GetComponent<PlayerProjectile>().ProjectileSetUp(projectileDamage, projectileRange);
                 }
                 if (currentChargeTime <= shootChargeTime)
                 {
@@ -647,16 +647,13 @@ public class PlayerController : MonoBehaviour
         currentBullets = maxBullets;
         currentFuel = maxFuel;
         canMove = true;
-        isReloading = false;
-        UIManager.Instance.SetReloadQTEActive(false);
-        reloadBarCurrentValue = 1;
     }
 
-    public void GetHit(Vector3 hitPos)
+    public void GetHit(Vector3 hitPos, float hitForce)
     {
-        if(canGetHitted)StartCoroutine(_GetHit(hitPos));
+        if(canGetHitted)StartCoroutine(_GetHit(hitPos, hitForce));
     }
-    private IEnumerator _GetHit(Vector3 hitPos)
+    private IEnumerator _GetHit(Vector3 hitPos, float hitForce)
     {
         canGetHitted = false;
         ResetPlayer();
@@ -664,14 +661,13 @@ public class PlayerController : MonoBehaviour
         //canMove = false;
         rb.AddForce((this.transform.position - hitPos) * hitForce);
         BlockPlayer(stunnedTime);
-        yield return new WaitForSeconds(0f);
+        yield return new WaitForSeconds(stunnedTime);
         //canFly = true;
         //canMove = true;
         canGetHitted = true;
     }
     public void BlockPlayer(float blockTime)
     {
-        StopCoroutine(_BlockPlayer(blockTime));
         StartCoroutine(_BlockPlayer(blockTime));
     }
     private IEnumerator _BlockPlayer(float blockTime)
@@ -800,7 +796,7 @@ public class PlayerController : MonoBehaviour
     {
         if(other.gameObject.tag == "Enemy")
         {
-            GetHit(other.gameObject.transform.position);
+            GetHit(other.gameObject.transform.position, hitForce);
         }
     }
 

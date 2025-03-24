@@ -182,13 +182,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8589170155988983570}
-  - component: {fileID: 4908511155175512190}
+  - component: {fileID: 3393227314281609732}
   - component: {fileID: 2015905639402838448}
   - component: {fileID: 611993597645727658}
   - component: {fileID: 9116624760187026013}
   - component: {fileID: 6470303841051709425}
   m_Layer: 0
-  m_Name: Projectile
+  m_Name: EnemyProjectile
   m_TagString: PlayerProjectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -210,7 +210,7 @@ Transform:
   - {fileID: 8439925072675872791}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4908511155175512190
+--- !u!114 &3393227314281609732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -219,10 +219,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7151585630043099556}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a747a483998b9d84696d64a90b34f6f7, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b5338e8187abc74199624bdff5e46d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PC: {fileID: 0}
   launched: 0
   charged: 0
   projectileDamage: 0

@@ -16,6 +16,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     [Header("Enemy abilities")]
     [SerializeField] private bool canShoot = false;
+    [SerializeField] private bool canRespawn = false;
 
 
     [SerializeField] private int enemyHealth = 1;
@@ -32,8 +33,17 @@ public class EnemyBehaviour : MonoBehaviour
 
     [Header("Shoot variables")]
     [SerializeField, ConditionalField(nameof(canShoot), false)] private float shootCD;
+    [SerializeField, ConditionalField(nameof(canShoot), false)] private float projectileRange;
+    [SerializeField, ConditionalField(nameof(canShoot), false)] private float projectileSize;
+    [SerializeField, ConditionalField(nameof(canShoot), false)] private float projectileSpeed;
+    [SerializeField, ConditionalField(nameof(canShoot), false)] private float projectileHitForce;
     private float currentShootCD;
     [SerializeField]private EnemyGunCollider gunCol;
+    [SerializeField] private GameObject enemyProjectileGO;
+    [SerializeField] private Transform shootOriginTr;
+
+    [Header("RespawnVariables")]
+    [SerializeField, ConditionalField(nameof(canRespawn), false)] private float respawnTime = 5f;
 
     [Header("Visual variables")]
     [SerializeField] private GameObject enemyStandardModelGO;
@@ -67,11 +77,7 @@ public class EnemyBehaviour : MonoBehaviour
         {
             MoveAlongSpline();
             Shoot();
-        }
-        if (canShoot)
-        {
-            enemyGunGO.transform.position = this.gameObject.transform.position;
-        }
+        }   
     }
 
     public void SetHealth(int healthModfier)
@@ -85,13 +91,15 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void EnemyDeath()
     {
-        Destroy(this.gameObject);
+        this.gameObject.SetActive(false);
         if (this.GetComponent<Objective>() != null) this.GetComponent<Objective>().SetCompletedObjective();
 
         if(enemyBehaviourType == enemyOnHitTypes.TpOnKill)
         {
             GameManager.Instance.currentPlayer.ForcedMovement(this.transform.position);
         }
+
+        if (canRespawn) StartCoroutine(_RespawnEnemy());
     }
 
     private void MoveAlongSpline()
@@ -113,7 +121,7 @@ public class EnemyBehaviour : MonoBehaviour
         }
     }
 
-
+    private GameObject currentProjectileGO;
     private void Shoot()
     {
         if (canShoot)
@@ -124,16 +132,38 @@ public class EnemyBehaviour : MonoBehaviour
 
                 if (currentShootCD >= shootCD)
                 {
-                    Debug.Log("Shoot player");
+                    //Shoot!
+                    currentProjectileGO.GetComponent<EnemyProjectile>().SetCharged();
+                    currentProjectileGO.GetComponent<EnemyProjectile>().LaunchProjectile((gunCol.objective.transform.position - enemyGunGO.transform.position), projectileSpeed);
+                    currentProjectileGO = null;
                     currentShootCD = 0;
+                }
+                else
+                {
+                    if (currentProjectileGO == null) 
+                    {
+                        currentProjectileGO = Instantiate(enemyProjectileGO, shootOriginTr.position, Quaternion.identity, shootOriginTr);
+                        currentProjectileGO.GetComponent<EnemyProjectile>().ProjectileSetUp(0, projectileRange);
+                        currentProjectileGO.GetComponent<EnemyProjectile>().hitForce = projectileHitForce;
+                    }
+                    currentProjectileGO.transform.localScale = Vector3.Lerp(new Vector3(0.01f, 0.01f, 0.01f), new Vector3(projectileSize, projectileSize, projectileSize), (currentShootCD / shootCD));
+                    currentShootCD += Time.deltaTime;
                 }
             }
             
-            if(currentShootCD < shootCD || gunCol.objective == null)
-            {
-                if(currentShootCD < shootCD) currentShootCD += Time.deltaTime;
-            }
+            //if(currentShootCD < shootCD || gunCol.objective == null)
+            //{
+            //    if(currentShootCD < shootCD) currentShootCD += Time.deltaTime;
+            //}
+
+            enemyGunGO.transform.position = this.gameObject.transform.position;
         }
+    }
+
+    private IEnumerator _RespawnEnemy()
+    {
+        yield return new WaitForSeconds(respawnTime);
+        this.gameObject.SetActive(true);
     }
     private void OnDestroy()
     {

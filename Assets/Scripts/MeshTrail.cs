@@ -8,7 +8,7 @@ public class MeshTrail : MonoBehaviour
 
     public Material trailMaterial;
 
-    private bool isTrailActive = false;
+    //private bool isTrailActive = false;
     private SkinnedMeshRenderer[] meshes;
 
     [SerializeField] Color[] sandColors;

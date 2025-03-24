@@ -1224,8 +1224,8 @@ MonoBehaviour:
   m_fuelRecoverSpeed: 0.5
   m_flySpeed: 24
   isFlying: 0
-  stunnedTime: 0.2
-  hitForce: 65
+  stunnedTime: 0.3
+  hitForce: 250
   anim: {fileID: 2847256334874103816}
   backGunGO: {fileID: 9203669742053687599}
   OnStartFlyEvent:
@@ -1309,7 +1309,7 @@ GameObject:
   - component: {fileID: 3065524275226871954}
   - component: {fileID: 2100143639693035319}
   - component: {fileID: 4233879299945657341}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WeaponModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2477,7 +2477,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 62599201be9c5df48a090098320e50ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
