@@ -815,7 +815,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -1.108, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.01, z: 0.5}
+  m_LocalScale: {x: 0.1, y: 1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4556464428590179113}
@@ -827,7 +827,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1520611908003941240}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &6990464784358562501
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -851,7 +851,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ae2e3e0370243a049ae94c5c4be0298d, type: 2}
+  - {fileID: 2100000, guid: 2aac3f3898f304d42a17ed9e5ed48381, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1225,7 +1225,6 @@ MonoBehaviour:
   m_fuelRecoverSpeed: 0.5
   m_flySpeed: 24
   isFlying: 0
-  switchPlatformState: 0
   stunnedTime: 0.2
   hitForce: 65
   anim: {fileID: 2847256334874103816}
@@ -1297,7 +1296,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pC: {fileID: 6905120389310956165}
   shadow: {fileID: 1520611908003941240}
-  offset: 0.5
+  rayOffset: -0.5
+  hitOffset: 0.03
+  rotateSpeed: 50
 --- !u!1 &2432294245454598696
 GameObject:
   m_ObjectHideFlags: 0
@@ -2432,7 +2433,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8780565877448640272}
   - component: {fileID: 1067287211448671108}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RiggedWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

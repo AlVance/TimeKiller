@@ -260,7 +260,6 @@ public class PlayerController : MonoBehaviour
     }
     public bool isFlying = false;
     private bool canFly = true;
-    public bool switchPlatformState;
 
     [Header("Hit variables")]
     [SerializeField] private float stunnedTime;

@@ -5,30 +5,32 @@ public class BlobShadow : MonoBehaviour
     [SerializeField] private PlayerController pC;
     [SerializeField] private GameObject shadow;
     [SerializeField] private RaycastHit hit;
-    [SerializeField] private float offset;
+    [SerializeField] private float rayOffset;
+    [SerializeField] private float hitOffset;
     Vector3 hitPosition;
+    [SerializeField] private float rotateSpeed;
     private void Start()
     {
-        shadow.transform.SetParent(null);
+        //shadow.transform.SetParent(null);
     }
 
     private void Update()
     {
-        shadow.transform.position = hitPosition;
+        shadow.transform.position = new Vector3(shadow.transform.position.x, hitPosition.y + hitOffset, shadow.transform.position.z);
+        shadow.transform.Rotate(new Vector3(0, 1, 0) * rotateSpeed * Time.deltaTime);
     }
     private void FixedUpdate()
     {
-        Ray downRay = new Ray(new Vector3(this.transform.position.x, this.transform.position.y - offset, this.transform.position.z), -Vector3.up);
+        Ray downRay = new Ray(new Vector3(this.transform.position.x, this.transform.position.y - rayOffset, this.transform.position.z), -Vector3.up);
 
-        //gets the hit from the raycast and converts it unto a vector3
         hitPosition = hit.point;
-        //transofrm the shadow to the location
-        //shadow.transform.position = hitPosition;
 
-        ////Cast a ray straight downwards, reads back where it lands (this is optional but reccomended)
-        if (Physics.Raycast(downRay, out hit))
-        {
-            print(hit.transform);
-        }
+        //shadow.transform.position = new Vector3(shadow.transform.position.x, hitPosition.y + hitOffset, hitPosition.z);
+        //shadow.transform.Rotate(new Vector3(0, 1, 0) * rotateSpeed * Time.deltaTime);
+
+        //if (Physics.Raycast(downRay, out hit))
+        //{
+        //    print(hit.transform);
+        //}
     }
 }
