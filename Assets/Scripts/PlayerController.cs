@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform groundCheckOriginTr;
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private LayerMask groundCheckLayersToCheck;
-    public bool isGrounded;
+    private bool isGrounded;
 
 
     [Header("Move Varaibles")]
