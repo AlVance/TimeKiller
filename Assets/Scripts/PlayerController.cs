@@ -672,7 +672,7 @@ public class PlayerController : MonoBehaviour
     private void LedgeGrab(Vector3 newPos)
     {
         Debug.Log("LedgeGrab");
-        this.transform.position = newPos;
+        this.transform.position = newPos + new Vector3(0,1,0);
     }
 
     public void ForcedMovement(Vector3 targetPos)
