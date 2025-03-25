@@ -1100,6 +1100,37 @@ Transform:
   - {fileID: 2317502368182906270}
   m_Father: {fileID: 6920357327071726357}
   m_LocalEulerAnglesHint: {x: -27.534561, y: -173.24861, z: 157.95737}
+--- !u!1 &2065354864168229854
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1168627065053906646}
+  m_Layer: 0
+  m_Name: LGFrontTr (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1168627065053906646
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065354864168229854}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3125583067982743518}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2134857558924869660
 GameObject:
   m_ObjectHideFlags: 0
@@ -1228,9 +1259,12 @@ MonoBehaviour:
   stunnedTime: 0.3
   hitForce: 250
   upRayTr: {fileID: 1983199136102684805}
-  frontRayTr: {fileID: 3769740406898625927}
-  upRayDistance: 1
-  frontRayDistance: 1
+  frontRayTr:
+  - {fileID: 3769740406898625927}
+  - {fileID: 1168627065053906646}
+  - {fileID: 7162193687219223351}
+  upRayDistance: 0.8
+  frontRayDistance: 0.4
   anim: {fileID: 2847256334874103816}
   backGunGO: {fileID: 9203669742053687599}
   OnStartFlyEvent:
@@ -1414,7 +1448,38 @@ Transform:
   m_GameObject: {fileID: 2447326092585332195}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.641, z: 0.556}
+  m_LocalPosition: {x: 0, y: 0.935, z: 0.45}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3125583067982743518}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2565142251058450208
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7162193687219223351}
+  m_Layer: 0
+  m_Name: LGFrontTr (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7162193687219223351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2565142251058450208}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2424,6 +2489,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3769740406898625927}
+  - {fileID: 7162193687219223351}
+  - {fileID: 1168627065053906646}
   - {fileID: 1983199136102684805}
   m_Father: {fileID: 4556464428590179113}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2516,7 +2583,7 @@ Transform:
   m_GameObject: {fileID: 4469353337545501016}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.162}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

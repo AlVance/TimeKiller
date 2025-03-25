@@ -268,7 +268,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Ledge grab variables")]
     [SerializeField] private Transform upRayTr;
-    [SerializeField] private Transform frontRayTr;
+    [SerializeField] private Transform[] frontRayTr;
     [SerializeField] private float upRayDistance;
     [SerializeField] private float frontRayDistance;
 
@@ -640,22 +640,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private bool UpRayHitted;
+    private bool FrontRayHitted;
     private void CheckLedgeGrab()
     {
-        Ray upRay = new Ray(upRayTr.position, Vector3.down * upRayDistance);
-        Ray frontRay = new Ray(frontRayTr.position, this.transform.forward * frontRayDistance);
         RaycastHit upRayHit;
         RaycastHit frontRayHit;
 
         Debug.DrawRay(upRayTr.position, Vector3.down * upRayDistance, Color.green);
-        Debug.DrawRay(frontRayTr.position, this.transform.forward * frontRayDistance, Color.green);
-
-        if(Physics.Raycast(upRay, out upRayHit, groundCheckLayersToCheck) && Physics.Raycast(frontRay, out frontRayHit, groundCheckLayersToCheck) && m_GoalVel.magnitude > 0)
+        Debug.DrawRay(frontRayTr[0].position, this.transform.forward * frontRayDistance, Color.green);
+        if (Physics.Raycast(upRayTr.position, Vector3.down, out upRayHit, upRayDistance, groundCheckLayersToCheck))
         {
-            //Debug.Log("Up:" + upRayHit.transform);
-            //Debug.Log("Front:" + frontRayHit.transform);
-            //Debug.Log("LedgeGrab");
+            UpRayHitted = true;
         }
+        else UpRayHitted = false;
+        if (Physics.Raycast(frontRayTr[0].position, this.transform.forward, out frontRayHit, frontRayDistance, groundCheckLayersToCheck) ||
+            Physics.Raycast(frontRayTr[1].position, this.transform.forward, out frontRayHit, frontRayDistance, groundCheckLayersToCheck) ||
+            Physics.Raycast(frontRayTr[2].position, this.transform.forward, out frontRayHit, frontRayDistance, groundCheckLayersToCheck))
+        {
+            FrontRayHitted = true;
+        }
+        else FrontRayHitted = false;
+
+
+        if (UpRayHitted && FrontRayHitted && !isGrounded && m_GoalVel.magnitude > 0)
+        {
+            LedgeGrab(upRayHit.point);
+        }
+    }
+
+    private void LedgeGrab(Vector3 newPos)
+    {
+        Debug.Log("LedgeGrab");
+        this.transform.position = newPos;
     }
 
     public void ForcedMovement(Vector3 targetPos)
