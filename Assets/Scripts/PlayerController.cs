@@ -648,7 +648,10 @@ public class PlayerController : MonoBehaviour
         RaycastHit frontRayHit;
 
         Debug.DrawRay(upRayTr.position, Vector3.down * upRayDistance, Color.green);
-        Debug.DrawRay(frontRayTr[0].position, this.transform.forward * frontRayDistance, Color.green);
+        for (int i = 0; i < frontRayTr.Length - 1; i++)
+        {
+            Debug.DrawRay(frontRayTr[i].position, this.transform.forward * frontRayDistance, Color.green);
+        }
         if (Physics.Raycast(upRayTr.position, Vector3.down, out upRayHit, upRayDistance, groundCheckLayersToCheck))
         {
             UpRayHitted = true;

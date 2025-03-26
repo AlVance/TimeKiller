@@ -1843,65 +1843,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 369740999}
   m_CullTransparentMesh: 1
---- !u!1 &378214457
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 378214459}
-  - component: {fileID: 378214458}
-  m_Layer: 0
-  m_Name: UpgradeControllerDebug
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &378214458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 378214457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37dfd04b34ca4684d9f8e358c202d43e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PC: {fileID: 1771256700}
-  damageUpgrade: 1
-  rangeUpgrade: 0.5
-  projectileSizeUpgrade: 0.3
-  projectileSpeedUpgrade: 0.5
-  speedUpgrade: 0.3
-  chargeTimeUpgrade: -0.1
-  maxBulletsUpgrade: 1
-  currentDamageText: {fileID: 235835113}
-  currentSpeedText: {fileID: 84440842}
-  currentRangeText: {fileID: 1858969892}
-  currentProjectileSizeText: {fileID: 541667268}
-  currentProjectileSpeedText: {fileID: 1577493771}
-  currentChargeTimeText: {fileID: 1740608897}
-  bulletsText: {fileID: 472667993}
---- !u!4 &378214459
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 378214457}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &380079173
 GameObject:
   m_ObjectHideFlags: 0
@@ -6227,6 +6168,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6905120389310956165, guid: 5e537cddc441d7f43bec932d35e7af34, type: 3}
+      propertyPath: m_shootChargeTime
+      value: 0.4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8349,17 +8294,6 @@ RectTransform:
   m_AnchoredPosition: {x: 3, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1771256700 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6905120389310956165, guid: 5e537cddc441d7f43bec932d35e7af34, type: 3}
-  m_PrefabInstance: {fileID: 1455268216}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 062b106fb60b6354fb36167ac21bdb1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1773843549
 GameObject:
   m_ObjectHideFlags: 0
@@ -10201,7 +10135,6 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 576789884}
-  - {fileID: 378214459}
   - {fileID: 558056830}
   - {fileID: 1773843551}
   - {fileID: 1785544203}
