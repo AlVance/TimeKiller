@@ -285,11 +285,11 @@ public class PlayerController : MonoBehaviour
         HandleInput();
 
         rb = this.GetComponent<Rigidbody>();
-        if (GameManager.Instance != null) GameManager.Instance.currentPlayer = this;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (GameManager.Instance != null) GameManager.Instance.currentPlayer = this;
         maxBullets = m_maxBullets;
         currentBullets = maxBullets;
         successReloadRate = m_successReloadRate;
@@ -648,7 +648,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit frontRayHit;
 
         Debug.DrawRay(upRayTr.position, Vector3.down * upRayDistance, Color.green);
-        for (int i = 0; i < frontRayTr.Length - 1; i++)
+        for (int i = 0; i < frontRayTr.Length; i++)
         {
             Debug.DrawRay(frontRayTr[i].position, this.transform.forward * frontRayDistance, Color.green);
         }
@@ -687,9 +687,10 @@ public class PlayerController : MonoBehaviour
 
     public void ResetPlayer()
     {
+        m_GoalVel = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
         ResetCharge();
-        currentBullets = maxBullets;
+        //currentBullets = maxBullets;
         currentFuel = maxFuel;
         canMove = true;
     }

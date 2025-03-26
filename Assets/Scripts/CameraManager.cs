@@ -5,6 +5,7 @@ public class CameraManager : MonoBehaviour
     public static CameraManager Instance { get; private set; }
     [SerializeField] public GameObject basePlayerCam;
     public GameObject currentCam;
+    [SerializeField]public GameObject winCam;
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.

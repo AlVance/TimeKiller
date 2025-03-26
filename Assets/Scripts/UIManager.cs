@@ -8,9 +8,11 @@ public class UIManager : MonoBehaviour
 
     [Header("Game UI Variables")]
     [SerializeField] private GameObject mobileControlsUI;
+    [SerializeField] private GameObject InlevelUI;
 
     [Header("UI Transitions")]
     [SerializeField] private GameObject endLevelScreenUI;
+    [SerializeField] private GameObject GoToInBetweenBTN;
     [SerializeField] private GameObject inBetweenLevelsScreenUI;
     [SerializeField] private GameObject levelOverviewUI;
 
@@ -20,6 +22,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] public TMP_Text startLevelTimerText;
     [SerializeField] private Slider levelTimerSlider;
     [SerializeField] private Slider[] globalTimerSliders;
+    [SerializeField] private TMP_Text objectivesValueText;
 
     [Header("Player UI Variables")]
     [SerializeField] private TMP_Text currentDamageText;
@@ -193,6 +196,10 @@ public class UIManager : MonoBehaviour
         flyFuelSlider.maxValue = newMaxValue;
     }
 
+    public void SetObjectivesValueText(int currentObj, int maxObj)
+    {
+        objectivesValueText.text = currentObj.ToString() + "/" + maxObj.ToString();
+    }
 
     public void SetPuntuationScreenActive(bool isActive)
     {
@@ -205,6 +212,14 @@ public class UIManager : MonoBehaviour
     public void SetLevelOverviewActive(bool isActive)
     {
         levelOverviewUI.SetActive(isActive);
+    }
+    public void SetInlevelUIActive(bool isActive)
+    {
+        InlevelUI.SetActive(isActive);
+    }
+    public void SetGoToInBetweenBTNActive(bool isActive)
+    {
+        GoToInBetweenBTN.SetActive(isActive);
     }
 
     public void SetMobileGameplayControlsActive(bool isActive)

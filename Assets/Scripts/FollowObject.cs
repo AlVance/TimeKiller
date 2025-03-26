@@ -12,6 +12,7 @@ public class FollowObject : MonoBehaviour
     private void Start()
     {
         if(followPlayer && targetTr == null) targetTr = GameManager.Instance.currentPlayer.gameObject.transform;
+        this.transform.position = targetTr.position + followOffset;
     }
 
     private void LateUpdate()

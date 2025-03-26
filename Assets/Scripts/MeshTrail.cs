@@ -17,11 +17,11 @@ public class MeshTrail : MonoBehaviour
     private void Start()
     {  
         meshes = GetComponentsInChildren<SkinnedMeshRenderer>();
-        GameManager.Instance.currentPlayer.OnStartFlyEvent.AddListener(ActivateSandevistan);
+        //GameManager.Instance.currentPlayer.OnStartFlyEvent.AddListener(ActivateSandevistan);
 
     }
 
-    private void ActivateSandevistan()
+    public void ActivateSandevistan()
     {
         StartCoroutine(ActivateTrail());
     }

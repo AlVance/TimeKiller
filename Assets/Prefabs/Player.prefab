@@ -1125,7 +1125,7 @@ Transform:
   m_GameObject: {fileID: 2065354864168229854}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1232,11 +1232,11 @@ MonoBehaviour:
   groundCheckLayersToCheck:
     serializedVersion: 2
     m_Bits: 8
-  m_maxSpeed: 12
+  m_maxSpeed: 10
   accelerationSpeed: 120
   maxAccelerationForce: 100
   aimDirAidGO: {fileID: 1915003310345504620}
-  m_shootChargeTime: 0.8
+  m_shootChargeTime: 0.4
   moveDirShootInertia: 0.2
   shootCDTime: 0.3
   projectileGO: {fileID: 7151585630043099556, guid: 245438c43b2898f499fb31acbf069fc2, type: 3}
@@ -1254,7 +1254,7 @@ MonoBehaviour:
   m_maxFuel: 1
   m_fuelBurnSpeed: 1
   m_fuelRecoverSpeed: 0.5
-  m_flySpeed: 14
+  m_flySpeed: 18
   isFlying: 0
   stunnedTime: 0.3
   hitForce: 250
@@ -1269,7 +1269,19 @@ MonoBehaviour:
   backGunGO: {fileID: 9203669742053687599}
   OnStartFlyEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8371136261269092558}
+        m_TargetAssemblyTypeName: MeshTrail, Assembly-CSharp
+        m_MethodName: ActivateSandevistan
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!54 &2411601841555775349
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1479,7 +1491,7 @@ Transform:
   m_GameObject: {fileID: 2565142251058450208}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.25, z: 0}
+  m_LocalPosition: {x: 0, y: -0.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
