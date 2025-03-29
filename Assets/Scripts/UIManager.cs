@@ -17,6 +17,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject levelOverviewUI;
     [SerializeField] public Animator fadeAnim;
 
+    [Header("Level data Variables")]
+    [SerializeField] private TMP_Text levelCountText;
+    [SerializeField] private TMP_Text levelNameText;
+
     [Header("Level UI Variables")]
     [SerializeField] private TMP_Text currentTimeText;
     [SerializeField] private TMP_Text levelTimeText;
@@ -221,6 +225,14 @@ public class UIManager : MonoBehaviour
     public void SetGoToInBetweenBTNActive(bool isActive)
     {
         GoToInBetweenBTN.SetActive(isActive);
+    }
+    public void SetLevelNameText(string newText)
+    {
+        levelNameText.text = newText;
+    }
+    public void SetLevelCountText(int completedLevels, int maxLevels)
+    {
+        levelCountText.text = completedLevels.ToString() + "/" + maxLevels.ToString();
     }
 
     public void SetMobileGameplayControlsActive(bool isActive)

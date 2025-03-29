@@ -805,12 +805,12 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Reload.started += ctx =>
         {
-            ReloadStarted();
+            if (GameManager.Instance.levelStarted) ReloadStarted();
         };
 
         playerInput.PlayerControls.Reload.performed += ctx =>
         {
-            ReloadPerformed();
+            if (GameManager.Instance.levelStarted) ReloadPerformed();
         };
 
         playerInput.PlayerControls.Reload.canceled += ctx =>

@@ -14,6 +14,7 @@ public class LevelManager : MonoBehaviour
 
     [Header("LevelTransition variables")]
     [SerializeField] private float timeRewardTime;
+    [SerializeField] private GameObject levelTransSceneGO;
     private bool canGoToLevelTrans = true;
     private void Awake()
     {
@@ -143,11 +144,16 @@ public class LevelManager : MonoBehaviour
         canGoToLevelTrans = false;
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1f);
+        levelTransSceneGO.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        SetNextLevel();
         UIManager.Instance.SetInlevelUIActive(false);
         UIManager.Instance.SetGoToInBetweenBTNActive(false);
         UIManager.Instance.SetPuntuationScreenActive(false);
+        UIManager.Instance.SetLevelCountText(currentLevel + 1, levelsGO.Length);
+        UIManager.Instance.SetLevelNameText(currentLevelGO.GetComponent<Level>().levelName);
         UIManager.Instance.SetInBetweenLevelsScreenActive(true);
-        SetNextLevel();
+  
     }
     public void GoToLevelOverview()
     {
@@ -157,6 +163,7 @@ public class LevelManager : MonoBehaviour
     {
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1f);
+        levelTransSceneGO.SetActive(false);
         UIManager.Instance.SetInBetweenLevelsScreenActive(false);
         UIManager.Instance.SetLevelOverviewActive(true);
         UIManager.Instance.SetInlevelUIActive(true);
