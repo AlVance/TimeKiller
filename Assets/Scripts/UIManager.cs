@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject GoToInBetweenBTN;
     [SerializeField] private GameObject inBetweenLevelsScreenUI;
     [SerializeField] private GameObject levelOverviewUI;
+    [SerializeField] public Animator fadeAnim;
 
     [Header("Level UI Variables")]
     [SerializeField] private TMP_Text currentTimeText;
@@ -225,5 +226,11 @@ public class UIManager : MonoBehaviour
     public void SetMobileGameplayControlsActive(bool isActive)
     {
         mobileControlsUI.SetActive(isActive);
+    }
+
+    public void SetFade(bool fadeState)
+    {
+        if(fadeState)fadeAnim.SetTrigger("FadeIn");
+        else fadeAnim.SetTrigger("FadeOut");
     }
 }
