@@ -14,6 +14,7 @@ public class LevelManager : MonoBehaviour
 
     [Header("LevelTransition variables")]
     [SerializeField] private float timeRewardTime;
+    [SerializeField] private GameObject levelTransSceneGO;
     private bool canGoToLevelTrans = true;
     private void Awake()
     {
@@ -76,6 +77,8 @@ public class LevelManager : MonoBehaviour
         {
             CameraManager.Instance.ChangeCam(CameraManager.Instance.basePlayerCam);
         }
+
+        UIManager.Instance.SetFade(false);
     }
     public void StartLevelGameplay()
     {
@@ -133,19 +136,39 @@ public class LevelManager : MonoBehaviour
     {
         if (canGoToLevelTrans)
         {
-            canGoToLevelTrans = false;
-            UIManager.Instance.SetInlevelUIActive(false);
-            UIManager.Instance.SetGoToInBetweenBTNActive(false);
-            UIManager.Instance.SetPuntuationScreenActive(false);
-            UIManager.Instance.SetInBetweenLevelsScreenActive(true);
-            SetNextLevel();
+            StartCoroutine(_GoToInbetweenLevels());
         }
+    }
+    private IEnumerator _GoToInbetweenLevels()
+    {
+        canGoToLevelTrans = false;
+        UIManager.Instance.SetFade(true);
+        yield return new WaitForSeconds(1f);
+        levelTransSceneGO.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        SetNextLevel();
+        UIManager.Instance.SetInlevelUIActive(false);
+        UIManager.Instance.SetGoToInBetweenBTNActive(false);
+        UIManager.Instance.SetPuntuationScreenActive(false);
+        UIManager.Instance.SetLevelCountText(currentLevel + 1, levelsGO.Length);
+        UIManager.Instance.SetLevelNameText(currentLevelGO.GetComponent<Level>().levelName);
+        UIManager.Instance.SetInBetweenLevelsScreenActive(true);
+  
     }
     public void GoToLevelOverview()
     {
+        StartCoroutine(_GoToLevelOverview());
+    }
+    private IEnumerator _GoToLevelOverview()
+    {
+        UIManager.Instance.SetFade(true);
+        yield return new WaitForSeconds(1f);
+        levelTransSceneGO.SetActive(false);
         UIManager.Instance.SetInBetweenLevelsScreenActive(false);
         UIManager.Instance.SetLevelOverviewActive(true);
         UIManager.Instance.SetInlevelUIActive(true);
+        yield return new WaitForSeconds(1f);
+        UIManager.Instance.SetFade(false);
     }
     private IEnumerator DestroyGOWithDelay(GameObject GO)
     {

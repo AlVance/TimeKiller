@@ -17,6 +17,7 @@ public class EnemyBehaviour : MonoBehaviour
     [Header("Enemy abilities")]
     [SerializeField] private bool canShoot = false;
     [SerializeField] private bool canRespawn = false;
+    [SerializeField] private bool isInvulnerable = false;
 
 
     [SerializeField] private int enemyHealth = 1;
@@ -82,10 +83,13 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void SetHealth(int healthModfier)
     {
-        currentEnemyHealth += healthModfier;
-        if(currentEnemyHealth <= 0)
+        if (!isInvulnerable)
         {
-            EnemyDeath();
+            currentEnemyHealth += healthModfier;
+            if (currentEnemyHealth <= 0)
+            {
+                EnemyDeath();
+            }
         }
     }
 

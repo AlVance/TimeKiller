@@ -3,6 +3,7 @@ using UnityEngine;
 public class Level : MonoBehaviour
 {
     [HideInInspector]public LevelManager lM;
+    [SerializeField] public string levelName;
     [SerializeField] public Transform playerStartTr;
     [SerializeField] public int objectivesToFinish;
     [SerializeField] public int levelTime;
