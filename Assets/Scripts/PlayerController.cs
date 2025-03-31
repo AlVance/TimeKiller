@@ -746,7 +746,7 @@ public class PlayerController : MonoBehaviour
         affectedByGravity = false;
         this.GetComponentInChildren<PlayerVFX>().DissolvePlayer(0);
        
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(3f);
         this.transform.position = tpPos.position;
         
         yield return new WaitForSeconds(0.5f);
@@ -814,7 +814,6 @@ public class PlayerController : MonoBehaviour
                 {
                     Vector2 tempAimDir = ctx.ReadValue<Vector2>();
                     Vector3 PlayerScreenPos = Camera.main.WorldToScreenPoint(this.transform.position);
-                    Debug.Log(PlayerScreenPos);
                     //tempAimDir.x -= Screen.width / 2;
                     //tempAimDir.y -= Screen.height / 2;
                     tempAimDir.x -= PlayerScreenPos.x;

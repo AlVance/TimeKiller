@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerVFX : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class PlayerVFX : MonoBehaviour
     [SerializeField] private Transform rightFootTr;
     [SerializeField] private Material playerMasterMat;
     [SerializeField] public float PlayerDissolveTime;
+    [SerializeField] public float playerDissolveSpeed;
     public void PlayLeftFootstepParticles()
     {
         Instantiate(footStepPS, leftFootTr.transform.position, rightFootTr.rotation);
@@ -31,10 +33,17 @@ public class PlayerVFX : MonoBehaviour
     private float playerDissolveCurrentTime = 0;
     public void DissolvePlayer(int isUpwards)
     {
-        while(playerDissolveCurrentTime < PlayerDissolveTime)
+        StartCoroutine(_DissolvePlayer(isUpwards));
+    }
+
+    private IEnumerator _DissolvePlayer(int isUpwards)
+    {
+        while (playerDissolveCurrentTime < PlayerDissolveTime)
         {
-            playerDissolveCurrentTime += Time.deltaTime;
-            ChangeMaterialProperties(playerDissolveCurrentTime, 1, isUpwards);
+            playerDissolveCurrentTime += playerDissolveSpeed * Time.deltaTime;
+            Debug.Log(playerDissolveCurrentTime);
+            ChangeMaterialProperties(playerDissolveCurrentTime / playerDissolveSpeed, 1, isUpwards);
+            yield return new WaitForEndOfFrame();
         }
         playerDissolveCurrentTime = 0;
     }
