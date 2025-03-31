@@ -1227,6 +1227,7 @@ MonoBehaviour:
   gravityForce: -2
   dashGravityForce: -2.8
   maxFallSpeed: -35
+  affectedByGravity: 1
   groundCheckOriginTr: {fileID: 3148131557680886516}
   groundCheckDistance: 2
   groundCheckLayersToCheck:
@@ -3541,6 +3542,8 @@ MonoBehaviour:
   footStepPS: {fileID: 5225712025041389073, guid: 0648236bbb12dcf47b3ec8f8977774e6, type: 3}
   leftFootTr: {fileID: 558164338463016462}
   rightFootTr: {fileID: 3807304450359482736}
+  playerMasterMat: {fileID: 2100000, guid: 62599201be9c5df48a090098320e50ac, type: 2}
+  PlayerDissolveTime: 1
 --- !u!1 &6548742496668323845
 GameObject:
   m_ObjectHideFlags: 0

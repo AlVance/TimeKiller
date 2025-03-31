@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float gravityForce;
     [SerializeField] private float dashGravityForce;
     [SerializeField] private float maxFallSpeed;
+    public bool affectedByGravity = true;
 
 
     [Header("Ground Check Variables")]
@@ -320,7 +321,7 @@ public class PlayerController : MonoBehaviour
             Movement();
             FloatOnGround();
             //if (!isDashing && !isFlying) AddGravityForce();
-            AddGravityForce();
+            if(affectedByGravity) AddGravityForce();
             CheckLedgeGrab();
         }
         
@@ -702,7 +703,9 @@ public class PlayerController : MonoBehaviour
     private IEnumerator _GetHit(Vector3 hitPos, float hitForce)
     {
         canGetHitted = false;
-        ResetPlayer();
+        m_GoalVel = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
+        ResetCharge();
         //canFly = false;
         //canMove = false;
         rb.AddForce((this.transform.position - hitPos) * hitForce);
@@ -719,12 +722,43 @@ public class PlayerController : MonoBehaviour
     private IEnumerator _BlockPlayer(float blockTime)
     {
         canFly = false;
-        //canMove = false;
+        canMove = false;
         currentMaxSpeed = 0;
         yield return new WaitForSeconds(blockTime);
         canFly = true;
         currentMaxSpeed = maxSpeed;
-        //canMove = true;
+        canMove = true;
+    }
+
+    public void PlayerOffLimits(Transform tpPos)
+    {
+        StartCoroutine(_PlayerOfLimits(tpPos));
+    }
+
+    private IEnumerator _PlayerOfLimits(Transform tpPos)
+    {
+        canGetHitted = false;
+        m_GoalVel = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
+        canFly = false;
+        canMove = false;
+        currentMaxSpeed = 0;
+        affectedByGravity = false;
+        this.GetComponentInChildren<PlayerVFX>().DissolvePlayer(0);
+       
+        yield return new WaitForSeconds(1.2f);
+        this.transform.position = tpPos.position;
+        
+        yield return new WaitForSeconds(0.5f);
+        this.GetComponentInChildren<PlayerVFX>().DissolvePlayer(1);
+       
+        yield return new WaitForSeconds(1f);
+        canFly = true;
+        currentMaxSpeed = maxSpeed;
+        canMove = true;
+        canGetHitted = true;
+        affectedByGravity = true;
+        this.GetComponentInChildren<PlayerVFX>().ChangeMaterialProperties(2, 0, 1);
     }
     private Vector3 GetV3RelativeToCamera(Vector2 baseDir)
     {
