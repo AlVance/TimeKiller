@@ -154,6 +154,11 @@ public class EnemyBehaviour : MonoBehaviour
                     currentShootCD += Time.deltaTime;
                 }
             }
+            else
+            {
+                currentShootCD = 0;
+                if (currentProjectileGO != null) Destroy(currentProjectileGO);
+            }
             
             //if(currentShootCD < shootCD || gunCol.objective == null)
             //{

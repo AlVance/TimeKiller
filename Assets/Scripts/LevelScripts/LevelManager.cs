@@ -117,6 +117,7 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetGoToInBetweenBTNActive(false);
         UIManager.Instance.SetPuntuationScreenActive(true);
         CameraManager.Instance.ChangeCam(CameraManager.Instance.winCam);
+        GameManager.Instance.currentPlayer.gameObject.transform.eulerAngles = new Vector3(0,-180,0);
         float finalTimeValue = TimeManager.Instance.currentTime + TimeManager.Instance.levelTime;
         float _rewardTime = timeRewardTime;
         while (TimeManager.Instance.currentTime < finalTimeValue)

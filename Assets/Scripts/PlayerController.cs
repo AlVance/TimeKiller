@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 shootDir;
     private Vector3 shootDirRelativeToCam;
     private bool isAiming = false;
+    private bool canAim = true;
 
 
     [Header("Shoot Variables")]
@@ -335,7 +336,7 @@ public class PlayerController : MonoBehaviour
 
     private void AimStarted()
     {
-        if(currentBullets > 0 && (!isFlying && !isDashing))
+        if(canAim && currentBullets > 0 && (!isFlying && !isDashing))
         {
             aimDirAidGO.SetActive(true);
             CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
@@ -466,7 +467,7 @@ public class PlayerController : MonoBehaviour
 
     private void Aim()
     {
-        if (aimPressed && (!isFlying && !isDashing))
+        if (canAim && aimPressed && (!isFlying && !isDashing))
         {
             if (!isAiming) AimStarted();
             //this.transform.rotation = Quaternion.LookRotation(new Vector3(aimDir.x, 0, aimDir.y));
@@ -478,7 +479,7 @@ public class PlayerController : MonoBehaviour
 
     private void ChargeShot()
     {
-        if (aimPressed && !shootCD && !isDashing && !isFlying)
+        if (canAim && aimPressed && !shootCD && !isDashing && !isFlying)
         {
             if(currentBullets > 0)
             {
@@ -732,11 +733,14 @@ public class PlayerController : MonoBehaviour
     {
         canFly = false;
         canMove = false;
+        canAim = false;
+        EndAim();
         currentMaxSpeed = 0;
         yield return new WaitForSeconds(blockTime);
         canFly = true;
         currentMaxSpeed = maxSpeed;
         canMove = true;
+        canAim = true;
     }
 
     public void PlayerOffLimits(Transform tpPos)
@@ -753,6 +757,9 @@ public class PlayerController : MonoBehaviour
         canMove = false;
         currentMaxSpeed = 0;
         affectedByGravity = false;
+        canAim = false;
+        ResetCharge();
+        EndAim();
         this.GetComponentInChildren<PlayerVFX>().DissolvePlayer(0);
        
         yield return new WaitForSeconds(1f);
@@ -767,6 +774,7 @@ public class PlayerController : MonoBehaviour
         canMove = true;
         canGetHitted = true;
         affectedByGravity = true;
+        canAim = true;
         this.GetComponentInChildren<PlayerVFX>().ChangeMaterialProperties(2, 0, 1);
     }
     private Vector3 GetV3RelativeToCamera(Vector2 baseDir)
@@ -786,86 +794,83 @@ public class PlayerController : MonoBehaviour
     }
     private void HandleInput()
     {
-        if (GameManager.Instance == null || GameManager.Instance.levelStarted)
+        playerInput.PlayerControls.Move.started += ctx =>
         {
-            playerInput.PlayerControls.Move.started += ctx =>
-            {
-                MoveStarted();
-            };
-            //When a move input is used its value is read and stored as the move direction and as a bool
-            playerInput.PlayerControls.Move.performed += ctx =>
-            {
-                moveDir = ctx.ReadValue<Vector2>();
-                movePressed = moveDir.x != 0 || moveDir.y != 0;
+            MoveStarted();
+        };
+        //When a move input is used its value is read and stored as the move direction and as a bool
+        playerInput.PlayerControls.Move.performed += ctx =>
+        {
+            moveDir = ctx.ReadValue<Vector2>();
+            movePressed = moveDir.x != 0 || moveDir.y != 0;
 
-                moveDirRelativeToCam = GetV3RelativeToCamera(moveDir);
-            };
-            //When the move input is canceled it resets the move direction to 0 and the moving bool to false
-            playerInput.PlayerControls.Move.canceled += ctx =>
-            {
-                movePressed = false;
-                lastMoveDir = moveDir;
-                moveDir = Vector2.zero;
-                moveDirRelativeToCam = GetV3RelativeToCamera(moveDir);
-            };
+            moveDirRelativeToCam = GetV3RelativeToCamera(moveDir);
+        };
+        //When the move input is canceled it resets the move direction to 0 and the moving bool to false
+        playerInput.PlayerControls.Move.canceled += ctx =>
+        {
+            movePressed = false;
+            lastMoveDir = moveDir;
+            moveDir = Vector2.zero;
+            moveDirRelativeToCam = GetV3RelativeToCamera(moveDir);
+        };
 
 
-            playerInput.PlayerControls.Aim.started += ctx =>
-            {
-                if (GameManager.Instance.levelStarted) AimStarted();
-                aimPressed = true;
-            };
+        playerInput.PlayerControls.Aim.started += ctx =>
+        {
+            if (GameManager.Instance.levelStarted) AimStarted();
+            aimPressed = true;
+        };
 
-            playerInput.PlayerControls.Aim.performed += ctx =>
-            {
+        playerInput.PlayerControls.Aim.performed += ctx =>
+        {
 #if !PLATFORM_ANDROID
-                if (Mouse.current.leftButton.isPressed)
-                {
-                    Vector2 tempAimDir = ctx.ReadValue<Vector2>();
-                    Vector3 PlayerScreenPos = Camera.main.WorldToScreenPoint(this.transform.position);
-                    //tempAimDir.x -= Screen.width / 2;
-                    //tempAimDir.y -= Screen.height / 2;
-                    tempAimDir.x -= PlayerScreenPos.x;
-                    tempAimDir.y -= PlayerScreenPos.y;
-                    aimDir = tempAimDir.normalized;
-                }
-                else
-                {
-                    aimDir = ctx.ReadValue<Vector2>();
-                }
+            if (Mouse.current.leftButton.isPressed)
+            {
+                Vector2 tempAimDir = ctx.ReadValue<Vector2>();
+                Vector3 PlayerScreenPos = Camera.main.WorldToScreenPoint(this.transform.position);
+                //tempAimDir.x -= Screen.width / 2;
+                //tempAimDir.y -= Screen.height / 2;
+                tempAimDir.x -= PlayerScreenPos.x;
+                tempAimDir.y -= PlayerScreenPos.y;
+                aimDir = tempAimDir.normalized;
+            }
+            else
+            {
+                aimDir = ctx.ReadValue<Vector2>();
+            }
 #else
             aimDir = ctx.ReadValue<Vector2>();
 #endif
-                aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
+            aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
 
-            };
+        };
 
-            playerInput.PlayerControls.Aim.canceled += ctx =>
-            {
-                shootDir = aimDir;
-                shootDirRelativeToCam = GetV3RelativeToCamera(shootDir);
-                aimPressed = false;
-                aimDir = Vector2.zero;
-                aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
-                AimFinished();
-            };
+        playerInput.PlayerControls.Aim.canceled += ctx =>
+        {
+            shootDir = aimDir;
+            shootDirRelativeToCam = GetV3RelativeToCamera(shootDir);
+            aimPressed = false;
+            aimDir = Vector2.zero;
+            aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
+            AimFinished();
+        };
 
 
-            playerInput.PlayerControls.Reload.started += ctx =>
-            {
-                ReloadStarted();
-            };
+        playerInput.PlayerControls.Reload.started += ctx =>
+        {
+            if (GameManager.Instance.levelStarted) ReloadStarted();
+        };
 
-            playerInput.PlayerControls.Reload.performed += ctx =>
-            {
-                ReloadPerformed();
-            };
+        playerInput.PlayerControls.Reload.performed += ctx =>
+        {
+            if (GameManager.Instance.levelStarted) ReloadPerformed();
+        };
 
-            playerInput.PlayerControls.Reload.canceled += ctx =>
-            {
-                ReloadEnded();
-            };
-        }       
+        playerInput.PlayerControls.Reload.canceled += ctx =>
+        {
+            if (GameManager.Instance.levelStarted) ReloadEnded();
+        };
     }
 
     private void HandleAnimations()
