@@ -9,6 +9,11 @@ public class PlayerVFX : MonoBehaviour
     [SerializeField] private Material playerMasterMat;
     [SerializeField] public float PlayerDissolveTime;
     [SerializeField] public float playerDissolveSpeed;
+
+    private void Start()
+    {
+        ChangeMaterialProperties(2, 0, 1);
+    }
     public void PlayLeftFootstepParticles()
     {
         Instantiate(footStepPS, leftFootTr.transform.position, rightFootTr.rotation);
@@ -42,9 +47,14 @@ public class PlayerVFX : MonoBehaviour
         {
             playerDissolveCurrentTime += playerDissolveSpeed * Time.deltaTime;
             Debug.Log(playerDissolveCurrentTime);
-            ChangeMaterialProperties(playerDissolveCurrentTime / playerDissolveSpeed, 1, isUpwards);
+            ChangeMaterialProperties(playerDissolveCurrentTime / PlayerDissolveTime, 1, isUpwards);
             yield return new WaitForEndOfFrame();
         }
         playerDissolveCurrentTime = 0;
+    }
+
+    private void OnDisable()
+    {
+        ChangeMaterialProperties(2, 0, 1);
     }
 }

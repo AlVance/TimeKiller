@@ -658,13 +658,22 @@ public class PlayerController : MonoBehaviour
             UpRayHitted = true;
         }
         else UpRayHitted = false;
-        if (Physics.Raycast(frontRayTr[0].position, this.transform.forward, out frontRayHit, frontRayDistance, groundCheckLayersToCheck) ||
-            Physics.Raycast(frontRayTr[1].position, this.transform.forward, out frontRayHit, frontRayDistance, groundCheckLayersToCheck) ||
-            Physics.Raycast(frontRayTr[2].position, this.transform.forward, out frontRayHit, frontRayDistance, groundCheckLayersToCheck))
+        for (int i = 0; i < frontRayTr.Length; i++)
         {
-            FrontRayHitted = true;
+            if (Physics.Raycast(frontRayTr[i].position, this.transform.forward, out frontRayHit, frontRayDistance, groundCheckLayersToCheck))
+            {
+                FrontRayHitted = true;
+                break;
+            }
+            else FrontRayHitted = false;
         }
-        else FrontRayHitted = false;
+        //if (Physics.Raycast(frontRayTr[0].position, this.transform.forward, out frontRayHit, frontRayDistance, groundCheckLayersToCheck) ||
+        //    Physics.Raycast(frontRayTr[1].position, this.transform.forward, out frontRayHit, frontRayDistance, groundCheckLayersToCheck) ||
+        //    Physics.Raycast(frontRayTr[2].position, this.transform.forward, out frontRayHit, frontRayDistance, groundCheckLayersToCheck))
+        //{
+        //    FrontRayHitted = true;
+        //}
+        //else FrontRayHitted = false;
 
 
         if (UpRayHitted && FrontRayHitted && !isGrounded && m_GoalVel.magnitude > 0)
@@ -746,7 +755,7 @@ public class PlayerController : MonoBehaviour
         affectedByGravity = false;
         this.GetComponentInChildren<PlayerVFX>().DissolvePlayer(0);
        
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
         this.transform.position = tpPos.position;
         
         yield return new WaitForSeconds(0.5f);
