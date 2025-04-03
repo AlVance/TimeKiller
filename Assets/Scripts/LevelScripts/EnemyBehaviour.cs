@@ -8,6 +8,7 @@ using UnityEditor.Callbacks;
 
 public class EnemyBehaviour : MonoBehaviour
 {
+    [SerializeField] private GameObject enemyStuff;
     private enum enemyMovementTypes { Static, Movable };
     [SerializeField] private enemyMovementTypes enemyMovementType = enemyMovementTypes.Static;
 
@@ -45,6 +46,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     [Header("RespawnVariables")]
     [SerializeField, ConditionalField(nameof(canRespawn), false)] private float respawnTime = 5f;
+    private bool isAlive = true;
 
     [Header("Visual variables")]
     [SerializeField] private GameObject enemyStandardModelGO;
@@ -74,7 +76,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.levelStarted)
+        if (GameManager.Instance.levelStarted && isAlive)
         {
             MoveAlongSpline();
             Shoot();
@@ -95,15 +97,18 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void EnemyDeath()
     {
-        this.gameObject.SetActive(false);
+        isAlive = false;
+        if (canRespawn) StartCoroutine(_RespawnEnemy());
+        else
+        {
+            this.gameObject.SetActive(false);
+        }
         if (this.GetComponent<Objective>() != null) this.GetComponent<Objective>().SetCompletedObjective();
 
         if(enemyBehaviourType == enemyOnHitTypes.TpOnKill)
         {
             GameManager.Instance.currentPlayer.ForcedMovement(this.transform.position);
-        }
-
-        if (canRespawn) StartCoroutine(_RespawnEnemy());
+        }  
     }
 
     private void MoveAlongSpline()
@@ -171,8 +176,12 @@ public class EnemyBehaviour : MonoBehaviour
 
     private IEnumerator _RespawnEnemy()
     {
+        enemyStuff.SetActive(false);
+        currentShootCD = 0;
+        if (currentProjectileGO != null) Destroy(currentProjectileGO);
         yield return new WaitForSeconds(respawnTime);
-        this.gameObject.SetActive(true);
+        enemyStuff.SetActive(true);
+        isAlive = true;
     }
     private void OnDestroy()
     {
