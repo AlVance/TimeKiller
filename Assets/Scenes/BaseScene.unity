@@ -927,6 +927,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 158437484}
+  - component: {fileID: 158437485}
   m_Layer: 5
   m_Name: Timers
   m_TagString: Untagged
@@ -955,6 +956,28 @@ RectTransform:
   m_AnchoredPosition: {x: 9.799988, y: -17.949997}
   m_SizeDelta: {x: 331, y: 82}
   m_Pivot: {x: 0, y: 1}
+--- !u!95 &158437485
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158437483}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e1af51719d0e9e146981ccce1460e7a1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &161848217
 GameObject:
   m_ObjectHideFlags: 0
@@ -1709,8 +1732,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.28401494, y: 0, z: 0, w: 0.9588199}
-  m_LocalPosition: {x: -18.2, y: 7.659844, z: -30.680637}
+  m_LocalRotation: {x: 0.44619775, y: 0, z: 0, w: 0.8949344}
+  m_LocalPosition: {x: 0, y: 10, z: -8.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3465,6 +3488,7 @@ MonoBehaviour:
   - {fileID: 2096805283}
   - {fileID: 2051672180}
   objectivesValueText: {fileID: 443906385}
+  TimerUIAnim: {fileID: 158437485}
   currentDamageText: {fileID: 235835113}
   currentSpeedText: {fileID: 84440842}
   currentRangeText: {fileID: 1858969892}
@@ -9434,7 +9458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelsGO:
-  - {fileID: 8454349058028808683, guid: 807c80d4d36b4094a9f271fc0ebb7041, type: 3}
+  - {fileID: 8454349058028808683, guid: ca7aefff84e389641a868ba1c79ea3fc, type: 3}
   - {fileID: 8454349058028808683, guid: aaddc47b10f22f9449b79eac218eed7c, type: 3}
   currentLevelGO: {fileID: 0}
   startLevelTime: 3
