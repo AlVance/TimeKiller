@@ -275,7 +275,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float frontRayDistance;
 
     [Header("Animation variables")]
-    [SerializeField] private Animator anim;
+    [SerializeField] public Animator anim;
     [SerializeField] private GameObject backGunGO;
 
     [Header("Player Events")]

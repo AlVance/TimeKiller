@@ -118,6 +118,7 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetPuntuationScreenActive(true);
         CameraManager.Instance.ChangeCam(CameraManager.Instance.winCam);
         GameManager.Instance.currentPlayer.gameObject.transform.eulerAngles = new Vector3(0,-180,0);
+        GameManager.Instance.currentPlayer.anim.SetBool("IsWin", true);
         //UIManager.Instance.SetTimerUIToIdle();
         yield return new WaitForSeconds(0.1f);
         UIManager.Instance.SetTimerUIToWinScreen();
@@ -151,6 +152,7 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         levelTransSceneGO.SetActive(true);
         yield return new WaitForSeconds(1f);
+        GameManager.Instance.currentPlayer.anim.SetBool("IsWin", false);
         UIManager.Instance.SetTimerUIToIdle();
         SetNextLevel();
         UIManager.Instance.SetInlevelUIActive(false);
