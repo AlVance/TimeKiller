@@ -71,7 +71,7 @@ MonoBehaviour:
     passTag: NotOccluded
     Event: 300
     filterSettings:
-      RenderQueueType: 0
+      RenderQueueType: 1
       LayerMask:
         serializedVersion: 2
         m_Bits: 128
@@ -113,7 +113,7 @@ MonoBehaviour:
     passTag: Occluded
     Event: 300
     filterSettings:
-      RenderQueueType: 0
+      RenderQueueType: 1
       LayerMask:
         serializedVersion: 2
         m_Bits: 128
