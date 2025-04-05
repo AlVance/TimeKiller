@@ -317,10 +317,10 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         GroundCheck();
+        FloatOnGround();
         if (GameManager.Instance.levelStarted)
         {  
             Movement();
-            FloatOnGround();
             //if (!isDashing && !isFlying) AddGravityForce();
             if(affectedByGravity) AddGravityForce();
             CheckLedgeGrab();
