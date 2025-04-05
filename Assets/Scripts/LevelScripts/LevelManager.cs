@@ -16,6 +16,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private float timeRewardTime;
     [SerializeField] private GameObject levelTransSceneGO;
     private bool canGoToLevelTrans = true;
+    [SerializeField] private Material levelTransWallMat;
+    private bool inLevelTrans = false;
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -33,7 +35,12 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        levelTransWallMat.mainTextureOffset = new Vector2(0, 0);
         GoToInbetweenLevels();
+    }
+    private void Update()
+    {
+        if(inLevelTrans) levelTransWallMat.mainTextureOffset += new Vector2(0,-4) * Time.deltaTime;
     }
     private void SetNextLevel()
     {
@@ -86,6 +93,7 @@ public class LevelManager : MonoBehaviour
     }
     private IEnumerator _StartLevelGameplay()
     {
+        UIManager.Instance.SetStartLevelBTNActive(false);
         UIManager.Instance.SetLevelOverviewActive(false);
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(true);
         if (Application.isMobilePlatform) UIManager.Instance.SetMobileGameplayControlsActive(true);
@@ -148,6 +156,8 @@ public class LevelManager : MonoBehaviour
     private IEnumerator _GoToInbetweenLevels()
     {
         canGoToLevelTrans = false;
+        inLevelTrans = true;
+        UIManager.Instance.SetGoToInBetweenBTNActive(false);
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1f);
         levelTransSceneGO.SetActive(true);
@@ -156,11 +166,11 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetTimerUIToIdle();
         SetNextLevel();
         UIManager.Instance.SetInlevelUIActive(false);
-        UIManager.Instance.SetGoToInBetweenBTNActive(false);
         UIManager.Instance.SetPuntuationScreenActive(false);
         UIManager.Instance.SetLevelCountText(currentLevel + 1, levelsGO.Length);
         UIManager.Instance.SetLevelNameText(currentLevelGO.GetComponent<Level>().levelName);
         UIManager.Instance.SetInBetweenLevelsScreenActive(true);
+        UIManager.Instance.SetGoToLevelBTNActive(true);
   
     }
     public void GoToLevelOverview()
@@ -169,14 +179,19 @@ public class LevelManager : MonoBehaviour
     }
     private IEnumerator _GoToLevelOverview()
     {
+        UIManager.Instance.SetGoToLevelBTNActive(false);
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1f);
+        inLevelTrans = false;
+        levelTransWallMat.mainTextureOffset = new Vector2(0, 0);
         levelTransSceneGO.SetActive(false);
         UIManager.Instance.SetInBetweenLevelsScreenActive(false);
         UIManager.Instance.SetLevelOverviewActive(true);
         UIManager.Instance.SetInlevelUIActive(true);
         yield return new WaitForSeconds(1f);
         UIManager.Instance.SetFade(false);
+        yield return new WaitForSeconds(1f);
+        UIManager.Instance.SetStartLevelBTNActive(true);
     }
     private IEnumerator DestroyGOWithDelay(GameObject GO)
     {

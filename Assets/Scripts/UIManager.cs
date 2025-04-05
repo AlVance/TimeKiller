@@ -13,9 +13,12 @@ public class UIManager : MonoBehaviour
     [Header("UI Transitions")]
     [SerializeField] private GameObject endLevelScreenUI;
     [SerializeField] private GameObject GoToInBetweenBTN;
+    [SerializeField] private GameObject GoToLevelBTN;
+    [SerializeField] private GameObject StartLevelBTN;
     [SerializeField] private GameObject inBetweenLevelsScreenUI;
     [SerializeField] private GameObject levelOverviewUI;
     [SerializeField] public Animator fadeAnim;
+    [SerializeField] private Animator ProgressionBTNsAnim;
 
     [Header("Level data Variables")]
     [SerializeField] private TMP_Text levelCountText;
@@ -234,7 +237,19 @@ public class UIManager : MonoBehaviour
     public void SetGoToInBetweenBTNActive(bool isActive)
     {
         GoToInBetweenBTN.SetActive(isActive);
+        ProgressionBTNsAnim.SetBool("OnScreen", isActive);
     }
+    public void SetGoToLevelBTNActive(bool isActive)
+    {
+        GoToLevelBTN.SetActive(isActive);
+        ProgressionBTNsAnim.SetBool("OnScreen", isActive);
+    }
+    public void SetStartLevelBTNActive(bool isActive)
+    {
+        StartLevelBTN.SetActive(isActive);
+        ProgressionBTNsAnim.SetBool("OnScreen", isActive);
+    }
+
     public void SetLevelNameText(string newText)
     {
         levelNameText.text = newText;
