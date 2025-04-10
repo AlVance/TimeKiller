@@ -46,7 +46,6 @@ public class PlayerVFX : MonoBehaviour
         while (playerDissolveCurrentTime < PlayerDissolveTime)
         {
             playerDissolveCurrentTime += playerDissolveSpeed * Time.deltaTime;
-            Debug.Log(playerDissolveCurrentTime);
             ChangeMaterialProperties(playerDissolveCurrentTime / PlayerDissolveTime, 1, isUpwards);
             yield return new WaitForEndOfFrame();
         }
