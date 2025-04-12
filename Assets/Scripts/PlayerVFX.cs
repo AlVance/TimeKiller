@@ -27,7 +27,6 @@ public class PlayerVFX : MonoBehaviour
     {
         //Realmente el parámetro puede ser su Material en vez del MR
         //Recuerda que de momento el 0 está en el pibote del broski, puede que el "0" esté en -2 y tengas que acabarlo ahí
-        //No existe el setBool
         playerMasterMat.SetInt("_isDissolving", isDissolving);
         playerMasterMat.SetFloat("_Cutoff_height", height);
 
