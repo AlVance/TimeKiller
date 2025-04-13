@@ -222,7 +222,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     private float m_currentFuel = 0;
-    private float currentFuel
+    public float currentFuel
     {
         get { return m_currentFuel; }
         set
@@ -895,10 +895,6 @@ public class PlayerController : MonoBehaviour
         if(other.gameObject.tag == "Enemy")
         {
             GetHit(other.gameObject.transform.position, hitForce);
-        }
-        if (other.gameObject.tag == "FuelRecharger")
-        {
-            currentFuel = maxFuel;
         }
     }
 
