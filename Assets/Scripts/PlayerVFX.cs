@@ -9,6 +9,8 @@ public class PlayerVFX : MonoBehaviour
     [SerializeField] private Material playerMasterMat;
     [SerializeField] public float PlayerDissolveTime;
     [SerializeField] public float playerDissolveSpeed;
+    private float dissolveMinValue = -0.5f;
+    private float dissolveMaxValue = 2f;
 
     private void Start()
     {
@@ -45,7 +47,9 @@ public class PlayerVFX : MonoBehaviour
         while (playerDissolveCurrentTime < PlayerDissolveTime)
         {
             playerDissolveCurrentTime += playerDissolveSpeed * Time.deltaTime;
-            ChangeMaterialProperties(playerDissolveCurrentTime / PlayerDissolveTime, 1, isUpwards);
+            float currentValue = Mathf.Lerp(dissolveMinValue, dissolveMaxValue, playerDissolveCurrentTime);
+            Debug.Log(currentValue);
+            ChangeMaterialProperties(currentValue, 1, isUpwards);
             yield return new WaitForEndOfFrame();
         }
         playerDissolveCurrentTime = 0;
