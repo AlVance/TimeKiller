@@ -267,6 +267,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float stunnedTime;
     [SerializeField] private float hitForce;
     private bool canGetHitted = true;
+    private bool isHitted = false;
 
     [Header("Ledge grab variables")]
     [SerializeField] private Transform upRayTr;
@@ -713,6 +714,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator _GetHit(Vector3 hitPos, float hitForce)
     {
         canGetHitted = false;
+        isHitted = true;
         m_GoalVel = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
         ResetCharge();
@@ -723,6 +725,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(stunnedTime);
         //canFly = true;
         //canMove = true;
+        isHitted = false;
         canGetHitted = true;
     }
     public void BlockPlayer(float blockTime)
@@ -888,6 +891,7 @@ public class PlayerController : MonoBehaviour
             anim.SetLayerWeight(1, 100f);
             backGunGO.SetActive(false);
         }
+        anim.SetBool("IsHit", isHitted);
     }
 
     private void OnTriggerEnter(Collider other)
