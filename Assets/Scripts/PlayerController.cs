@@ -896,6 +896,10 @@ public class PlayerController : MonoBehaviour
         {
             GetHit(other.gameObject.transform.position, hitForce);
         }
+        if (other.gameObject.tag == "FuelRecharger")
+        {
+            currentFuel = maxFuel;
+        }
     }
 
     private void OnEnable()
