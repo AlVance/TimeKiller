@@ -54,6 +54,8 @@ public class EnemyBehaviour : MonoBehaviour
     [SerializeField] private GameObject enemyGunGO;
     [SerializeField] private GameObject shieldGO;
     private GameObject enemyModelGO;
+
+    private Vector3 gunTr;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -72,11 +74,12 @@ public class EnemyBehaviour : MonoBehaviour
         EnemyVisualSetter();
         EnemyMovementTypeSetter();
 
-        
+        gunTr = enemyGunGO.transform.localPosition;
     }
 
     private void Update()
     {
+        if(enemyGunGO != null) enemyGunGO.transform.localPosition = gunTr;
         if (GameManager.Instance.levelStarted && isAlive)
         {
             MoveAlongSpline();
@@ -138,7 +141,7 @@ public class EnemyBehaviour : MonoBehaviour
         {
             if (gunCol.objective != null)
             {
-                enemyGunGO.transform.rotation = Quaternion.LookRotation(gunCol.objective.transform.position - enemyGunGO.transform.position);
+                //enemyGunGO.transform.rotation = Quaternion.LookRotation(gunCol.objective.transform.position - enemyGunGO.transform.position);
 
                 if (currentShootCD >= shootCD)
                 {
@@ -165,13 +168,8 @@ public class EnemyBehaviour : MonoBehaviour
                 currentShootCD = 0;
                 if (currentProjectileGO != null) Destroy(currentProjectileGO);
             }
-            
-            //if(currentShootCD < shootCD || gunCol.objective == null)
-            //{
-            //    if(currentShootCD < shootCD) currentShootCD += Time.deltaTime;
-            //}
 
-            enemyGunGO.transform.position = this.gameObject.transform.position;
+            
         }
     }
 
