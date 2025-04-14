@@ -9,7 +9,8 @@ public class Objective : MonoBehaviour
     {
         if(objectivePoints > 0 && objPS != null)
         {
-            Instantiate(objPS, this.transform);
+            GameObject objPSGO = Instantiate(objPS, this.transform);
+            objPSGO.transform.localScale = this.gameObject.transform.localScale;
         }
     }
     public void SetCompletedObjective()
