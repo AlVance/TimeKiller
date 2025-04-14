@@ -52,6 +52,7 @@ public class EnemyBehaviour : MonoBehaviour
     [SerializeField] private GameObject enemyStandardModelGO;
     [SerializeField] private GameObject enemyTpOnKillModelGO;
     [SerializeField] private GameObject enemyGunGO;
+    [SerializeField] private GameObject shieldGO;
     private GameObject enemyModelGO;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -238,6 +239,18 @@ public class EnemyBehaviour : MonoBehaviour
             else
             {
                 enemyGunGO.SetActive(false);
+            }
+        }
+
+        if(shieldGO != null)
+        {
+            if (isInvulnerable)
+            {
+                shieldGO.SetActive(true);
+            }
+            else
+            {
+                shieldGO.SetActive(false);
             }
         }
         
