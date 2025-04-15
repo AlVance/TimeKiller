@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Camera Variables")]
     [SerializeField] private Transform aimTargetTr;
+    [SerializeField] private Transform flyTargetTr;
 
 
     [Header ("Gravity Varaibles")]
@@ -613,7 +614,7 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
             ResetCharge();
             EndAim();
-            CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
+            CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = flyTargetTr;
 
             OnStartFlyEvent.Invoke();
         }
@@ -709,7 +710,7 @@ public class PlayerController : MonoBehaviour
 
     public void GetHit(Vector3 hitPos, float hitForce)
     {
-        if(canGetHitted)StartCoroutine(_GetHit(hitPos, hitForce));
+        if(GameManager.Instance.levelStarted && canGetHitted) StartCoroutine(_GetHit(hitPos, hitForce));
     }
     private IEnumerator _GetHit(Vector3 hitPos, float hitForce)
     {
