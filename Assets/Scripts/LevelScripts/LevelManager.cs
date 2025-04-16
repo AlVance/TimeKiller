@@ -110,6 +110,7 @@ public class LevelManager : MonoBehaviour
     public void OnLevelEnded()
     {
         GameManager.Instance.levelStarted = false;
+        GameManager.Instance.currentPlayer.BlockPlayer(0.2f);
         GameManager.Instance.currentPlayer.ResetPlayer();
         SetLevelPuntuationScreen();
     }

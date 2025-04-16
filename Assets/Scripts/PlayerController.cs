@@ -355,6 +355,7 @@ public class PlayerController : MonoBehaviour
     {
         aimDirAidGO.SetActive(false);
         CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+        isAiming = false;
     }
 
     private void ReloadStarted()
@@ -700,6 +701,7 @@ public class PlayerController : MonoBehaviour
 
     public void ResetPlayer()
     {
+        canMove = false;
         m_GoalVel = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
         ResetCharge();
