@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class FollowObject : MonoBehaviour
 {
@@ -9,15 +10,16 @@ public class FollowObject : MonoBehaviour
     [SerializeField] private float followSpeed;
     [SerializeField] public bool followPlayer;
 
-    private void Start()
+    private IEnumerator Start()
     {
+        yield return new WaitForSeconds(1f);
         if(followPlayer && targetTr == null) targetTr = GameManager.Instance.currentPlayer.gameObject.transform;
-        this.transform.position = targetTr.position + followOffset;
+        if(targetTr != null) this.transform.position = targetTr.position + followOffset;
     }
 
     private void LateUpdate()
     {
-        if (!followSmooth)
+        if (!followSmooth && targetTr != null)
         {
             this.transform.position = targetTr.position + followOffset;
         }
@@ -26,7 +28,7 @@ public class FollowObject : MonoBehaviour
     private void FixedUpdate()
     {
         
-        if(followSmooth)
+        if(followSmooth && targetTr != null)
         {
             this.transform.position += ((targetTr.position + followOffset) - this.transform.position) * followSpeed * Time.deltaTime;
         }

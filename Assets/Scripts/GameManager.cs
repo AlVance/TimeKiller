@@ -4,6 +4,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public PlayerController currentPlayer;
+    public GameObject currentLevelGO;
+    public int currentLevel = 0;
     public bool levelStarted = false;
 
     private void Awake()

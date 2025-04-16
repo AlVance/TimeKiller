@@ -3,11 +3,10 @@ using System.Collections;
 
 public class LevelManager : MonoBehaviour
 {
-    public static LevelManager Instance { get; private set; }
+    //public static LevelManager Instance { get; private set; }
 
     [SerializeField] private GameObject[] levelsGO;
     [HideInInspector] public GameObject currentLevelGO;
-    private int currentLevel = 0;
 
     [SerializeField] private float startLevelTime = 3f;
 
@@ -22,14 +21,14 @@ public class LevelManager : MonoBehaviour
     {
         // If there is an instance, and it's not me, delete myself.
 
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
+        //if (Instance != null && Instance != this)
+        //{
+        //    Destroy(this);
+        //}
+        //else
+        //{
+        //    Instance = this;
+        //}
     }
 
 
@@ -46,8 +45,8 @@ public class LevelManager : MonoBehaviour
     {
         if(currentLevelGO != null)
         {
-            ++currentLevel;
-            if (currentLevel >= levelsGO.Length) currentLevel = 0; //TEMP LOOP
+            ++GameManager.Instance.currentLevel;
+            if (GameManager.Instance.currentLevel >= levelsGO.Length) GameManager.Instance.currentLevel = 0; //TEMP LOOP
 
             foreach(Transform go in currentLevelGO.transform)
             {
@@ -56,7 +55,8 @@ public class LevelManager : MonoBehaviour
             Destroy(currentLevelGO);
         }
         
-        currentLevelGO = Instantiate(levelsGO[currentLevel]);
+        currentLevelGO = Instantiate(levelsGO[GameManager.Instance.currentLevel]);
+        GameManager.Instance.currentLevelGO = currentLevelGO;
         currentLevelGO.GetComponent<Level>().lM = this;
 
         StartCoroutine(OnLevelStartSetUp());
@@ -159,6 +159,7 @@ public class LevelManager : MonoBehaviour
         canGoToLevelTrans = false;
         inLevelTrans = true;
         UIManager.Instance.SetGoToInBetweenBTNActive(false);
+        UIManager.Instance.SetGoToStartBTNActive(false);
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1f);
         levelTransSceneGO.SetActive(true);
@@ -168,7 +169,7 @@ public class LevelManager : MonoBehaviour
         SetNextLevel();
         UIManager.Instance.SetInlevelUIActive(false);
         UIManager.Instance.SetPuntuationScreenActive(false);
-        UIManager.Instance.SetLevelCountText(currentLevel + 1, levelsGO.Length);
+        UIManager.Instance.SetLevelCountText(GameManager.Instance.currentLevel + 1, levelsGO.Length);
         UIManager.Instance.SetLevelNameText(currentLevelGO.GetComponent<Level>().levelName);
         UIManager.Instance.SetInBetweenLevelsScreenActive(true);
         UIManager.Instance.SetGoToLevelBTNActive(true);
@@ -199,5 +200,4 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         Destroy(GO);
     }
-
 }

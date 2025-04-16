@@ -15,6 +15,6 @@ public class Objective : MonoBehaviour
     }
     public void SetCompletedObjective()
     {
-        LevelManager.Instance.currentLevelGO.GetComponent<Level>().SetCurrentObjectivesInt(objectivePoints);
+        GameManager.Instance.currentLevelGO.GetComponent<Level>().SetCurrentObjectivesInt(objectivePoints);
     }
 }

@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections;
 public class TimeManager : MonoBehaviour
 {
     public static TimeManager Instance { get; private set; }
@@ -58,6 +58,30 @@ public class TimeManager : MonoBehaviour
                 levelTime = 0;
                 currentTime -= Time.deltaTime;
             }
+
+            if(currentTime <= 0)
+            {
+                currentTime = 0;
+                GameOver();
+            }
         }
+    }
+
+    public void GameOver()
+    {
+        StartCoroutine(_GameOver());
+    }
+    private IEnumerator _GameOver()
+    {
+        GameManager.Instance.levelStarted = false;
+        GameManager.Instance.currentLevel = 0;
+        CameraManager.Instance.ChangeCam(CameraManager.Instance.winCam);
+        GameManager.Instance.currentPlayer.gameObject.transform.eulerAngles = new Vector3(0, -180, 0);
+        GameManager.Instance.currentPlayer.anim.SetBool("IsWin", true);
+        yield return new WaitForSeconds(0.1f);
+        UIManager.Instance.SetTimerUIToWinScreen();
+        UIManager.Instance.SetGameOverScreenctive(true);
+        yield return new WaitForSeconds(0.5f);
+        UIManager.Instance.SetGoToStartBTNActive(true);
     }
 }

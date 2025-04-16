@@ -48,7 +48,6 @@ public class PlayerVFX : MonoBehaviour
         {
             playerDissolveCurrentTime += playerDissolveSpeed * Time.deltaTime;
             float currentValue = Mathf.Lerp(dissolveMinValue, dissolveMaxValue, playerDissolveCurrentTime);
-            Debug.Log(currentValue);
             ChangeMaterialProperties(currentValue, 1, isUpwards);
             yield return new WaitForEndOfFrame();
         }
