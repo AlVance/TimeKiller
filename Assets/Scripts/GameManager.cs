@@ -6,7 +6,16 @@ public class GameManager : MonoBehaviour
     public PlayerController currentPlayer;
     public GameObject currentLevelGO;
     public int currentLevel = 0;
-    public bool levelStarted = false;
+    private bool m_levelStarted = false;
+    public bool levelStarted 
+    { 
+        get { return m_levelStarted; }
+        set {
+            m_levelStarted = value;
+            playerWork = value;
+        }
+    } 
+    public bool playerWork = false;
 
     private void Awake()
     {
@@ -20,6 +29,8 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+
+        levelStarted = false;
     }
 
 

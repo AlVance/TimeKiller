@@ -306,7 +306,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.levelStarted)
+        if (GameManager.Instance.playerWork)
         {
             Aim();
             ChargeShot();
@@ -320,7 +320,7 @@ public class PlayerController : MonoBehaviour
     {
         GroundCheck();
         FloatOnGround();
-        if (GameManager.Instance.levelStarted)
+        if (GameManager.Instance.playerWork)
         {  
             Movement();
             //if (!isDashing && !isFlying) AddGravityForce();
@@ -712,7 +712,7 @@ public class PlayerController : MonoBehaviour
 
     public void GetHit(Vector3 hitPos, float hitForce)
     {
-        if(GameManager.Instance.levelStarted && canGetHitted) StartCoroutine(_GetHit(hitPos, hitForce));
+        if(GameManager.Instance.playerWork && canGetHitted) StartCoroutine(_GetHit(hitPos, hitForce));
     }
     private IEnumerator _GetHit(Vector3 hitPos, float hitForce)
     {
@@ -824,7 +824,7 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Aim.started += ctx =>
         {
-            if (GameManager.Instance.levelStarted) AimStarted();
+            if (GameManager.Instance.playerWork) AimStarted();
             aimPressed = true;
         };
 
@@ -863,17 +863,17 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Reload.started += ctx =>
         {
-            if (GameManager.Instance.levelStarted) ReloadStarted();
+            if (GameManager.Instance.playerWork) ReloadStarted();
         };
 
         playerInput.PlayerControls.Reload.performed += ctx =>
         {
-            if (GameManager.Instance.levelStarted) ReloadPerformed();
+            if (GameManager.Instance.playerWork) ReloadPerformed();
         };
 
         playerInput.PlayerControls.Reload.canceled += ctx =>
         {
-            if (GameManager.Instance.levelStarted) ReloadEnded();
+            if (GameManager.Instance.playerWork) ReloadEnded();
         };
     }
 

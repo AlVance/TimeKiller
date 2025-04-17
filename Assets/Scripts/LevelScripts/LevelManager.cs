@@ -17,24 +17,12 @@ public class LevelManager : MonoBehaviour
     private bool canGoToLevelTrans = true;
     [SerializeField] private Material levelTransWallMat;
     private bool inLevelTrans = false;
-    private void Awake()
-    {
-        // If there is an instance, and it's not me, delete myself.
-
-        //if (Instance != null && Instance != this)
-        //{
-        //    Destroy(this);
-        //}
-        //else
-        //{
-        //    Instance = this;
-        //}
-    }
-
-
+    private bool isStart = false;
     private void Start()
     {
+        isStart = true;
         levelTransWallMat.mainTextureOffset = new Vector2(0, 0);
+        UIManager.Instance.SetInlevelUIActive(true);
         GoToInbetweenLevels();
     }
     private void Update()

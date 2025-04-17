@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     [Header("Game UI Variables")]
     [SerializeField] private GameObject mobileControlsUI;
     [SerializeField] private GameObject InlevelUI;
+    [SerializeField] private GameObject InitialScenelUI;
 
     [Header("UI Transitions")]
     [SerializeField] private GameObject endLevelScreenUI;
@@ -236,6 +237,10 @@ public class UIManager : MonoBehaviour
     public void SetInlevelUIActive(bool isActive)
     {
         InlevelUI.SetActive(isActive);
+    }
+    public void SetInitialSceneUIActive(bool isActive)
+    {
+        InitialScenelUI.SetActive(isActive);
     }
     public void SetGoToInBetweenBTNActive(bool isActive)
     {
