@@ -835,8 +835,6 @@ public class PlayerController : MonoBehaviour
             {
                 Vector2 tempAimDir = ctx.ReadValue<Vector2>();
                 Vector3 PlayerScreenPos = Camera.main.WorldToScreenPoint(this.transform.position);
-                //tempAimDir.x -= Screen.width / 2;
-                //tempAimDir.y -= Screen.height / 2;
                 tempAimDir.x -= PlayerScreenPos.x;
                 tempAimDir.y -= PlayerScreenPos.y;
                 aimDir = tempAimDir.normalized;

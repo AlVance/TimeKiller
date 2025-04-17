@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
@@ -238,23 +239,47 @@ public class UIManager : MonoBehaviour
     }
     public void SetGoToInBetweenBTNActive(bool isActive)
     {
-        GoToInBetweenBTN.SetActive(isActive);
-        ProgressionBTNsAnim.SetBool("OnScreen", isActive);
+        if (isActive)
+        {
+            GoToInBetweenBTN.SetActive(isActive);
+            ProgressionBTNsAnim.SetBool("OnScreen", isActive);
+        }
+        else StartCoroutine(SetBtnsInnactive(GoToInBetweenBTN));
     }
     public void SetGoToLevelBTNActive(bool isActive)
     {
-        GoToLevelBTN.SetActive(isActive);
-        ProgressionBTNsAnim.SetBool("OnScreen", isActive);
+        if (isActive)
+        {
+            GoToLevelBTN.SetActive(isActive);
+            ProgressionBTNsAnim.SetBool("OnScreen", isActive);
+        }
+        else StartCoroutine(SetBtnsInnactive(GoToLevelBTN));
     }
     public void SetStartLevelBTNActive(bool isActive)
     {
-        StartLevelBTN.SetActive(isActive);
-        ProgressionBTNsAnim.SetBool("OnScreen", isActive);
+        if (isActive)
+        {
+            StartLevelBTN.SetActive(isActive);
+            ProgressionBTNsAnim.SetBool("OnScreen", isActive);
+        }
+        else StartCoroutine(SetBtnsInnactive(StartLevelBTN));
+        
     }
     public void SetGoToStartBTNActive(bool isActive)
     {
-        GoToStartBTN.SetActive(isActive);
-        ProgressionBTNsAnim.SetBool("OnScreen", isActive);
+        if (isActive)
+        {
+            GoToStartBTN.SetActive(isActive);
+            ProgressionBTNsAnim.SetBool("OnScreen", isActive);
+        }
+        else StartCoroutine(SetBtnsInnactive(GoToStartBTN));
+        
+    }
+    private IEnumerator SetBtnsInnactive(GameObject a)
+    {
+        ProgressionBTNsAnim.SetBool("OnScreen", false);
+        yield return new WaitForSeconds(0.5f);
+        a.SetActive(false);
     }
 
     public void SetGameOverScreenctive(bool isActive)

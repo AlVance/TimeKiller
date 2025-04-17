@@ -77,7 +77,7 @@ public class TimeManager : MonoBehaviour
         GameManager.Instance.currentLevel = 0;
         CameraManager.Instance.ChangeCam(CameraManager.Instance.winCam);
         GameManager.Instance.currentPlayer.gameObject.transform.eulerAngles = new Vector3(0, -180, 0);
-        GameManager.Instance.currentPlayer.anim.SetBool("IsWin", true);
+        GameManager.Instance.currentPlayer.anim.SetBool("IsLose", true);
         yield return new WaitForSeconds(0.1f);
         UIManager.Instance.SetTimerUIToWinScreen();
         UIManager.Instance.SetGameOverScreenctive(true);

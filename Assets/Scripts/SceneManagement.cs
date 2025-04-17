@@ -26,7 +26,6 @@ public class SceneManagement : MonoBehaviour
     }
     private IEnumerator _LoadScene(string sceneName)
     {
-        UIManager.Instance.SetGoToStartBTNActive(false);
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene(sceneName);
