@@ -27,12 +27,8 @@ public class PlayerVFX : MonoBehaviour
 
     public void ChangeMaterialProperties(float height, int isDissolving, int isUpwards)
     {
-        //Realmente el parámetro puede ser su Material en vez del MR
-        //Recuerda que de momento el 0 está en el pibote del broski, puede que el "0" esté en -2 y tengas que acabarlo ahí
         playerMasterMat.SetInt("_isDissolving", isDissolving);
         playerMasterMat.SetFloat("_Cutoff_height", height);
-
-        //Por si quieres hacerlo de arriba a abajo o al revés
         playerMasterMat.SetInt("_isUpwards", isUpwards);
     }
 

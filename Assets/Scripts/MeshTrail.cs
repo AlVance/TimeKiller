@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class MeshTrail : MonoBehaviour
 { 
@@ -8,17 +9,16 @@ public class MeshTrail : MonoBehaviour
 
     public Material trailMaterial;
 
-    //private bool isTrailActive = false;
     private SkinnedMeshRenderer[] meshes;
 
     [SerializeField] Color[] sandColors;
     int nColor = 0;
 
+    [SerializeField] VisualEffect[] smoke_VFX;
+
     private void Start()
     {  
         meshes = GetComponentsInChildren<SkinnedMeshRenderer>();
-        //GameManager.Instance.currentPlayer.OnStartFlyEvent.AddListener(ActivateSandevistan);
-
     }
 
     public void ActivateSandevistan()
@@ -28,11 +28,14 @@ public class MeshTrail : MonoBehaviour
     
     IEnumerator ActivateTrail()
     {
+        smoke_VFX[0].Play();
+        smoke_VFX[1].Play();
+
         for (int i = 0; i < meshes.Length; i++)
         {
             GameObject go = new GameObject();
             go.transform.SetPositionAndRotation(meshes[i].transform.position, meshes[i].transform.rotation);
-            //go.transform.localScale = (meshes[i].transform.localScale * transform.localScale.x);
+
             MeshRenderer mr = go.AddComponent<MeshRenderer>();
             MeshFilter mf = go.AddComponent<MeshFilter>();
 
@@ -50,5 +53,11 @@ public class MeshTrail : MonoBehaviour
         nColor = nColor >= sandColors.Length - 1 ? 0 : ++nColor;
 
         if (GameManager.Instance.currentPlayer.isFlying) StartCoroutine(ActivateTrail());
+        else
+        {
+            smoke_VFX[0].Stop();
+            smoke_VFX[1].Stop();
+
+        }
     }
 }
