@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Objectives trail mat
+  m_Name: Objectives scroll trail mat
   m_Shader: {fileID: -6465566751694194690, guid: 06da26076feaba84ebf0e13e68aa45a2, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -29,7 +29,7 @@ Material:
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2950
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
@@ -38,7 +38,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Texture2D_1605CCAD:
-        m_Texture: {fileID: 2800000, guid: 868fa695b200f8249902a6d3df9c13c1, type: 3}
+        m_Texture: {fileID: 2800000, guid: a376a0d46d73bcf40bb2bcb20ba7e092, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -136,7 +136,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
-    - _QueueOffset: 0
+    - _QueueOffset: -50
     - _ReceiveShadows: 1
     - _SampleGI: 0
     - _Smoothness: 0.5
@@ -151,9 +151,9 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
-    - Color_D91EC358: {r: 3.7328455, g: 3.7328455, b: 3.7328455, a: 1}
+    - Color_D91EC358: {r: 4.983642, g: 4.983642, b: 4.983642, a: 1}
     - Vector2_34C6AF00: {r: 0, g: 0, b: 0, a: 0}
-    - Vector2_F463ABA: {r: 0.3, g: 0, b: 0, a: 0}
+    - Vector2_F463ABA: {r: 1, g: 0, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
