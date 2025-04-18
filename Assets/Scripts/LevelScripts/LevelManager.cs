@@ -16,20 +16,15 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject levelTransSceneGO;
     [SerializeField] private GameObject startLevelGO;
     private bool canGoToLevelTrans = true;
-    [SerializeField] private Material levelTransWallMat;
     private bool inLevelTrans = false;
     private bool isStart = false;
     private void Start()
     {
         isStart = true;
-        levelTransWallMat.mainTextureOffset = new Vector2(0, 0);
         UIManager.Instance.SetInlevelUIActive(false);
         GoToStartLevel();
     }
-    private void Update()
-    {
-        if(inLevelTrans) levelTransWallMat.mainTextureOffset += new Vector2(0,-4) * Time.deltaTime;
-    }
+
     private void SetNextLevel()
     {
         if(currentLevelGO != null)
@@ -180,7 +175,6 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1f);
         inLevelTrans = false;
-        levelTransWallMat.mainTextureOffset = new Vector2(0, 0);
         levelTransSceneGO.SetActive(false);
         UIManager.Instance.SetInBetweenLevelsScreenActive(false);
         UIManager.Instance.SetLevelOverviewActive(true);
