@@ -29,21 +29,24 @@ public class LevelManager : MonoBehaviour
     {
         if(currentLevelGO != null)
         {
-            ++GameManager.Instance.currentLevel;
-            if (GameManager.Instance.currentLevel >= levelsGO.Length) GameManager.Instance.currentLevel = 0; //TEMP LOOP
-
-            foreach(Transform go in currentLevelGO.transform)
+            foreach (Transform go in currentLevelGO.transform)
             {
                 StartCoroutine(DestroyGOWithDelay(go.gameObject));
             }
             Destroy(currentLevelGO);
+            
+            //++GameManager.Instance.currentLevel;
+            
         }
-        
-        currentLevelGO = Instantiate(levelsGO[GameManager.Instance.currentLevel]);
-        GameManager.Instance.currentLevelGO = currentLevelGO;
-        currentLevelGO.GetComponent<Level>().lM = this;
+        if(GameManager.Instance.currentLevel < levelsGO.Length)
+        {
+            currentLevelGO = Instantiate(levelsGO[GameManager.Instance.currentLevel]);
+            GameManager.Instance.currentLevelGO = currentLevelGO;
+            currentLevelGO.GetComponent<Level>().lM = this;
 
-        StartCoroutine(OnLevelStartSetUp());
+            StartCoroutine(OnLevelStartSetUp());
+        }
+
     }
 
     private IEnumerator OnLevelStartSetUp()
@@ -51,7 +54,6 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         GameManager.Instance.currentPlayer.gameObject.transform.position = currentLevelGO.GetComponent<Level>().playerStartTr.position;
         GameManager.Instance.currentPlayer.ResetPlayer();
-        //GameManager.Instance.currentPlayer.enabled = false;
         TimeManager.Instance.levelTime = currentLevelGO.GetComponent<Level>().levelTime;
         UIManager.Instance.SetLevelTimerSliderMaxValue(currentLevelGO.GetComponent<Level>().levelTime);
         UIManager.Instance.SetLevelTimeText(currentLevelGO.GetComponent<Level>().levelTime);
@@ -125,7 +127,6 @@ public class LevelManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         TimeManager.Instance.currentTime = finalTimeValue;
-        //TimeManager.Instance.currentTime += TimeManager.Instance.levelTime;
         TimeManager.Instance.levelTime = 0;
         canGoToLevelTrans = true;
         UIManager.Instance.SetGoToInBetweenBTNActive(true);
@@ -156,14 +157,24 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
         GameManager.Instance.currentPlayer.anim.SetBool("IsWin", false);
         UIManager.Instance.SetTimerUIToIdle();
-        SetNextLevel();
         UIManager.Instance.SetInlevelUIActive(false);
         UIManager.Instance.SetPuntuationScreenActive(false);
-        UIManager.Instance.SetLevelCountText(GameManager.Instance.currentLevel + 1, levelsGO.Length);
-        UIManager.Instance.SetLevelNameText(currentLevelGO.GetComponent<Level>().levelName);
-        UIManager.Instance.SetInBetweenLevelsScreenActive(true);
-        UIManager.Instance.SetGoToLevelBTNActive(true);
-  
+        
+        if (GameManager.Instance.currentLevel < levelsGO.Length)
+        {
+            SetNextLevel();
+            UIManager.Instance.SetLevelCountText(GameManager.Instance.currentLevel + 1, levelsGO.Length);
+            UIManager.Instance.SetLevelNameText(currentLevelGO.GetComponent<Level>().levelName);
+            UIManager.Instance.SetInBetweenLevelsScreenActive(true);
+            UIManager.Instance.SetGoToLevelBTNActive(true);
+        }
+        else
+        {
+            UIManager.Instance.SetFade(false);
+            yield return new WaitForSeconds(1f);
+            UIManager.Instance.SetGoToStartBTNActive(true);
+        }
+        ++GameManager.Instance.currentLevel;
     }
     public void GoToLevelOverview()
     {
@@ -197,6 +208,7 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.currentLevel = 0;
         TimeManager.Instance.currentTime = TimeManager.Instance.startTime;
         //UIManager.Instance.SetGoToStartBTNActive(true);
+        levelTransSceneGO.SetActive(false);
         startLevelGO.SetActive(true);
         yield return new WaitForEndOfFrame();
         if(currentLevelGO != null)
