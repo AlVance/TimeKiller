@@ -14,6 +14,7 @@ public class LevelManager : MonoBehaviour
     [Header("LevelTransition variables")]
     [SerializeField] private float timeRewardTime;
     [SerializeField] private GameObject levelTransSceneGO;
+    [SerializeField] private GameObject startLevelGO;
     private bool canGoToLevelTrans = true;
     [SerializeField] private Material levelTransWallMat;
     private bool inLevelTrans = false;
@@ -22,8 +23,8 @@ public class LevelManager : MonoBehaviour
     {
         isStart = true;
         levelTransWallMat.mainTextureOffset = new Vector2(0, 0);
-        UIManager.Instance.SetInlevelUIActive(true);
-        GoToInbetweenLevels();
+        UIManager.Instance.SetInlevelUIActive(false);
+        GoToStartLevel();
     }
     private void Update()
     {
@@ -149,6 +150,12 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetGoToStartBTNActive(false);
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1f);
+        if (isStart)
+        {
+            GameManager.Instance.playerWork = false;
+            startLevelGO.SetActive(false);      
+            isStart = false;
+        }
         levelTransSceneGO.SetActive(true);
         yield return new WaitForSeconds(1f);
         GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
@@ -182,6 +189,44 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetFade(false);
         yield return new WaitForSeconds(1f);
         UIManager.Instance.SetStartLevelBTNActive(true);
+    }
+
+    public void GoToStartLevel()
+    {
+        StartCoroutine(_GoToStartLevel());
+    }
+    private IEnumerator _GoToStartLevel()
+    {
+        isStart = true;
+        UIManager.Instance.SetFade(true);
+        yield return new WaitForSeconds(1f);
+        GameManager.Instance.currentLevel = 0;
+        TimeManager.Instance.currentTime = TimeManager.Instance.startTime;
+        //UIManager.Instance.SetGoToStartBTNActive(true);
+        startLevelGO.SetActive(true);
+        yield return new WaitForEndOfFrame();
+        if(currentLevelGO != null)
+        {
+            foreach (Transform go in currentLevelGO.transform)
+            {
+                StartCoroutine(DestroyGOWithDelay(go.gameObject));
+            }
+            Destroy(currentLevelGO);
+            yield return new WaitForEndOfFrame();
+        }
+        GameManager.Instance.currentPlayer.gameObject.transform.position = startLevelGO.GetComponent<Level>().playerStartTr.position;
+        GameManager.Instance.currentPlayer.ResetPlayer();
+        CameraManager.Instance.ChangeCam(CameraManager.Instance.basePlayerCam);
+        GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
+        UIManager.Instance.SetTimerUIToIdle();
+        UIManager.Instance.SetInlevelUIActive(false);
+        UIManager.Instance.SetPuntuationScreenActive(false);
+        UIManager.Instance.SetGameOverScreenctive(false);
+        if (Application.isMobilePlatform) UIManager.Instance.SetMobileGameplayControlsActive(true);
+        canGoToLevelTrans = true;
+        yield return new WaitForSeconds(1f);
+        UIManager.Instance.SetFade(false);
+        GameManager.Instance.playerWork = true;
     }
     private IEnumerator DestroyGOWithDelay(GameObject GO)
     {

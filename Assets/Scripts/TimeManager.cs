@@ -4,7 +4,7 @@ public class TimeManager : MonoBehaviour
 {
     public static TimeManager Instance { get; private set; }
 
-    [SerializeField] private float startTime;
+    [SerializeField] public float startTime;
 
     private float m_currentTime;
     public float currentTime
@@ -76,7 +76,6 @@ public class TimeManager : MonoBehaviour
         GameManager.Instance.levelStarted = false;
         GameManager.Instance.currentPlayer.BlockPlayer(0.2f);
         GameManager.Instance.currentPlayer.ResetPlayer();
-        GameManager.Instance.currentLevel = 0;
         CameraManager.Instance.ChangeCam(CameraManager.Instance.winCam);
         GameManager.Instance.currentPlayer.gameObject.transform.eulerAngles = new Vector3(0, -180, 0);
         GameManager.Instance.currentPlayer.anim.SetBool("IsLose", true);
