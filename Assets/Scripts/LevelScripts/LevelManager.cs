@@ -151,6 +151,7 @@ public class LevelManager : MonoBehaviour
             GameManager.Instance.playerWork = false;
             startLevelGO.SetActive(false);      
             isStart = false;
+            UIManager.Instance.SetInitialSceneUIActive(false);
         }
         levelTransSceneGO.SetActive(true);
         yield return new WaitForSeconds(1f);
@@ -159,7 +160,7 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetTimerUIToIdle();
         UIManager.Instance.SetInlevelUIActive(false);
         UIManager.Instance.SetPuntuationScreenActive(false);
-        
+
         if (GameManager.Instance.currentLevel < levelsGO.Length)
         {
             SetNextLevel();
@@ -228,6 +229,7 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetInlevelUIActive(false);
         UIManager.Instance.SetPuntuationScreenActive(false);
         UIManager.Instance.SetGameOverScreenctive(false);
+        UIManager.Instance.SetInitialSceneUIActive(true);
         if (Application.isMobilePlatform) UIManager.Instance.SetMobileGameplayControlsActive(true);
         canGoToLevelTrans = true;
         yield return new WaitForSeconds(1f);
