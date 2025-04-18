@@ -89,7 +89,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void SetHealth(int healthModfier)
     {
-        if (!isInvulnerable)
+        if (!isInvulnerable && GameManager.Instance.levelStarted)
         {
             currentEnemyHealth += healthModfier;
             if (currentEnemyHealth <= 0)
