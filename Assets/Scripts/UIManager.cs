@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text currentTimeText;
     [SerializeField] private TMP_Text levelTimeText;
     [SerializeField] public TMP_Text startLevelTimerText;
+    [SerializeField] public Animator startLevelTimerAnim;
     [SerializeField] private Slider levelTimerSlider;
     [SerializeField] private Slider[] globalTimerSliders;
     [SerializeField] private TMP_Text objectivesValueText;
@@ -56,6 +57,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Fly UI Variables")]
     [SerializeField] private Slider flyFuelSlider;
+    [SerializeField] private Image flyFuelSliderImage;
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -69,7 +71,7 @@ public class UIManager : MonoBehaviour
             Instance = this;
         }
     }
-
+    
     private void Start()
     {
         if (Application.isMobilePlatform) mobileControlsUI.SetActive(true);
@@ -126,6 +128,7 @@ public class UIManager : MonoBehaviour
 
     public void SetStartLevelTimerText(string newtext)
     {
+        startLevelTimerAnim.SetTrigger("On");
         startLevelTimerText.text = newtext;
     }
 
@@ -208,7 +211,10 @@ public class UIManager : MonoBehaviour
     {
         flyFuelSlider.maxValue = newMaxValue;
     }
-
+     public void SetFlyFuelSliderColor(Color newColor)
+    {
+        flyFuelSliderImage.color = newColor;
+    }
     public void SetObjectivesValueText(int currentObj, int maxObj)
     {
         objectivesValueText.text = currentObj.ToString() + "/" + maxObj.ToString();

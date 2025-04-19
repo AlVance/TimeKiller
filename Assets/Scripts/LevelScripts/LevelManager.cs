@@ -89,8 +89,11 @@ public class LevelManager : MonoBehaviour
             UIManager.Instance.SetStartLevelTimerText((startLevelTime - i).ToString("0"));
             yield return new WaitForSeconds(1f);
         }
-        UIManager.Instance.startLevelTimerText.gameObject.SetActive(false);
+        
         GameManager.Instance.levelStarted = true;
+        UIManager.Instance.SetStartLevelTimerText("GO!");
+        yield return new WaitForSeconds(1f);
+        UIManager.Instance.startLevelTimerText.gameObject.SetActive(false);
     }
 
     public void OnLevelEnded()
@@ -160,6 +163,7 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetTimerUIToIdle();
         UIManager.Instance.SetInlevelUIActive(false);
         UIManager.Instance.SetPuntuationScreenActive(false);
+
 
         if (GameManager.Instance.currentLevel < levelsGO.Length)
         {

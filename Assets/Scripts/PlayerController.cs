@@ -707,6 +707,7 @@ public class PlayerController : MonoBehaviour
         ResetCharge();
         //currentBullets = maxBullets;
         currentFuel = maxFuel;
+        UIManager.Instance.SetFlyFuelSliderColor(Color.white);
         canMove = true;
     }
 
