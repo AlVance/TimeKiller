@@ -82,7 +82,7 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetStartLevelBTNActive(false);
         UIManager.Instance.SetLevelOverviewActive(false);
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(true);
-        if (Application.isMobilePlatform) UIManager.Instance.SetMobileGameplayControlsActive(true);
+        if (GameManager.Instance.isMobile) UIManager.Instance.SetMobileGameplayControlsActive(true);
 
         for (int i = 0; i < startLevelTime; i++)
         {
@@ -111,7 +111,7 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator _SetLevelPuntuation()
     {
-        if (Application.isMobilePlatform) UIManager.Instance.SetMobileGameplayControlsActive(false);
+        if (GameManager.Instance.isMobile) UIManager.Instance.SetMobileGameplayControlsActive(false);
         UIManager.Instance.SetGoToInBetweenBTNActive(false);
         UIManager.Instance.SetPuntuationScreenActive(true);
         CameraManager.Instance.ChangeCam(CameraManager.Instance.winCam);
@@ -234,8 +234,8 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetPuntuationScreenActive(false);
         UIManager.Instance.SetGameOverScreenctive(false);
         UIManager.Instance.SetInitialSceneUIActive(true);
-        if (Application.isMobilePlatform) UIManager.Instance.SetMobileGameplayControlsActive(true);
-        canGoToLevelTrans = true;
+        if (GameManager.Instance.isMobile) UIManager.Instance.SetMobileGameplayControlsActive(true);
+        canGoToLevelTrans = true; 
         yield return new WaitForSeconds(1f);
         UIManager.Instance.SetFade(false);
         GameManager.Instance.playerWork = true;

@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public GameObject currentLevelGO;
     public int currentLevel = 0;
     private bool m_levelStarted = false;
+    public bool isMobile = false;
+    [SerializeField] private MobileDetector MD;
     public bool levelStarted 
     { 
         get { return m_levelStarted; }
@@ -31,6 +33,8 @@ public class GameManager : MonoBehaviour
         }
 
         levelStarted = false;
+
+        isMobile = MD.IsRunningOnMobile();
     }
 
 

@@ -74,7 +74,7 @@ public class UIManager : MonoBehaviour
     
     private void Start()
     {
-        if (Application.isMobilePlatform) mobileControlsUI.SetActive(true);
+        if (GameManager.Instance.isMobile) mobileControlsUI.SetActive(true);
         else mobileControlsUI.SetActive(false);
     }
 
