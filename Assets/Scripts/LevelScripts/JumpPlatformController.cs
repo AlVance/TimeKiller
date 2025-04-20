@@ -7,6 +7,7 @@ public class JumpPlatformController : MonoBehaviour
     [SerializeField] float Jumpspeed;
     [SerializeField] ParticleSystem particle;
     [SerializeField] private float blockInputTime = 0.05f;
+    [SerializeField] private Animator platformAnim;
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
@@ -17,7 +18,7 @@ public class JumpPlatformController : MonoBehaviour
             //_rb.AddForce(Jumpdirection.normalized * Jumpspeed);
             other.gameObject.GetComponent<PlayerController>().BlockPlayer(blockInputTime);
             _rb.AddForce(JumpDirectionTr.up.normalized * Jumpspeed);
-
+            platformAnim.SetTrigger("On");
             particle.Play();
         }
     }
