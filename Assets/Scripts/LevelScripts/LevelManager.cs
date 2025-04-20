@@ -133,6 +133,7 @@ public class LevelManager : MonoBehaviour
         TimeManager.Instance.levelTime = 0;
         canGoToLevelTrans = true;
         UIManager.Instance.SetGoToInBetweenBTNActive(true);
+        PlayerPrefs.SetInt("Level_" + (GameManager.Instance.currentLevel - 1), 1);
     }
     public void GoToInbetweenLevels()
     {
@@ -216,7 +217,13 @@ public class LevelManager : MonoBehaviour
         levelTransSceneGO.SetActive(false);
         startLevelGO.SetActive(true);
         yield return new WaitForEndOfFrame();
-        if(currentLevelGO != null)
+        GOLoaderByPlayerPrefs[] SL = startLevelGO.GetComponentsInChildren<GOLoaderByPlayerPrefs>();
+        foreach (GOLoaderByPlayerPrefs sl in SL)
+        {
+            sl.SetStickerActive();
+        }
+        yield return new WaitForEndOfFrame();
+        if (currentLevelGO != null)
         {
             foreach (Transform go in currentLevelGO.transform)
             {
