@@ -28,6 +28,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text levelCountText;
     [SerializeField] private TMP_Text levelNameText;
 
+    [Header("End level UI Stuff")]
+    [SerializeField] private GameObject endGameUI;
+    [SerializeField] private TMP_Text timeSavedText;
+    [SerializeField] private TMP_Text mostTimeSavedText;
+
     [Header("Level UI Variables")]
     [SerializeField] private TMP_Text currentTimeText;
     [SerializeField] private TMP_Text levelTimeText;
@@ -316,5 +321,19 @@ public class UIManager : MonoBehaviour
     {
         if(fadeState)fadeAnim.SetTrigger("FadeIn");
         else fadeAnim.SetTrigger("FadeOut");
+    }
+
+    public void SetEndGameUIActive(bool isActive)
+    {
+        endGameUI.SetActive(isActive);
+    }
+
+    public void SetTimeSavedText(string newText)
+    {
+        timeSavedText.text = "Time saved: " + newText;
+    }
+    public void SetMostTimeSavedText(string newText)
+    {
+        mostTimeSavedText.text = "Most time saved: " + newText;
     }
 }

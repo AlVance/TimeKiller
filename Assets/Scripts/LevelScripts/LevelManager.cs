@@ -176,11 +176,26 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
+            SetEndGameUIStuff();
             UIManager.Instance.SetFade(false);
             yield return new WaitForSeconds(1f);
             UIManager.Instance.SetGoToStartBTNActive(true);
         }
         ++GameManager.Instance.currentLevel;
+    }
+    private void SetEndGameUIStuff()
+    {
+        UIManager.Instance.SetEndGameUIActive(true);
+        UIManager.Instance.SetTimeSavedText(TimeManager.Instance.currentTime.ToString("0.00"));
+        if(!PlayerPrefs.HasKey("MostTimeSaved") || TimeManager.Instance.currentTime > PlayerPrefs.GetFloat("MostTimeSaved"))
+        {
+            PlayerPrefs.SetFloat("MostTimeSaved", TimeManager.Instance.currentTime);
+            UIManager.Instance.SetMostTimeSavedText(TimeManager.Instance.currentTime.ToString("0.00") + "[NEW RECORD!]");
+        }
+        else
+        {
+            UIManager.Instance.SetMostTimeSavedText(PlayerPrefs.GetFloat("MostTimeSaved").ToString("0.00"));
+        }
     }
     public void GoToLevelOverview()
     {
@@ -214,6 +229,7 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.currentLevel = 0;
         TimeManager.Instance.currentTime = TimeManager.Instance.startTime;
         //UIManager.Instance.SetGoToStartBTNActive(true);
+        UIManager.Instance.SetEndGameUIActive(false);
         levelTransSceneGO.SetActive(false);
         startLevelGO.SetActive(true);
         yield return new WaitForEndOfFrame();
