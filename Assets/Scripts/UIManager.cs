@@ -347,10 +347,10 @@ public class UIManager : MonoBehaviour
 
     public void SetTimeSavedText(string newText)
     {
-        timeSavedText.text = "Time saved: " + newText;
+        timeSavedText.text = "Time saved:\n" + newText;
     }
     public void SetMostTimeSavedText(string newText)
     {
-        mostTimeSavedText.text = "Most time saved: " + newText;
+        mostTimeSavedText.text = "Most time saved:\n" + newText;
     }
 }
