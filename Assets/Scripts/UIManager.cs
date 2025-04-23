@@ -33,6 +33,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text timeSavedText;
     [SerializeField] private TMP_Text mostTimeSavedText;
 
+    [Header("Credits UI Stuff")]
+    [SerializeField] private GameObject GoToCreditsBTN;
+    [SerializeField] private GameObject creditsUI;
+
     [Header("Level UI Variables")]
     [SerializeField] private TMP_Text currentTimeText;
     [SerializeField] private TMP_Text levelTimeText;
@@ -291,6 +295,16 @@ public class UIManager : MonoBehaviour
         else StartCoroutine(SetBtnsInnactive(GoToStartBTN));
         
     }
+    public void SetGoToCreditsBTNActive(bool isActive)
+    {
+        if (isActive)
+        {
+            GoToCreditsBTN.SetActive(isActive);
+            ProgressionBTNsAnim.SetBool("OnScreen", isActive);
+        }
+        else StartCoroutine(SetBtnsInnactive(GoToCreditsBTN));
+
+    }
     private IEnumerator SetBtnsInnactive(GameObject a)
     {
         ProgressionBTNsAnim.SetBool("OnScreen", false);
@@ -302,7 +316,10 @@ public class UIManager : MonoBehaviour
     {
         gameOverUI.SetActive(isActive);
     }
-
+    public void SetCreditsScreenActive(bool isActive)
+    {
+        creditsUI.SetActive(isActive);
+    }
     public void SetLevelNameText(string newText)
     {
         levelNameText.text = newText;

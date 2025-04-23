@@ -179,7 +179,7 @@ public class LevelManager : MonoBehaviour
             SetEndGameUIStuff();
             UIManager.Instance.SetFade(false);
             yield return new WaitForSeconds(1f);
-            UIManager.Instance.SetGoToStartBTNActive(true);
+            UIManager.Instance.SetGoToCreditsBTNActive(true);
         }
         ++GameManager.Instance.currentLevel;
     }
@@ -198,6 +198,23 @@ public class LevelManager : MonoBehaviour
             UIManager.Instance.SetTimeSavedText(TimeManager.Instance.currentTime.ToString("0.00"));
         }
     }
+    public void GoToCredits()
+    {
+        StartCoroutine(_GoToCredits());
+    }
+    private IEnumerator _GoToCredits()
+    {
+        UIManager.Instance.SetGoToCreditsBTNActive(false);
+        UIManager.Instance.SetFade(true);
+        yield return new WaitForSeconds(1.5f);
+        levelTransSceneGO.SetActive(false);
+        UIManager.Instance.SetCreditsScreenActive(true);
+        yield return new WaitForEndOfFrame();
+        UIManager.Instance.SetFade(false);
+        yield return new WaitForSeconds(1.5f);
+        UIManager.Instance.SetGoToStartBTNActive(true);
+    }
+
     public void GoToLevelOverview()
     {
         StartCoroutine(_GoToLevelOverview());
@@ -230,6 +247,7 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.currentLevel = 0;
         TimeManager.Instance.currentTime = TimeManager.Instance.startTime;
         //UIManager.Instance.SetGoToStartBTNActive(true);
+        UIManager.Instance.SetCreditsScreenActive(false);
         UIManager.Instance.SetEndGameUIActive(false);
         levelTransSceneGO.SetActive(false);
         startLevelGO.SetActive(true);
