@@ -186,15 +186,16 @@ public class LevelManager : MonoBehaviour
     private void SetEndGameUIStuff()
     {
         UIManager.Instance.SetEndGameUIActive(true);
-        UIManager.Instance.SetTimeSavedText(TimeManager.Instance.currentTime.ToString("0.00"));
         if(!PlayerPrefs.HasKey("MostTimeSaved") || TimeManager.Instance.currentTime > PlayerPrefs.GetFloat("MostTimeSaved"))
         {
             PlayerPrefs.SetFloat("MostTimeSaved", TimeManager.Instance.currentTime);
-            UIManager.Instance.SetMostTimeSavedText(TimeManager.Instance.currentTime.ToString("0.00") + "[NEW RECORD!]");
+            UIManager.Instance.SetMostTimeSavedText(TimeManager.Instance.currentTime.ToString("0.00"));
+            UIManager.Instance.SetTimeSavedText(TimeManager.Instance.currentTime.ToString("0.00") + "[NEW RECORD!]");
         }
         else
         {
             UIManager.Instance.SetMostTimeSavedText(PlayerPrefs.GetFloat("MostTimeSaved").ToString("0.00"));
+            UIManager.Instance.SetTimeSavedText(TimeManager.Instance.currentTime.ToString("0.00"));
         }
     }
     public void GoToLevelOverview()
