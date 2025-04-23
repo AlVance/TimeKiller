@@ -24,6 +24,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AlbedoTex:
+        m_Texture: {fileID: 2800000, guid: 69d1a1582cb10104786d5f11e863ae21, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissiveMaskTex:
+        m_Texture: {fileID: 2800000, guid: 044f9cf7a0727b04fbdf72a22370a476, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_d1ff30d8320d443dacf4886c29fefb75_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 044f9cf7a0727b04fbdf72a22370a476, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -49,6 +57,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
+    - _EmissiveColor: {r: 0, g: 1.016609, b: 0.08487602, a: 1}
     - _MoveSpeed: {r: 0, g: 1, b: 0, a: 0}
     - _Tiling: {r: 10, g: 70, b: 0, a: 0}
   m_BuildTextureStacks: []
