@@ -259,51 +259,36 @@ public class UIManager : MonoBehaviour
     }
     public void SetGoToInBetweenBTNActive(bool isActive)
     {
-        if (isActive)
-        {
-            GoToInBetweenBTN.SetActive(isActive);
-            ProgressionBTNsAnim.SetBool("OnScreen", isActive);
-        }
-        else StartCoroutine(SetBtnsInnactive(GoToInBetweenBTN));
+        ActivateProgressionBTN(GoToInBetweenBTN, isActive);
     }
     public void SetGoToLevelBTNActive(bool isActive)
     {
-        if (isActive)
-        {
-            GoToLevelBTN.SetActive(isActive);
-            ProgressionBTNsAnim.SetBool("OnScreen", isActive);
-        }
-        else StartCoroutine(SetBtnsInnactive(GoToLevelBTN));
+        ActivateProgressionBTN(GoToLevelBTN, isActive);
     }
     public void SetStartLevelBTNActive(bool isActive)
     {
-        if (isActive)
-        {
-            StartLevelBTN.SetActive(isActive);
-            ProgressionBTNsAnim.SetBool("OnScreen", isActive);
-        }
-        else StartCoroutine(SetBtnsInnactive(StartLevelBTN));
-        
+        ActivateProgressionBTN(StartLevelBTN, isActive);
     }
     public void SetGoToStartBTNActive(bool isActive)
     {
-        if (isActive)
-        {
-            GoToStartBTN.SetActive(isActive);
-            ProgressionBTNsAnim.SetBool("OnScreen", isActive);
-        }
-        else StartCoroutine(SetBtnsInnactive(GoToStartBTN));
-        
+        ActivateProgressionBTN(GoToStartBTN, isActive);
     }
     public void SetGoToCreditsBTNActive(bool isActive)
     {
+        ActivateProgressionBTN(GoToCreditsBTN, isActive);
+    }
+    private void ActivateProgressionBTN(GameObject BTN, bool isActive)
+    {
         if (isActive)
         {
-            GoToCreditsBTN.SetActive(isActive);
+            BTN.SetActive(isActive);
             ProgressionBTNsAnim.SetBool("OnScreen", isActive);
+            BTN.GetComponent<Button>().Select();
         }
-        else StartCoroutine(SetBtnsInnactive(GoToCreditsBTN));
-
+        else 
+        {
+            StartCoroutine(SetBtnsInnactive(BTN));
+        } 
     }
     private IEnumerator SetBtnsInnactive(GameObject a)
     {

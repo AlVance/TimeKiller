@@ -73,12 +73,14 @@ public class LevelManager : MonoBehaviour
 
         UIManager.Instance.SetFade(false);
     }
+    private bool canGoToStartLevelGameplay = true;
     public void StartLevelGameplay()
     {
-        StartCoroutine(_StartLevelGameplay());
+        if(canGoToStartLevelGameplay) StartCoroutine(_StartLevelGameplay());
     }
     private IEnumerator _StartLevelGameplay()
     {
+        canGoToStartLevelGameplay = false;
         UIManager.Instance.SetStartLevelBTNActive(false);
         UIManager.Instance.SetLevelOverviewActive(false);
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(true);
@@ -94,6 +96,7 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetStartLevelTimerText("GO!");
         yield return new WaitForSeconds(1f);
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(false);
+        canGoToStartLevelGameplay = true;
     }
 
     public void OnLevelEnded()
@@ -198,12 +201,14 @@ public class LevelManager : MonoBehaviour
             UIManager.Instance.SetTimeSavedText(TimeManager.Instance.currentTime.ToString("0.00"));
         }
     }
+    private bool canGoToCredits = true;
     public void GoToCredits()
     {
-        StartCoroutine(_GoToCredits());
+        if(canGoToCredits) StartCoroutine(_GoToCredits());
     }
     private IEnumerator _GoToCredits()
     {
+        canGoToCredits = false;
         UIManager.Instance.SetGoToCreditsBTNActive(false);
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1.5f);
@@ -213,14 +218,17 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetFade(false);
         yield return new WaitForSeconds(1.5f);
         UIManager.Instance.SetGoToStartBTNActive(true);
+        canGoToCredits = true;
     }
 
+    private bool canGoToLevelOverview = true;
     public void GoToLevelOverview()
     {
-        StartCoroutine(_GoToLevelOverview());
+        if(canGoToLevelOverview) StartCoroutine(_GoToLevelOverview());
     }
     private IEnumerator _GoToLevelOverview()
     {
+        canGoToLevelOverview = false;
         UIManager.Instance.SetGoToLevelBTNActive(false);
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1f);
@@ -233,14 +241,17 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetFade(false);
         yield return new WaitForSeconds(1f);
         UIManager.Instance.SetStartLevelBTNActive(true);
+        canGoToLevelOverview = true;
     }
 
+    private bool canGoToStartLevel = true;
     public void GoToStartLevel()
     {
-        StartCoroutine(_GoToStartLevel());
+        if(canGoToStartLevel) StartCoroutine(_GoToStartLevel());
     }
     private IEnumerator _GoToStartLevel()
     {
+        canGoToStartLevel = false;
         isStart = true;
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1f);
@@ -281,6 +292,7 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         UIManager.Instance.SetFade(false);
         GameManager.Instance.playerWork = true;
+        canGoToStartLevel = true;
     }
     private IEnumerator DestroyGOWithDelay(GameObject GO)
     {
