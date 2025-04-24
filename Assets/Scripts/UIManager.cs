@@ -47,6 +47,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider[] globalTimerSliders;
     [SerializeField] private TMP_Text objectivesValueText;
     [SerializeField] private Animator TimerUIAnim;
+    [SerializeField] private Animator TimerParentUIAnim;
 
     [Header("Player UI Variables")]
     [SerializeField] private TMP_Text currentDamageText;
@@ -249,6 +250,10 @@ public class UIManager : MonoBehaviour
     public void SetTimerUIToWinScreen()
     {
         TimerUIAnim.SetTrigger("GoToWinScreen");
+    }
+    public void SetParentTimerCritical(bool isCritical)
+    {
+        TimerParentUIAnim.SetBool("IsCritical", isCritical);
     }
     public void SetInBetweenLevelsScreenActive(bool isActive)
     {

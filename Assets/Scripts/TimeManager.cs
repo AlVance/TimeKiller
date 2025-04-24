@@ -29,6 +29,7 @@ public class TimeManager : MonoBehaviour
     }
 
     public bool timerStarted = false;
+
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -64,6 +65,14 @@ public class TimeManager : MonoBehaviour
                 currentTime = 0;
                 GameOver();
             }
+        }
+        if(currentTime <= 5f && currentTime > 0f)
+        {
+            UIManager.Instance.SetParentTimerCritical(true);
+        }
+        else
+        {
+            UIManager.Instance.SetParentTimerCritical(false);
         }
     }
 
