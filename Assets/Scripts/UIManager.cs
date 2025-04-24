@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Game UI Variables")]
     [SerializeField] private GameObject mobileControlsUI;
+    [SerializeField] private GameObject ProggressionBTNsInputPromts;
     [SerializeField] private GameObject InlevelUI;
     [SerializeField] private GameObject InitialScenelUI;
 
@@ -46,6 +47,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider[] globalTimerSliders;
     [SerializeField] private TMP_Text objectivesValueText;
     [SerializeField] private Animator TimerUIAnim;
+    [SerializeField] private Animator TimerParentUIAnim;
 
     [Header("Player UI Variables")]
     [SerializeField] private TMP_Text currentDamageText;
@@ -83,8 +85,16 @@ public class UIManager : MonoBehaviour
     
     private void Start()
     {
-        if (GameManager.Instance.isMobile) mobileControlsUI.SetActive(true);
-        else mobileControlsUI.SetActive(false);
+        if (GameManager.Instance.isMobile) 
+        {
+            ProggressionBTNsInputPromts.SetActive(false);
+            mobileControlsUI.SetActive(true);
+        } 
+        else 
+        {
+            ProggressionBTNsInputPromts.SetActive(true);
+            mobileControlsUI.SetActive(false);
+        } 
     }
 
     public void SetCurrentDamageText(string newText)
@@ -240,6 +250,10 @@ public class UIManager : MonoBehaviour
     public void SetTimerUIToWinScreen()
     {
         TimerUIAnim.SetTrigger("GoToWinScreen");
+    }
+    public void SetParentTimerCritical(bool isCritical)
+    {
+        TimerParentUIAnim.SetBool("IsCritical", isCritical);
     }
     public void SetInBetweenLevelsScreenActive(bool isActive)
     {
