@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Game UI Variables")]
     [SerializeField] private GameObject mobileControlsUI;
+    [SerializeField] private GameObject ProggressionBTNsInputPromts;
     [SerializeField] private GameObject InlevelUI;
     [SerializeField] private GameObject InitialScenelUI;
 
@@ -83,8 +84,16 @@ public class UIManager : MonoBehaviour
     
     private void Start()
     {
-        if (GameManager.Instance.isMobile) mobileControlsUI.SetActive(true);
-        else mobileControlsUI.SetActive(false);
+        if (GameManager.Instance.isMobile) 
+        {
+            ProggressionBTNsInputPromts.SetActive(false);
+            mobileControlsUI.SetActive(true);
+        } 
+        else 
+        {
+            ProggressionBTNsInputPromts.SetActive(true);
+            mobileControlsUI.SetActive(false);
+        } 
     }
 
     public void SetCurrentDamageText(string newText)
