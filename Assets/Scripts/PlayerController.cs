@@ -779,10 +779,11 @@ public class PlayerController : MonoBehaviour
         canFly = true;
         currentMaxSpeed = maxSpeed;
         canMove = true;
-        canGetHitted = true;
         affectedByGravity = true;
         canAim = true;
         this.GetComponentInChildren<PlayerVFX>().ChangeMaterialProperties(2, 0, 1);
+        yield return new WaitForSeconds(0.5f);
+        canGetHitted = true;
     }
     private Vector3 GetV3RelativeToCamera(Vector2 baseDir)
     {

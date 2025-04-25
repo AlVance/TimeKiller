@@ -4,20 +4,22 @@ using System.Collections;
 
 public class OffLimitsColController : MonoBehaviour
 {
-    private Transform tpTr;
-
+    private Level currentLevel;
     private void Start()
     {
-        if (this.GetComponentInParent<Level>() != null) tpTr = this.GetComponentInParent<Level>().playerStartTr;
+        if (this.transform.parent.TryGetComponent<Level>(out Level parentLevel))
+        {
+            currentLevel = parentLevel;
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (tpTr != null) 
+        if (currentLevel != null) 
         {
-            if(other.gameObject.tag != "Player")other.gameObject.transform.position = tpTr.position;
+            if(other.gameObject.tag != "Player")other.gameObject.transform.position = currentLevel.playerStartTr.position;
             else
             {
-                other.gameObject.GetComponent<PlayerController>().PlayerOffLimits(tpTr);
+                other.gameObject.GetComponent<PlayerController>().PlayerOffLimits(currentLevel.playerStartTr);
             }
         } 
         else other.gameObject.transform.position = Vector3.zero;
