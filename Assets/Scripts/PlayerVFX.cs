@@ -18,11 +18,13 @@ public class PlayerVFX : MonoBehaviour
     }
     public void PlayLeftFootstepParticles()
     {
-        Instantiate(footStepPS, leftFootTr.transform.position, Quaternion.Euler(0, this.transform.parent.gameObject.transform.rotation.eulerAngles.y,0));
+        GameObject fs = Instantiate(footStepPS, leftFootTr.transform.position, Quaternion.Euler(0, this.transform.parent.gameObject.transform.rotation.eulerAngles.y,0));
+        Destroy(fs, 2);
     }
     public void PlayRightFootstepParticles()
     {
-        Instantiate(footStepPS, rightFootTr.transform.position, Quaternion.Euler(0, this.transform.parent.gameObject.transform.rotation.eulerAngles.y, 0));
+        GameObject fs = Instantiate(footStepPS, rightFootTr.transform.position, Quaternion.Euler(0, this.transform.parent.gameObject.transform.rotation.eulerAngles.y, 0));
+        Destroy(fs, 2);
     }
 
     public void ChangeMaterialProperties(float height, int isDissolving, int isUpwards)
