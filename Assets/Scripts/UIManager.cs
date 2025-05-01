@@ -69,6 +69,9 @@ public class UIManager : MonoBehaviour
     [Header("Fly UI Variables")]
     [SerializeField] private Slider flyFuelSlider;
     [SerializeField] private Image flyFuelSliderImage;
+
+    [Header("Debug UI Varables")]
+    [SerializeField] private TMP_Text fpsText;
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -97,6 +100,10 @@ public class UIManager : MonoBehaviour
         } 
     }
 
+    private void Update()
+    {
+        fpsText.text = (1.0f / Time.smoothDeltaTime).ToString("0") + " fps";
+    }
     public void SetCurrentDamageText(string newText)
     {
         currentDamageText.text = newText;
