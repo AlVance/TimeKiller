@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Splines;
 using MyBox;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor.Callbacks;
 #endif
@@ -75,6 +76,7 @@ public class EnemyBehaviour : MonoBehaviour
         EnemyMovementTypeSetter();
 
         gunTr = enemyGunGO.transform.localPosition;
+        if (canShoot) ProjectilePooling();
     }
 
     private void Update()
@@ -155,8 +157,10 @@ public class EnemyBehaviour : MonoBehaviour
                 {
                     if (currentProjectileGO == null) 
                     {
-                        currentProjectileGO = Instantiate(enemyProjectileGO, shootOriginTr.position, Quaternion.identity, shootOriginTr);
-                        currentProjectileGO.GetComponent<EnemyProjectile>().ProjectileSetUp(0, projectileRange);
+                        currentProjectileGO = projectilePool[currentProjectilePooled];
+                        if (currentProjectilePooled < projectilePool.Count - 1) ++currentProjectilePooled;
+                        else currentProjectilePooled = 0;
+                        currentProjectileGO.GetComponent<EnemyProjectile>().ProjectileSetUp(0, projectileRange, shootOriginTr);
                         currentProjectileGO.GetComponent<EnemyProjectile>().hitForce = projectileHitForce;
                     }
                     currentProjectileGO.transform.localScale = Vector3.Lerp(new Vector3(0.01f, 0.01f, 0.01f), new Vector3(projectileSize, projectileSize, projectileSize), (currentShootCD / shootCD));
@@ -166,10 +170,28 @@ public class EnemyBehaviour : MonoBehaviour
             else
             {
                 currentShootCD = 0;
-                if (currentProjectileGO != null) Destroy(currentProjectileGO);
+                if (currentProjectileGO != null) 
+                {
+                    currentProjectileGO.GetComponent<Projectile>().SetProjectileInactive();
+                    currentProjectileGO = null;
+                } 
+
             }
 
-            
+
+        }
+    }
+
+    private List<GameObject> projectilePool = new List<GameObject>();
+    private int currentProjectilePooled = 0;
+    private void ProjectilePooling()
+    {
+        for (int i = 0; i < (projectileRange / shootCD) + 2; i++)
+        {
+            GameObject newProj = Instantiate(enemyProjectileGO, shootOriginTr.position, Quaternion.identity, shootOriginTr);
+            projectilePool.Add(newProj);
+            newProj.GetComponent<Projectile>().spawnPos = shootOriginTr;
+            newProj.GetComponent<Projectile>().SetProjectileInactive();
         }
     }
 

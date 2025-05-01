@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    private Rigidbody rb;
+    [SerializeField]private Rigidbody rb;
 
     public bool launched = false;
     public bool charged = false;
@@ -10,25 +10,29 @@ public class Projectile : MonoBehaviour
     public float lifeTime;
     private float timeLaunched = 0;
     private Vector3 launchSize;
-
-    private void Start()
+    public bool isActive = false;
+    public Transform spawnPos;
+    private void Awake()
     {
-        rb = this.GetComponent<Rigidbody>();
     }
+
     private void Update()
     {
         if (launched)
         {
             timeLaunched += Time.deltaTime;
             //this.transform.localScale = Vector3.Slerp(launchSize, Vector3.zero, (timeLaunched / lifeTime));
-            if (timeLaunched >= lifeTime) Destroy(this.gameObject);
+            if (timeLaunched >= lifeTime) SetProjectileInactive();
         }
     }
 
-    public void ProjectileSetUp(int _damage, float _lifeTime)
+    public void ProjectileSetUp(int _damage, float _lifeTime, Transform _spawnPos)
     {
+        this.gameObject.SetActive(true);
         projectileDamage = _damage;
         lifeTime = _lifeTime;
+        isActive = true;
+        spawnPos = _spawnPos;
     }
     public void LaunchProjectile(Vector3 direction, float speed)
     {
@@ -43,5 +47,22 @@ public class Projectile : MonoBehaviour
     {
         this.GetComponent<MeshRenderer>().material.color = Color.green;
         charged = true;
+    }
+    
+    public void SetProjectileInactive()
+    {
+        //launchSize = this.gameObject.transform.localScale;
+        launched = false;
+        charged = false;
+        timeLaunched = 0;
+        rb.linearVelocity = Vector3.zero;
+        rb.isKinematic = true;
+        if(spawnPos != null)
+        {
+            this.gameObject.transform.SetParent(spawnPos);
+            this.transform.position = spawnPos.position;
+        }   
+        this.gameObject.SetActive(false);
+
     }
 }

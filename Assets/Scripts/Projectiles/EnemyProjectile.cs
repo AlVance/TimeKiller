@@ -11,7 +11,7 @@ public class EnemyProjectile : Projectile
             {
                 other.gameObject.GetComponent<PlayerController>().GetHit(this.transform.position, hitForce);
             }
-            Destroy(this.gameObject);
+            SetProjectileInactive();
         }
     }
 }

@@ -222,10 +222,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b5338e8187abc74199624bdff5e46d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 611993597645727658}
   launched: 0
   charged: 0
   projectileDamage: 0
   lifeTime: 0
+  isActive: 0
+  spawnPos: {fileID: 0}
+  hitForce: 0
 --- !u!135 &2015905639402838448
 SphereCollider:
   m_ObjectHideFlags: 0

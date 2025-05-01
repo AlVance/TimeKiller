@@ -3,6 +3,7 @@ using TMPro;
 using System.Collections;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
@@ -301,8 +302,21 @@ public class PlayerController : MonoBehaviour
         currentFuel = maxFuel;
         currentMaxSpeed = maxSpeed;
         currentGravityForce = gravityForce;
+        ProjectilePooling();
     }
 
+    private List<GameObject> projectilePool = new List<GameObject>();
+    private int currentProjectilePooled = 0;
+    private void ProjectilePooling()
+    { 
+        for (int i = 0; i < (projectileRange/shootChargeTime) + 1; i++)
+        {
+            GameObject newProj = Instantiate(projectileGO, porjectileSpawnPos.position, Quaternion.identity, porjectileSpawnPos);
+            projectilePool.Add(newProj);
+            newProj.GetComponent<Projectile>().spawnPos = porjectileSpawnPos;
+            newProj.GetComponent<Projectile>().SetProjectileInactive();           
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -488,8 +502,11 @@ public class PlayerController : MonoBehaviour
             {
                 if (currentChargeTime <= 0)
                 {
-                    currentProjectileGO = Instantiate(projectileGO, porjectileSpawnPos.position, Quaternion.identity, porjectileSpawnPos);
-                    currentProjectileGO.GetComponent<PlayerProjectile>().ProjectileSetUp(projectileDamage, projectileRange);
+                    //currentProjectileGO = Instantiate(projectileGO, porjectileSpawnPos.position, Quaternion.identity, porjectileSpawnPos);
+                    currentProjectileGO = projectilePool[currentProjectilePooled];
+                    if (currentProjectilePooled < projectilePool.Count - 1) ++currentProjectilePooled;
+                    else currentProjectilePooled = 0;
+                    currentProjectileGO.GetComponent<PlayerProjectile>().ProjectileSetUp(projectileDamage, projectileRange, porjectileSpawnPos);
                 }
                 if (currentChargeTime <= shootChargeTime)
                 {
@@ -527,7 +544,7 @@ public class PlayerController : MonoBehaviour
         if(currentProjectileGO != null)
         {
             currentProjectileGO.transform.parent = null;
-            Destroy(currentProjectileGO);
+            currentProjectileGO.GetComponent<Projectile>().SetProjectileInactive();
             currentProjectileGO = null;
         }
         currentChargeTime = 0;

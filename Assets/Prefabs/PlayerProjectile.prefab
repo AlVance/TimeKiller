@@ -164,10 +164,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a747a483998b9d84696d64a90b34f6f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 611993597645727658}
   launched: 0
   charged: 0
   projectileDamage: 0
   lifeTime: 0
+  isActive: 0
+  spawnPos: {fileID: 0}
   impactParticle: {fileID: 3032052334957090329, guid: 994c8923838b31b458a4ddbf1fa35a1c, type: 3}
 --- !u!135 &2015905639402838448
 SphereCollider:
