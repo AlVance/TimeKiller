@@ -464,12 +464,23 @@ public class PlayerController : MonoBehaviour
 
     Vector3 m_GoalVel;
     private void Movement()
-    {
+    {        
         if (canMove)
         {
+            Vector3 otherVel = Vector3.zero;
+            if (Physics.Raycast(this.transform.position, Vector3.down, out groundHit, groundRayDistance))
+            {
+                if (groundHit.rigidbody != null)
+                {
+                    otherVel = groundHit.rigidbody.linearVelocity;
+                }
+                else otherVel = Vector3.zero;
+            }
+            else otherVel = Vector3.zero;
+            Debug.Log(otherVel);
             //Vector3 unitGoal = new Vector3(moveDir.x, 0, moveDir.y);
             Vector3 unitGoal = moveDirRelativeToCam;
-            Vector3 goalVel = unitGoal * currentMaxSpeed;
+            Vector3 goalVel = unitGoal * currentMaxSpeed + otherVel;
 
             m_GoalVel = Vector3.MoveTowards(m_GoalVel, goalVel, accelerationSpeed * Time.fixedDeltaTime);
 
@@ -900,7 +911,7 @@ public class PlayerController : MonoBehaviour
     {
         anim.SetBool("isGrounded", isGrounded);
         anim.SetBool("isDashing", isFlying);
-        anim.SetBool("isMoving", canMove && m_GoalVel.magnitude > 0);
+        anim.SetBool("isMoving", canMove && m_GoalVel.magnitude > 0 && moveDir != Vector2.zero);
         if (!isAiming)
         {
             anim.SetLayerWeight(1, 0f);
