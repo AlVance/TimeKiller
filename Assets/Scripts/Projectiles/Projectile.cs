@@ -45,7 +45,7 @@ public class Projectile : MonoBehaviour
 
     public void SetCharged()
     {
-        this.GetComponent<MeshRenderer>().material.color = Color.green;
+        //this.GetComponent<MeshRenderer>().material.color = Color.green;
         charged = true;
     }
     

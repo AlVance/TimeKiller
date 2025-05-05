@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -16,9 +17,28 @@ public class MeshTrail : MonoBehaviour
 
     [SerializeField] VisualEffect[] smoke_VFX;
 
+    private List<GameObject> GOmeshes;
+    int index = 0;
+
+
     private void Start()
-    {  
+    {
+        GOmeshes = new List<GameObject>();
         meshes = GetComponentsInChildren<SkinnedMeshRenderer>();
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject BigGO = new GameObject();
+            for (int t = 0; t < meshes.Length; t++)
+            {
+                GameObject go = new GameObject();
+                MeshRenderer mr = go.AddComponent<MeshRenderer>();
+                MeshFilter mf = go.AddComponent<MeshFilter>();
+                go.transform.parent = BigGO.transform;
+            }
+            GOmeshes.Add(BigGO);
+
+        }
+
     }
 
     public void ActivateSandevistan()
@@ -26,6 +46,11 @@ public class MeshTrail : MonoBehaviour
         StartCoroutine(ActivateTrail());
     }
     
+    private void SpawnMesh()
+    {
+        this.gameObject.transform.SetParent(null);
+    }
+
     IEnumerator ActivateTrail()
     {
         smoke_VFX[0].Play();
@@ -33,22 +58,22 @@ public class MeshTrail : MonoBehaviour
 
         for (int i = 0; i < meshes.Length; i++)
         {
-            GameObject go = new GameObject();
-            go.transform.SetPositionAndRotation(meshes[i].transform.position, meshes[i].transform.rotation);
-
-            MeshRenderer mr = go.AddComponent<MeshRenderer>();
-            MeshFilter mf = go.AddComponent<MeshFilter>();
+            GOmeshes[index].transform.GetChild(i).transform.SetPositionAndRotation(meshes[i].transform.position, meshes[i].transform.rotation);
 
             Mesh _mesh = new Mesh();
             meshes[i].BakeMesh(_mesh);
-            mf.mesh = _mesh;
-            mr.material = trailMaterial;
+            GOmeshes[index].transform.GetChild(i).GetComponent<MeshFilter>().mesh = _mesh;
+            GOmeshes[index].transform.GetChild(i).GetComponent<MeshRenderer>().material = trailMaterial;
 
             Color sandColor = sandColors[nColor];
 
-            mr.material.SetColor("_Emission_color", sandColor);
-            Destroy(go, destroyTime);
+            GOmeshes[index].transform.GetChild(i).GetComponent<MeshRenderer>().material.SetColor("_Emission_color", sandColor);
         }
+
+        GOmeshes[index].SetActive(true);
+        StartCoroutine(SetActiveFalse(GOmeshes[index]));
+        index = index >= 3 ? 0 : ++index;
+
         yield return new WaitForSeconds(meshResfreshRate);
         nColor = nColor >= sandColors.Length - 1 ? 0 : ++nColor;
 
@@ -57,7 +82,12 @@ public class MeshTrail : MonoBehaviour
         {
             smoke_VFX[0].Stop();
             smoke_VFX[1].Stop();
-
         }
+    }
+
+    IEnumerator SetActiveFalse(GameObject go)
+    {
+        yield return new WaitForSeconds(destroyTime);
+        go.SetActive(false);
     }
 }
