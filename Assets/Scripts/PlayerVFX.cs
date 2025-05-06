@@ -27,9 +27,10 @@ public class PlayerVFX : MonoBehaviour
         GameObject list = new GameObject("FootstepsPool");
         for (int i = 0; i < poolNumberTotal; i++)
         {
-            footstepsList.Add(Instantiate(footStepPS));
-            footstepsList[i].SetActive(false);
+            GameObject a = Instantiate(footStepPS);
+            footstepsList.Add(a);
             footstepsList[i].transform.parent = list.transform;
+            footstepsList[i].SetActive(false);
         }
     }
     public void PlayLeftFootstepParticles()

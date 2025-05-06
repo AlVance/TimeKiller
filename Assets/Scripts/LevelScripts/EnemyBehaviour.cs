@@ -44,6 +44,7 @@ public class EnemyBehaviour : MonoBehaviour
     [SerializeField]private EnemyGunCollider gunCol;
     [SerializeField] private GameObject enemyProjectileGO;
     [SerializeField] private Transform shootOriginTr;
+    [SerializeField] private LineRenderer lR;
 
     [Header("RespawnVariables")]
     [SerializeField, ConditionalField(nameof(canRespawn), false)] private float respawnTime = 5f;
@@ -76,7 +77,13 @@ public class EnemyBehaviour : MonoBehaviour
         EnemyMovementTypeSetter();
 
         gunTr = enemyGunGO.transform.localPosition;
-        if (canShoot) ProjectilePooling();
+        if (canShoot) 
+        {
+            ProjectilePooling();
+            lR.SetPosition(0, shootOriginTr.position);
+            lR.SetPosition(1, lR.GetPosition(0));
+
+        }
     }
 
     private void Update()
@@ -144,7 +151,8 @@ public class EnemyBehaviour : MonoBehaviour
             if (gunCol.objective != null)
             {
                 //enemyGunGO.transform.rotation = Quaternion.LookRotation(gunCol.objective.transform.position - enemyGunGO.transform.position);
-
+                lR.SetPosition(0, shootOriginTr.position);
+                lR.SetPosition(1, gunCol.objective.transform.position);
                 if (currentShootCD >= shootCD)
                 {
                     //Shoot!
@@ -172,6 +180,8 @@ public class EnemyBehaviour : MonoBehaviour
                 currentShootCD = 0;
                 if (currentProjectileGO != null) 
                 {
+                    lR.SetPosition(0, shootOriginTr.position);
+                    lR.SetPosition(1, lR.GetPosition(0));
                     currentProjectileGO.GetComponent<Projectile>().SetProjectileInactive();
                     currentProjectileGO = null;
                 } 
