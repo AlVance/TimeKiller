@@ -477,7 +477,6 @@ public class PlayerController : MonoBehaviour
                 else otherVel = Vector3.zero;
             }
             else otherVel = Vector3.zero;
-            Debug.Log(otherVel);
             //Vector3 unitGoal = new Vector3(moveDir.x, 0, moveDir.y);
             Vector3 unitGoal = moveDirRelativeToCam;
             Vector3 goalVel = unitGoal * currentMaxSpeed + otherVel;
