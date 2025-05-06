@@ -18,27 +18,13 @@ public class MeshTrail : MonoBehaviour
     [SerializeField] VisualEffect[] smoke_VFX;
 
     private List<GameObject> GOmeshes;
+    [SerializeField] int poolNumber = 4;
     int index = 0;
 
 
     private void Start()
     {
-        GOmeshes = new List<GameObject>();
-        meshes = GetComponentsInChildren<SkinnedMeshRenderer>();
-        for (int i = 0; i < 4; i++)
-        {
-            GameObject BigGO = new GameObject();
-            for (int t = 0; t < meshes.Length; t++)
-            {
-                GameObject go = new GameObject();
-                MeshRenderer mr = go.AddComponent<MeshRenderer>();
-                MeshFilter mf = go.AddComponent<MeshFilter>();
-                go.transform.parent = BigGO.transform;
-            }
-            GOmeshes.Add(BigGO);
-
-        }
-
+        CreatePool();
     }
 
     public void ActivateSandevistan()
@@ -72,7 +58,7 @@ public class MeshTrail : MonoBehaviour
 
         GOmeshes[index].SetActive(true);
         StartCoroutine(SetActiveFalse(GOmeshes[index]));
-        index = index >= 3 ? 0 : ++index;
+        index = index >= poolNumber -1 ? 0 : ++index;
 
         yield return new WaitForSeconds(meshResfreshRate);
         nColor = nColor >= sandColors.Length - 1 ? 0 : ++nColor;
@@ -89,5 +75,26 @@ public class MeshTrail : MonoBehaviour
     {
         yield return new WaitForSeconds(destroyTime);
         go.SetActive(false);
+    }
+
+    private void CreatePool()
+    {
+        GameObject trailsParent = new GameObject("Trails");
+        GOmeshes = new List<GameObject>();
+        meshes = GetComponentsInChildren<SkinnedMeshRenderer>();
+
+        for (int i = 0; i < poolNumber; i++)
+        {
+            GameObject BigGO = new GameObject();
+            for (int t = 0; t < meshes.Length; t++)
+            {
+                GameObject go = new GameObject();
+                MeshRenderer mr = go.AddComponent<MeshRenderer>();
+                MeshFilter mf = go.AddComponent<MeshFilter>();
+                go.transform.parent = BigGO.transform;
+            }
+            GOmeshes.Add(BigGO);
+            BigGO.transform.parent = trailsParent.transform;
+        }
     }
 }

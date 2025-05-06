@@ -215,12 +215,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f39f14283861584586d462f394a71a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footStepPS: {fileID: 5225712025041389073, guid: dd1aff640ba8f664f875d0e5d604f502, type: 3}
+  footStepPS: {fileID: 5225712025041389073, guid: 0648236bbb12dcf47b3ec8f8977774e6, type: 3}
   leftFootTr: {fileID: 558164338463016462}
   rightFootTr: {fileID: 3807304450359482736}
   playerMasterMat: {fileID: 2100000, guid: 62599201be9c5df48a090098320e50ac, type: 2}
   PlayerDissolveTime: 0.75
   playerDissolveSpeed: 1
+  poolNumberTotal: 10
 --- !u!114 &1805697725916356773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,17 +238,17 @@ MonoBehaviour:
   destroyTime: 0.3
   trailMaterial: {fileID: 2100000, guid: 977fbd2448f304649a489b70ca859b8d, type: 2}
   sandColors:
-  - {r: 0.7042122, g: 0, b: 1, a: 1}
-  - {r: 1, g: 0, b: 0.9315591, a: 1}
+  - {r: 0.608263, g: 0, b: 1, a: 1}
+  - {r: 1, g: 0, b: 0.93470955, a: 1}
   - {r: 1, g: 0.08483097, b: 0, a: 1}
   - {r: 1, g: 0.52494204, b: 0, a: 1}
   - {r: 0.95059407, g: 1, b: 0, a: 1}
-  - {r: 0, g: 1, b: 0.001329422, a: 1}
-  - {r: 0, g: 1, b: 0.8893428, a: 1}
-  - {r: 0, g: 0.4310677, b: 1, a: 1}
+  - {r: 0, g: 0.99020815, b: 1, a: 1}
+  - {r: 0, g: 0.20850754, b: 1, a: 1}
   smoke_VFX:
   - {fileID: 4662360433264434889}
   - {fileID: 8110896525485470224}
+  poolNumber: 4
 --- !u!1 &491091013992886470
 GameObject:
   m_ObjectHideFlags: 0
@@ -5742,6 +5743,10 @@ PrefabInstance:
       propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[2].m_Overridden
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2325456371178914036, guid: 094dc8e234810a0479ea2ae4a064f0c9, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3710245633077890442, guid: 094dc8e234810a0479ea2ae4a064f0c9, type: 3}
       propertyPath: m_Name
       value: vfx_smoke (1)
@@ -5916,6 +5921,10 @@ PrefabInstance:
     - target: {fileID: 1416902473294161199, guid: 094dc8e234810a0479ea2ae4a064f0c9, type: 3}
       propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[2].m_Overridden
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2325456371178914036, guid: 094dc8e234810a0479ea2ae4a064f0c9, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3710245633077890442, guid: 094dc8e234810a0479ea2ae4a064f0c9, type: 3}
       propertyPath: m_Name
