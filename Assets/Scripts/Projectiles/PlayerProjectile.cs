@@ -21,7 +21,7 @@ public class PlayerProjectile : Projectile
             {
                 Vector3 rotation = this.transform.rotation.eulerAngles;
                 rotation.y -= 180;
-                Instantiate(impactParticle, this.transform.position, Quaternion.Euler(rotation));
+                Destroy(Instantiate(impactParticle, this.transform.position, Quaternion.Euler(rotation)), 2);
                 SetProjectileInactive();
 
             }
