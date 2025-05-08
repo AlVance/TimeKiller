@@ -704,6 +704,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &840081109
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5029887325819928325, guid: 32d0442be4376de459d78fa3586d080c, type: 3}
+      propertyPath: m_Name
+      value: LevelStartChanger
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154028071045133780, guid: 32d0442be4376de459d78fa3586d080c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.9249854
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154028071045133780, guid: 32d0442be4376de459d78fa3586d080c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.4319835
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154028071045133780, guid: 32d0442be4376de459d78fa3586d080c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10.361314
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154028071045133780, guid: 32d0442be4376de459d78fa3586d080c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154028071045133780, guid: 32d0442be4376de459d78fa3586d080c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154028071045133780, guid: 32d0442be4376de459d78fa3586d080c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154028071045133780, guid: 32d0442be4376de459d78fa3586d080c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154028071045133780, guid: 32d0442be4376de459d78fa3586d080c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154028071045133780, guid: 32d0442be4376de459d78fa3586d080c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6154028071045133780, guid: 32d0442be4376de459d78fa3586d080c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 32d0442be4376de459d78fa3586d080c, type: 3}
 --- !u!1001 &1241177893
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -948,7 +1005,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 836d1f7bfaf26454c9511ae0c02b08d3, type: 2}
+  - {fileID: 2100000, guid: 5644d6620b49e1f46b3b0dc61c3a0db0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -977,7 +1034,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1394893181}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 7041411741339386671, guid: 35623e950a0f5944d8c9b036402c7c8f, type: 3}
 --- !u!4 &1394893185
 Transform:
   m_ObjectHideFlags: 0
@@ -986,13 +1043,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1394893181}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.020769687, y: 0.012882705, z: -0.82327116, w: -0.56712204}
-  m_LocalPosition: {x: -0.61558557, y: -0.044879135, z: 0.8391637}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalRotation: {x: 0.45642868, y: -0.6358038, z: -0.52193385, w: -0.33913347}
+  m_LocalPosition: {x: -4.41, y: -0.044879135, z: 8.79}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -0.134, y: -2.798, z: -249.12}
+  m_LocalEulerAnglesHint: {x: -76.724, y: -168.647, z: -80.345}
 --- !u!1001 &1455268216
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2114,3 +2171,4 @@ SceneRoots:
   - {fileID: 2027734500}
   - {fileID: 5637773980442850794}
   - {fileID: 6959671714972654486}
+  - {fileID: 840081109}
