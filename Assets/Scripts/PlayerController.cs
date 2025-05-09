@@ -757,6 +757,7 @@ public class PlayerController : MonoBehaviour
         //canFly = true;
         //canMove = true;
         isHitted = false;
+        yield return new WaitForSeconds(1f);
         canGetHitted = true;
     }
     public void BlockPlayer(float blockTime)
@@ -809,7 +810,7 @@ public class PlayerController : MonoBehaviour
         affectedByGravity = true;
         canAim = true;
         this.GetComponentInChildren<PlayerVFX>().ChangeMaterialProperties(2, 0, 1);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         canGetHitted = true;
     }
     private Vector3 GetV3RelativeToCamera(Vector2 baseDir)
