@@ -786,6 +786,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator _PlayerOfLimits(Transform tpPos)
     {
         canGetHitted = false;
+        TimeManager.Instance.timerStarted = false;
         m_GoalVel = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
         canFly = false;
@@ -810,6 +811,7 @@ public class PlayerController : MonoBehaviour
         affectedByGravity = true;
         canAim = true;
         this.GetComponentInChildren<PlayerVFX>().ChangeMaterialProperties(2, 0, 1);
+        TimeManager.Instance.timerStarted = true;
         yield return new WaitForSeconds(1f);
         canGetHitted = true;
     }

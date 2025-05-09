@@ -29,7 +29,6 @@ public class TimeManager : MonoBehaviour
     }
 
     public bool timerStarted = false;
-
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -51,7 +50,7 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.levelStarted)
+        if (GameManager.Instance.levelStarted && timerStarted)
         {
             if (levelTime > 0) levelTime -= Time.deltaTime;
             else

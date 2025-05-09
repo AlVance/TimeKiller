@@ -94,6 +94,7 @@ public class LevelManager : MonoBehaviour
         
         GameManager.Instance.levelStarted = true;
         UIManager.Instance.SetStartLevelTimerText("GO!");
+        TimeManager.Instance.timerStarted = true;
         yield return new WaitForSeconds(1f);
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(false);
         canGoToStartLevelGameplay = true;
