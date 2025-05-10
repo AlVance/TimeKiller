@@ -6,11 +6,11 @@ public class PlayerProjectile : Projectile
     [SerializeField] private GameObject impactParticle;
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Enemy" || other.gameObject.layer == LayerMask.NameToLayer("Floor"))
+        if(other.gameObject.tag == "EnemyHurtBox" || other.gameObject.layer == LayerMask.NameToLayer("Floor"))
         {
-            if (other.gameObject.tag == "Enemy" && charged)
+            if (other.gameObject.tag == "EnemyHurtBox" && charged)
             {
-                other.gameObject.GetComponent<EnemyBehaviour>().SetHealth(-projectileDamage);
+                other.gameObject.GetComponentInParent<EnemyBehaviour>().SetHealth(-projectileDamage);
             }
 
             if (!launched)

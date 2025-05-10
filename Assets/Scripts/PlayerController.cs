@@ -757,7 +757,7 @@ public class PlayerController : MonoBehaviour
         //canFly = true;
         //canMove = true;
         isHitted = false;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.6f);
         canGetHitted = true;
     }
     public void BlockPlayer(float blockTime)
@@ -929,7 +929,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Enemy")
+        if(other.gameObject.tag == "EnemyHitBox")
         {
             GetHit(other.gameObject.transform.position, hitForce);
         }
