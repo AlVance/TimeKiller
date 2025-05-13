@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
 
 public class SwitchingPlatform : MonoBehaviour
 {
@@ -7,8 +8,9 @@ public class SwitchingPlatform : MonoBehaviour
     [SerializeField] private Animator switchingPlatformAnimator;
     [SerializeField] private bool switchPlatformState = false;
 
-    private void Start()
+    private IEnumerator Start()
     {
+        yield return new WaitForEndOfFrame();
         if (switchPlatformState)
         {
             switchingPlatformAnimator.SetBool("SwitchingPlatformState", switchPlatformState);
