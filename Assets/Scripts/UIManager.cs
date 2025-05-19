@@ -31,8 +31,11 @@ public class UIManager : MonoBehaviour
 
     [Header("End level UI Stuff")]
     [SerializeField] private GameObject endGameUI;
+    [SerializeField] private Slider[] timeSavedSliders;
     [SerializeField] private TMP_Text timeSavedText;
+    [SerializeField] private Slider[] mostTimeSavedSliders;
     [SerializeField] private TMP_Text mostTimeSavedText;
+
 
     [Header("Credits UI Stuff")]
     [SerializeField] private GameObject GoToCreditsBTN;
@@ -351,12 +354,21 @@ public class UIManager : MonoBehaviour
         endGameUI.SetActive(isActive);
     }
 
-    public void SetTimeSavedText(string newText)
+    public void SetTimeSavedSlidiers(float newValue)
     {
-        timeSavedText.text = "Time saved:\n" + newText;
+        for (int i = 0; i < timeSavedSliders.Length; i++)
+        {
+            timeSavedSliders[i].value = newValue;
+        }
+        timeSavedText.text = newValue.ToString();
     }
-    public void SetMostTimeSavedText(string newText)
+    public void SetMostTimeSavedSlidiers(float newValue)
     {
-        mostTimeSavedText.text = "Most time saved:\n" + newText;
+        for (int i = 0; i < timeSavedSliders.Length; i++)
+        {
+            mostTimeSavedSliders[i].value = newValue;
+        }
+        mostTimeSavedText.text = newValue.ToString();
+
     }
 }
