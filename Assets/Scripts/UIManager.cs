@@ -32,9 +32,13 @@ public class UIManager : MonoBehaviour
     [Header("End level UI Stuff")]
     [SerializeField] private GameObject endGameUI;
     [SerializeField] private Slider[] timeSavedSliders;
+    [SerializeField] private GameObject timeSavedSliderGO;
     [SerializeField] private TMP_Text timeSavedText;
     [SerializeField] private Slider[] mostTimeSavedSliders;
     [SerializeField] private TMP_Text mostTimeSavedText;
+    [SerializeField] private GameObject mostTimeSavedSliderGO;
+    [SerializeField] private GameObject newRecordText;
+
 
 
     [Header("Credits UI Stuff")]
@@ -352,6 +356,12 @@ public class UIManager : MonoBehaviour
     public void SetEndGameUIActive(bool isActive)
     {
         endGameUI.SetActive(isActive);
+        if(isActive == false)
+        {
+            SetTimeSavedSliderActive(false);
+            SetMostTimeSavedSliderActive(false);
+            newRecordText.SetActive(false);
+        }
     }
 
     public void SetTimeSavedSlidiers(float newValue)
@@ -360,7 +370,7 @@ public class UIManager : MonoBehaviour
         {
             timeSavedSliders[i].value = newValue;
         }
-        timeSavedText.text = newValue.ToString();
+        timeSavedText.text = newValue.ToString("0.00");
     }
     public void SetMostTimeSavedSlidiers(float newValue)
     {
@@ -368,7 +378,20 @@ public class UIManager : MonoBehaviour
         {
             mostTimeSavedSliders[i].value = newValue;
         }
-        mostTimeSavedText.text = newValue.ToString();
+        mostTimeSavedText.text = newValue.ToString("0.00");
+    }
 
+    public void SetTimeSavedSliderActive(bool isActive)
+    {
+        timeSavedSliderGO.SetActive(isActive);
+    }
+
+    public void SetMostTimeSavedSliderActive(bool isActive)
+    {
+        mostTimeSavedSliderGO.SetActive(isActive);
+    }
+    public void SetNewRecordTextActive(bool isActive)
+    {
+        newRecordText.SetActive(isActive);
     }
 }

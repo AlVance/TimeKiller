@@ -182,27 +182,87 @@ public class LevelManager : MonoBehaviour
         {
             SetEndGameUIStuff();
             UIManager.Instance.SetFade(false);
-            yield return new WaitForSeconds(1f);
-            UIManager.Instance.SetGoToCreditsBTNActive(true);
+            
         }
         ++GameManager.Instance.currentLevel;
     }
     private void SetEndGameUIStuff()
     {
+        StartCoroutine(_SetEndGameUIStuff());
+    }
+    private IEnumerator _SetEndGameUIStuff()
+    {
+        UIManager.Instance.SetMostTimeSavedSliderActive(false);
+        UIManager.Instance.SetTimeSavedSliderActive(false);
         UIManager.Instance.SetEndGameUIActive(true);
-        if(!PlayerPrefs.HasKey("MostTimeSaved") || TimeManager.Instance.currentTime > PlayerPrefs.GetFloat("MostTimeSaved"))
+        yield return new WaitForSeconds(1f);
+        if (!PlayerPrefs.HasKey("MostTimeSaved") || TimeManager.Instance.currentTime > PlayerPrefs.GetFloat("MostTimeSaved"))
         {
+            
             PlayerPrefs.SetFloat("MostTimeSaved", TimeManager.Instance.currentTime);
+            UIManager.Instance.SetMostTimeSavedSlidiers(0);
+            UIManager.Instance.SetMostTimeSavedSliderActive(true);
+            yield return new WaitForSeconds(0.5f);
+            float currentTimeA = 0;
+            while (currentTimeA < TimeManager.Instance.currentTime)
+            {
+                UIManager.Instance.SetMostTimeSavedSlidiers(currentTimeA);
+                currentTimeA += 0.1f;
+               yield return new WaitForEndOfFrame();
+            }
             UIManager.Instance.SetMostTimeSavedSlidiers(TimeManager.Instance.currentTime);
+
+            UIManager.Instance.SetTimeSavedSlidiers(0);
+            yield return new WaitForSeconds(1f);
+
+            UIManager.Instance.SetTimeSavedSliderActive(true);
+            yield return new WaitForSeconds(0.5f);
+
+            float currentTimeB = 0;
+            while (currentTimeB < TimeManager.Instance.currentTime)
+            {
+                UIManager.Instance.SetTimeSavedSlidiers(currentTimeB);
+                currentTimeB += 0.1f;
+                yield return new WaitForEndOfFrame();
+            }
+            UIManager.Instance.SetNewRecordTextActive(true);
             UIManager.Instance.SetTimeSavedSlidiers(TimeManager.Instance.currentTime);
             //NEW RECORD!
         }
         else
         {
+            UIManager.Instance.SetMostTimeSavedSlidiers(0);
+            UIManager.Instance.SetMostTimeSavedSliderActive(true);
+            yield return new WaitForSeconds(0.5f);
+
+            float currentTimeA = 0;
+            while (currentTimeA < PlayerPrefs.GetFloat("MostTimeSaved"))
+            {
+                UIManager.Instance.SetMostTimeSavedSlidiers(currentTimeA);
+                currentTimeA += 0.1f;
+                yield return new WaitForEndOfFrame();
+            }
             UIManager.Instance.SetMostTimeSavedSlidiers(PlayerPrefs.GetFloat("MostTimeSaved"));
+
+            UIManager.Instance.SetTimeSavedSlidiers(0);
+            yield return new WaitForSeconds(1f);
+            UIManager.Instance.SetTimeSavedSliderActive(true);
+            yield return new WaitForSeconds(0.5f);
+
+            float currentTimeB = 0;
+            while (currentTimeB < TimeManager.Instance.currentTime)
+            {
+                UIManager.Instance.SetTimeSavedSlidiers(currentTimeB);
+                currentTimeB += 0.1f;
+                yield return new WaitForEndOfFrame();
+            }
             UIManager.Instance.SetTimeSavedSlidiers(TimeManager.Instance.currentTime);
         }
+
+        yield return new WaitForSeconds(1f);
+        UIManager.Instance.SetGoToCreditsBTNActive(true);
     }
+
     private bool canGoToCredits = true;
     public void GoToCredits()
     {
