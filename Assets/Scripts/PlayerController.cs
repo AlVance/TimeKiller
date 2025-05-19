@@ -352,6 +352,7 @@ public class PlayerController : MonoBehaviour
 
     private void AimStarted()
     {
+        aimPressed = true;
         if(canAim && currentBullets > 0 && (!isFlying && !isDashing))
         {
             aimDirAidGO.SetActive(true);
@@ -856,8 +857,7 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Aim.started += ctx =>
         {
-            if (GameManager.Instance.playerWork) AimStarted();
-            aimPressed = true;
+            if (GameManager.Instance.playerWork && Mouse.current.leftButton.isPressed) AimStarted();
         };
 
         playerInput.PlayerControls.Aim.performed += ctx =>
@@ -871,15 +871,30 @@ public class PlayerController : MonoBehaviour
                 tempAimDir.y -= PlayerScreenPos.y;
                 aimDir = tempAimDir.normalized;
             }
-            else
+            else 
             {
-                aimDir = ctx.ReadValue<Vector2>();
+                Vector2 tempAimDir = ctx.ReadValue<Vector2>();
+                if (tempAimDir.x > 0.1f || tempAimDir.x < -0.1f || tempAimDir.y > 0.1f || tempAimDir.y < -0.1f) 
+                {
+                    aimDir = tempAimDir;
+                    if (GameManager.Instance.playerWork) AimStarted();
+                } 
+                
             }
+         
 #else
             aimDir = ctx.ReadValue<Vector2>();
 #endif
             aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
-
+            //if (aimDir.x < 0.2f && aimDir.x > -0.2f && aimDir.y < 0.2f && aimDir.y > -0.2f)
+            //{
+            //    shootDir = aimDir;
+            //    shootDirRelativeToCam = GetV3RelativeToCamera(shootDir);
+            //    aimPressed = false;
+            //    aimDir = Vector2.zero;
+            //    aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
+            //    AimFinished();
+            //}
         };
 
         playerInput.PlayerControls.Aim.canceled += ctx =>
