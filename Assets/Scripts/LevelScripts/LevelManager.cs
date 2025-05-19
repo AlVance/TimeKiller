@@ -1,5 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class LevelManager : MonoBehaviour
 {
@@ -18,6 +20,9 @@ public class LevelManager : MonoBehaviour
     private bool canGoToLevelTrans = true;
     private bool inLevelTrans = false;
     private bool isStart = false;
+
+    [SerializeField] private Slider[] recordTimeSavedSlidersLobby;
+    [SerializeField] private TMP_Text recordTimeSavedText;
     private void Start()
     {
         isStart = true;
@@ -199,21 +204,7 @@ public class LevelManager : MonoBehaviour
         if (!PlayerPrefs.HasKey("MostTimeSaved") || TimeManager.Instance.currentTime > PlayerPrefs.GetFloat("MostTimeSaved"))
         {
             
-            PlayerPrefs.SetFloat("MostTimeSaved", TimeManager.Instance.currentTime);
-            UIManager.Instance.SetMostTimeSavedSlidiers(0);
-            UIManager.Instance.SetMostTimeSavedSliderActive(true);
-            yield return new WaitForSeconds(0.5f);
-            float currentTimeA = 0;
-            while (currentTimeA < TimeManager.Instance.currentTime)
-            {
-                UIManager.Instance.SetMostTimeSavedSlidiers(currentTimeA);
-                currentTimeA += 0.1f;
-               yield return new WaitForEndOfFrame();
-            }
-            UIManager.Instance.SetMostTimeSavedSlidiers(TimeManager.Instance.currentTime);
-
             UIManager.Instance.SetTimeSavedSlidiers(0);
-            yield return new WaitForSeconds(1f);
 
             UIManager.Instance.SetTimeSavedSliderActive(true);
             yield return new WaitForSeconds(0.5f);
@@ -225,13 +216,42 @@ public class LevelManager : MonoBehaviour
                 currentTimeB += 0.1f;
                 yield return new WaitForEndOfFrame();
             }
-            UIManager.Instance.SetNewRecordTextActive(true);
             UIManager.Instance.SetTimeSavedSlidiers(TimeManager.Instance.currentTime);
+
+            PlayerPrefs.SetFloat("MostTimeSaved", TimeManager.Instance.currentTime);
+            UIManager.Instance.SetMostTimeSavedSlidiers(0);
+            yield return new WaitForSeconds(1f);
+            UIManager.Instance.SetMostTimeSavedSliderActive(true);
+            yield return new WaitForSeconds(0.5f);
+            float currentTimeA = 0;
+            while (currentTimeA < TimeManager.Instance.currentTime)
+            {
+                UIManager.Instance.SetMostTimeSavedSlidiers(currentTimeA);
+                currentTimeA += 0.1f;
+                yield return new WaitForEndOfFrame();
+            }
+            UIManager.Instance.SetMostTimeSavedSlidiers(TimeManager.Instance.currentTime);
+
+            UIManager.Instance.SetNewRecordTextActive(true);
             //NEW RECORD!
         }
         else
-        {
+        {    
+            UIManager.Instance.SetTimeSavedSlidiers(0);
+            UIManager.Instance.SetTimeSavedSliderActive(true);
+            yield return new WaitForSeconds(0.5f);
+
+            float currentTimeB = 0;
+            while (currentTimeB < TimeManager.Instance.currentTime)
+            {
+                UIManager.Instance.SetTimeSavedSlidiers(currentTimeB);
+                currentTimeB += 0.1f;
+                yield return new WaitForEndOfFrame();
+            }
+            UIManager.Instance.SetTimeSavedSlidiers(TimeManager.Instance.currentTime);
+
             UIManager.Instance.SetMostTimeSavedSlidiers(0);
+            yield return new WaitForSeconds(1f);
             UIManager.Instance.SetMostTimeSavedSliderActive(true);
             yield return new WaitForSeconds(0.5f);
 
@@ -244,19 +264,6 @@ public class LevelManager : MonoBehaviour
             }
             UIManager.Instance.SetMostTimeSavedSlidiers(PlayerPrefs.GetFloat("MostTimeSaved"));
 
-            UIManager.Instance.SetTimeSavedSlidiers(0);
-            yield return new WaitForSeconds(1f);
-            UIManager.Instance.SetTimeSavedSliderActive(true);
-            yield return new WaitForSeconds(0.5f);
-
-            float currentTimeB = 0;
-            while (currentTimeB < TimeManager.Instance.currentTime)
-            {
-                UIManager.Instance.SetTimeSavedSlidiers(currentTimeB);
-                currentTimeB += 0.1f;
-                yield return new WaitForEndOfFrame();
-            }
-            UIManager.Instance.SetTimeSavedSlidiers(TimeManager.Instance.currentTime);
         }
 
         yield return new WaitForSeconds(1f);
@@ -324,6 +331,11 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetEndGameUIActive(false);
         levelTransSceneGO.SetActive(false);
         startLevelGO.SetActive(true);
+        for (int i = 0; i < recordTimeSavedSlidersLobby.Length; i++)
+        {
+            recordTimeSavedSlidersLobby[i].value = PlayerPrefs.GetFloat("MostTimeSaved");
+        }
+        recordTimeSavedText.text = PlayerPrefs.GetFloat("MostTimeSaved").ToString("0.00");
         yield return new WaitForEndOfFrame();
         GOLoaderByPlayerPrefs[] SL = startLevelGO.GetComponentsInChildren<GOLoaderByPlayerPrefs>();
         foreach (GOLoaderByPlayerPrefs sl in SL)
