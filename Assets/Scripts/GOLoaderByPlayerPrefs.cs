@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class GOLoaderByPlayerPrefs : MonoBehaviour
 {
-    [SerializeField] private string playerPrefsToUnlock = "Level_0";
+    [SerializeField] private string playerPrefsToLoad = "Level_0";
     [SerializeField] private GameObject GOToActive;
+    [SerializeField] private bool load = true;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -12,13 +13,28 @@ public class GOLoaderByPlayerPrefs : MonoBehaviour
 
     public void SetStickerActive()
     {
-        if(PlayerPrefs.GetInt(playerPrefsToUnlock) == 1)
+        if (load)
         {
-            GOToActive.SetActive(true);
+            if (PlayerPrefs.GetInt(playerPrefsToLoad) == 1)
+            {
+                GOToActive.SetActive(true);
+            }
+            else
+            {
+                GOToActive.SetActive(false);
+            }
         }
         else
         {
-            GOToActive.SetActive(false);
+            if (PlayerPrefs.GetInt(playerPrefsToLoad) == 1)
+            {
+                GOToActive.SetActive(false);
+            }
+            else
+            {
+                GOToActive.SetActive(true);
+            }
         }
+        
     }
 }
