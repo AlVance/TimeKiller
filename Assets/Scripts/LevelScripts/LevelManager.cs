@@ -100,9 +100,11 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.levelStarted = true;
         UIManager.Instance.SetStartLevelTimerText("GO!");
         TimeManager.Instance.timerStarted = true;
+        SoundManager.Instance.MusicOnOff(true);
         yield return new WaitForSeconds(1f);
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(false);
         canGoToStartLevelGameplay = true;
+
     }
 
     public void OnLevelEnded()
@@ -167,6 +169,7 @@ public class LevelManager : MonoBehaviour
             UIManager.Instance.SetInitialSceneUIActive(false);
         }
         levelTransSceneGO.SetActive(true);
+        SoundManager.Instance.MusicOnOff(false);
         yield return new WaitForSeconds(1f);
         GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
         GameManager.Instance.currentPlayer.anim.SetBool("IsWin", false);
@@ -323,6 +326,7 @@ public class LevelManager : MonoBehaviour
         canGoToStartLevel = false;
         isStart = true;
         UIManager.Instance.SetFade(true);
+        SoundManager.Instance.LobbyMusicOnOff(true);
         yield return new WaitForSeconds(1f);
         GameManager.Instance.currentLevel = 0;
         TimeManager.Instance.currentTime = TimeManager.Instance.startTime;
