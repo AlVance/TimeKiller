@@ -51,17 +51,16 @@ public class Projectile : MonoBehaviour
     
     public void SetProjectileInactive()
     {
-        //launchSize = this.gameObject.transform.localScale;
         launched = false;
-        charged = false;
-        timeLaunched = 0;
-        rb.linearVelocity = Vector3.zero;
+        charged = false; 
+        if(!rb.isKinematic) rb.linearVelocity = Vector3.zero;
         rb.isKinematic = true;
         if(spawnPos != null)
         {
-            this.gameObject.transform.SetParent(spawnPos);
             this.transform.position = spawnPos.position;
-        }   
+            this.gameObject.transform.SetParent(spawnPos);           
+        }
+        timeLaunched = 0;
         this.gameObject.SetActive(false);
 
     }

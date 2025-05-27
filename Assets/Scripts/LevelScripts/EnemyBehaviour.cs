@@ -170,6 +170,7 @@ public class EnemyBehaviour : MonoBehaviour
                         else currentProjectilePooled = 0;
                         currentProjectileGO.GetComponent<EnemyProjectile>().ProjectileSetUp(0, projectileRange, shootOriginTr);
                         currentProjectileGO.GetComponent<EnemyProjectile>().hitForce = projectileHitForce;
+
                     }
                     currentProjectileGO.transform.localScale = Vector3.Lerp(new Vector3(0.01f, 0.01f, 0.01f), new Vector3(projectileSize, projectileSize, projectileSize), (currentShootCD / shootCD));
                     currentShootCD += Time.deltaTime;
@@ -177,15 +178,14 @@ public class EnemyBehaviour : MonoBehaviour
             }
             else
             {
-                currentShootCD = 0;
                 if (currentProjectileGO != null) 
                 {
                     lR.SetPosition(0, shootOriginTr.position);
                     lR.SetPosition(1, lR.GetPosition(0));
                     currentProjectileGO.GetComponent<Projectile>().SetProjectileInactive();
                     currentProjectileGO = null;
-                } 
-
+                }
+                currentShootCD = 0;
             }
 
 

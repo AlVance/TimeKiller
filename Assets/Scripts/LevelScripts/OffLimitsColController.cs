@@ -16,11 +16,7 @@ public class OffLimitsColController : MonoBehaviour
     {
         if (currentLevel != null) 
         {
-            if(other.gameObject.tag != "Player")other.gameObject.transform.position = currentLevel.playerStartTr.position;
-            else
-            {
-                other.gameObject.GetComponent<PlayerController>().PlayerOffLimits(currentLevel.playerStartTr);
-            }
+            if(other.gameObject.tag == "Player") other.gameObject.GetComponent<PlayerController>().PlayerOffLimits(currentLevel.playerStartTr);
         } 
         else other.gameObject.transform.position = Vector3.zero;
     }
