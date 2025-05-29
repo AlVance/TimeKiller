@@ -96,9 +96,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3226657733939842989}
-  - component: {fileID: 8111027237223827171}
   - component: {fileID: 4705953428587341078}
   - component: {fileID: 4168475205308704347}
+  - component: {fileID: 8111027237223827171}
   - component: {fileID: 3294341138529045306}
   m_Layer: 0
   m_Name: LevelStickerUnlockPrefab
@@ -123,6 +123,35 @@ Transform:
   - {fileID: 6901499678106369725}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4705953428587341078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5784149988808888325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32746de7bed69394f9f5a7ed8ca2feeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefsToLoad: Sticker_Level_0
+  GOToActive: {fileID: 5784149988808888325}
+  load: 0
+--- !u!114 &4168475205308704347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5784149988808888325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 035fa3039eac6e54ba0a1cae47789ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefsToUnlock: Sticker_Level_0
+  anim: {fileID: 3294341138529045306}
 --- !u!135 &8111027237223827171
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -144,35 +173,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.75
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4705953428587341078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5784149988808888325}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32746de7bed69394f9f5a7ed8ca2feeb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPrefsToUnlock: Sticker_Level_0
-  GOToActive: {fileID: 5784149988808888325}
-  load: 0
---- !u!114 &4168475205308704347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5784149988808888325}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 035fa3039eac6e54ba0a1cae47789ae8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPrefsToUnlock: Sticker_Level_0
-  anim: {fileID: 3294341138529045306}
 --- !u!95 &3294341138529045306
 Animator:
   serializedVersion: 7
