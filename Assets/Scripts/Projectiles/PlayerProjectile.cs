@@ -11,18 +11,22 @@ public class PlayerProjectile : Projectile
             if (other.gameObject.tag == "EnemyHurtBox" && charged)
             {
                 other.gameObject.GetComponentInParent<EnemyBehaviour>().SetHealth(-projectileDamage);
-            }
-
-            if (!launched)
-            {
-                GameManager.Instance.currentPlayer.ResetCharge();
-            }
-            else
-            {
+                
                 Vector3 rotation = this.transform.rotation.eulerAngles;
                 rotation.y -= 180;
                 Destroy(Instantiate(impactParticle, this.transform.position, Quaternion.Euler(rotation)), 2);
-                SetProjectileInactive();
+                if(!launched)GameManager.Instance.currentPlayer.ResetCharge();
+                else SetProjectileInactive();
+
+            }
+
+            //if (!launched)
+            //{
+            //    GameManager.Instance.currentPlayer.ResetCharge();
+            //}
+            if (launched)
+            {
+                
 
             }
 
