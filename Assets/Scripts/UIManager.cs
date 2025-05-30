@@ -77,6 +77,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider flyFuelSlider;
     [SerializeField] private Image flyFuelSliderImage;
 
+    [Header("Pause Menu Variables")]
+    [SerializeField] private GameObject pauseMenuGO;
+
     [Header("Debug UI Varables")]
     [SerializeField] private TMP_Text fpsText;
     private void Awake()
@@ -393,5 +396,10 @@ public class UIManager : MonoBehaviour
     public void SetNewRecordTextActive(bool isActive)
     {
         newRecordText.SetActive(isActive);
+    }
+
+    public void SetPauseMenuActive(bool isActive)
+    {
+        pauseMenuGO.SetActive(isActive);
     }
 }

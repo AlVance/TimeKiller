@@ -80,6 +80,11 @@ public class SoundManager : MonoBehaviour
             isLevelMusicMuted = true;
         }
     }
+
+    public void MuteMusic()
+    {
+        MuteLevelMusic();
+    }
 }
 
 [CustomEditor(typeof(SoundManager))]

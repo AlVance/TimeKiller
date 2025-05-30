@@ -335,6 +335,7 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetEndGameUIActive(false);
         levelTransSceneGO.SetActive(false);
         startLevelGO.SetActive(true);
+        GameManager.Instance.currentLevelGO = startLevelGO;
         for (int i = 0; i < recordTimeSavedSlidersLobby.Length; i++)
         {
             recordTimeSavedSlidersLobby[i].value = PlayerPrefs.GetFloat("MostTimeSaved");

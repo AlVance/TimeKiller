@@ -20,16 +20,6 @@ public class PlayerProjectile : Projectile
 
             }
 
-            //if (!launched)
-            //{
-            //    GameManager.Instance.currentPlayer.ResetCharge();
-            //}
-            if (launched)
-            {
-                
-
-            }
-
         }
     }
 }
