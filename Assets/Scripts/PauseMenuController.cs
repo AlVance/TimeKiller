@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PauseMenuController : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class PauseMenuController : MonoBehaviour
             Time.timeScale = 1f;
             GameManager.Instance.playerWork = playerWasWorking;
             SoundManager.Instance.MusicOnOff(playerWasWorking);
+            if (UIManager.Instance.currentBTN != null) UIManager.Instance.currentBTN.GetComponent<Button>().Select();
         }
         else
         {
@@ -43,8 +45,15 @@ public class PauseMenuController : MonoBehaviour
         GameManager.Instance.currentPlayer.PlayerOffLimits(GameManager.Instance.currentLevelGO.GetComponent<Level>().playerStartTr);
     }
 
+    public void ReturnToLobby()
+    {
+        OpenClosePauseMenu();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     public void ExitGame()
     {
+        OpenClosePauseMenu();
         Application.Quit();
     }
 }

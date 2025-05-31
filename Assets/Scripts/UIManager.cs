@@ -79,6 +79,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Pause Menu Variables")]
     [SerializeField] private GameObject pauseMenuGO;
+    public GameObject currentBTN;
 
     [Header("Debug UI Varables")]
     [SerializeField] private TMP_Text fpsText;
@@ -295,6 +296,7 @@ public class UIManager : MonoBehaviour
     public void SetGoToLevelBTNActive(bool isActive)
     {
         ActivateProgressionBTN(GoToLevelBTN, isActive);
+
     }
     public void SetStartLevelBTNActive(bool isActive)
     {
@@ -315,10 +317,12 @@ public class UIManager : MonoBehaviour
             BTN.SetActive(isActive);
             ProgressionBTNsAnim.SetBool("OnScreen", isActive);
             BTN.GetComponent<Button>().Select();
+            currentBTN = BTN;
         }
         else 
         {
             StartCoroutine(SetBtnsInnactive(BTN));
+            currentBTN = null;
         } 
     }
     private IEnumerator SetBtnsInnactive(GameObject a)
