@@ -1,19 +1,22 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.InputSystem;
 public class PauseMenuController : MonoBehaviour
 {
     private bool isOpened = false;
     [SerializeField] private Button resumeBTN;
+    private PlayerInput playerInput;
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        playerInput = new PlayerInput();
+        playerInput.UI.Enable();
+        playerInput.UI.Click.performed += ctx =>
         {
             OpenClosePauseMenu();
-        }
+
+        };
     }
 
     private bool playerWasWorking;
