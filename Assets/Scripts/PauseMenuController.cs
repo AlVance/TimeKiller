@@ -8,6 +8,8 @@ public class PauseMenuController : MonoBehaviour
     [SerializeField] private Button resumeBTN;
     private PlayerInput playerInput;
 
+    [SerializeField] private Image unscaled_img;
+    private Material unscaled_mat;
     private void Start()
     {
         playerInput = new PlayerInput();
@@ -17,8 +19,14 @@ public class PauseMenuController : MonoBehaviour
             OpenClosePauseMenu();
 
         };
+
+        unscaled_mat = unscaled_img.material;
     }
 
+    private void Update()
+    {
+        unscaled_mat.SetFloat("_UnscaledTime", Time.unscaledTime);
+    }
     private bool playerWasWorking;
     public void OpenClosePauseMenu()
     {
