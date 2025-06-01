@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class MovePlatform : MonoBehaviour
 {
+    [SerializeField] private float delayMoveTime = 0;
     private Rigidbody rb;
     //[SerializeField]private Transform[] waypoints;
     private List<Transform> waypointsList = new List<Transform>();
@@ -10,23 +12,30 @@ public class MovePlatform : MonoBehaviour
     private int currentWaypointsIndex = 0;
     [SerializeField] private float moveSpeed;
     private int direction = 1;
+    private bool hasStarted = false;
+
     private void Awake()
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
         
     }
-    private void Start()
+    private IEnumerator Start()
     {
+        yield return new WaitForSeconds(delayMoveTime);
         foreach (Transform item in waypointsParent.transform)
         {
             waypointsList.Add(item);
         }
+        this.transform.position = waypointsList[currentWaypointsIndex].position;
+        ++currentWaypointsIndex;
         rb.linearVelocity = (waypointsList[currentWaypointsIndex].position - this.transform.position).normalized * moveSpeed;
+
+        hasStarted = true;
     }
 
     private void FixedUpdate()
     {
-        MoveToWaypoint();
+       if(hasStarted) MoveToWaypoint();
     }
     private void MoveToWaypoint()
     {
