@@ -11,7 +11,7 @@ public class MovePlatform : MonoBehaviour
     [SerializeField] private GameObject waypointsParent;
     private int currentWaypointsIndex = 0;
     [SerializeField] private float moveSpeed;
-    private int direction = 1;
+    private int direction = -1;
     private bool hasStarted = false;
 
     private void Awake()
