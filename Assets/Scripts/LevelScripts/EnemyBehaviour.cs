@@ -113,6 +113,8 @@ public class EnemyBehaviour : MonoBehaviour
     {
         isAlive = false;
         gunCol.objective = null;
+        lR.SetPosition(0, shootOriginTr.position);
+        lR.SetPosition(1, lR.GetPosition(0));
         if (canRespawn) StartCoroutine(_RespawnEnemy());
         else
         {
@@ -170,11 +172,15 @@ public class EnemyBehaviour : MonoBehaviour
                         currentProjectileGO = projectilePool[currentProjectilePooled];
                         if (currentProjectilePooled < projectilePool.Count - 1) ++currentProjectilePooled;
                         else currentProjectilePooled = 0;
-                        currentProjectileGO.GetComponent<EnemyProjectile>().ProjectileSetUp(0, projectileRange, shootOriginTr);
-                        currentProjectileGO.GetComponent<EnemyProjectile>().hitForce = projectileHitForce;
+                        if (currentProjectileGO != null) 
+                        {
+                            currentProjectileGO.GetComponent<EnemyProjectile>().ProjectileSetUp(0, projectileRange, shootOriginTr);
+                            currentProjectileGO.GetComponent<EnemyProjectile>().hitForce = projectileHitForce;
+                        } 
+                        
 
                     }
-                    currentProjectileGO.transform.localScale = Vector3.Lerp(new Vector3(0.01f, 0.01f, 0.01f), new Vector3(projectileSize, projectileSize, projectileSize), (currentShootCD / shootCD));
+                    if (currentProjectileGO != null) currentProjectileGO.transform.localScale = Vector3.Lerp(new Vector3(0.01f, 0.01f, 0.01f), new Vector3(projectileSize, projectileSize, projectileSize), (currentShootCD / shootCD));
                     currentShootCD += Time.deltaTime;
                 }
             }
