@@ -112,6 +112,7 @@ public class EnemyBehaviour : MonoBehaviour
     private void EnemyDeath()
     {
         isAlive = false;
+        gunCol.objective = null;
         if (canRespawn) StartCoroutine(_RespawnEnemy());
         else
         {
