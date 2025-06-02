@@ -42,6 +42,19 @@ public class SoundManager : MonoBehaviour
         musicSource.Play();
     }
 
+    public void LevelMusicVolumeOnOff(bool ToOn)
+    {
+        if (ToOn)
+        {
+            musicSourceON.volume = 0.0f;
+            musicSourceOFF.volume = 0f;
+        }
+        else
+        {
+            musicSourceON.volume = 0f;
+            musicSourceOFF.volume = 0.0f;
+        }
+    }
     public void MusicOnOff(bool ToOn)
     {
         if (ToOn)
