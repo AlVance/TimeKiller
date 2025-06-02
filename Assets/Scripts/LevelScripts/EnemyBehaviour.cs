@@ -9,6 +9,7 @@ using UnityEditor.Callbacks;
 
 public class EnemyBehaviour : MonoBehaviour
 {
+    [SerializeField] private bool forceEnemyToWork = false;
     [SerializeField] private GameObject enemyStuff;
     private enum enemyMovementTypes { Static, Movable };
     [SerializeField] private enemyMovementTypes enemyMovementType = enemyMovementTypes.Static;
@@ -89,7 +90,7 @@ public class EnemyBehaviour : MonoBehaviour
     private void Update()
     {
         if(enemyGunGO != null) enemyGunGO.transform.localPosition = gunTr;
-        if (GameManager.Instance.levelStarted && isAlive)
+        if ((GameManager.Instance.levelStarted || forceEnemyToWork) && isAlive)
         {
             MoveAlongSpline();
             Shoot();
@@ -98,7 +99,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void SetHealth(int healthModfier)
     {
-        if (!isInvulnerable && GameManager.Instance.levelStarted)
+        if (!isInvulnerable && (GameManager.Instance.levelStarted || forceEnemyToWork))
         {
             currentEnemyHealth += healthModfier;
             if (currentEnemyHealth <= 0)
