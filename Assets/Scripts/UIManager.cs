@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject ProggressionBTNsInputPromts;
     [SerializeField] private GameObject InlevelUI;
     [SerializeField] private GameObject InitialScenelUI;
+    [SerializeField] private GameObject TimersGO;
+    [SerializeField] private GameObject ExplorationModeTagGO;
 
     [Header("UI Transitions")]
     [SerializeField] private GameObject endLevelScreenUI;
@@ -284,6 +286,15 @@ public class UIManager : MonoBehaviour
     public void SetInlevelUIActive(bool isActive)
     {
         InlevelUI.SetActive(isActive);
+        if (GameManager.Instance.explorationMode)
+        {
+            TimersGO.SetActive(false);
+            //ExplorationModeTagGO.SetActive(isActive);
+        }
+        else
+        {
+            TimersGO.SetActive(isActive);
+        }
     }
     public void SetInitialSceneUIActive(bool isActive)
     {
@@ -405,5 +416,10 @@ public class UIManager : MonoBehaviour
     public void SetPauseMenuActive(bool isActive)
     {
         pauseMenuGO.SetActive(isActive);
+    }
+
+    public void SetExplorationTagActive(bool isActive)
+    {
+        ExplorationModeTagGO.SetActive(isActive);
     }
 }

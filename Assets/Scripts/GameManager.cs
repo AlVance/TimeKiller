@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,17 @@ public class GameManager : MonoBehaviour
     private bool m_levelStarted = false;
     public bool isMobile = false;
     [SerializeField] private MobileDetector MD;
+    private bool m_explorationMode = false;
+    public bool explorationMode
+    {
+        get {return m_explorationMode;}
+        set
+        {
+            m_explorationMode = value;
+            UIManager.Instance.SetExplorationTagActive(value);
+        }
+    }
+
     public bool levelStarted 
     { 
         get { return m_levelStarted; }
@@ -38,4 +50,19 @@ public class GameManager : MonoBehaviour
     }
 
 
+}
+
+[CustomEditor(typeof(GameManager))]
+public class SoundManagerEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+        GameManager GM = (GameManager)target;
+
+        if(GUILayout.Button("Set/Quit Exploration Mode"))
+        {
+            GM.explorationMode = !GM.explorationMode;
+        }
+    }
 }

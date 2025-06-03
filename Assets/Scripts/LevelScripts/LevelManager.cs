@@ -131,6 +131,7 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         UIManager.Instance.SetTimerUIToWinScreen();
         yield return new WaitForSeconds(0.8f);
+        if(GameManager.Instance.explorationMode)TimeManager.Instance.levelTime = 0.1f;
         float finalTimeValue = TimeManager.Instance.currentTime + TimeManager.Instance.levelTime;
         float _rewardTime = timeRewardTime;
         while (TimeManager.Instance.currentTime < finalTimeValue)
@@ -144,7 +145,7 @@ public class LevelManager : MonoBehaviour
         TimeManager.Instance.levelTime = 0;
         canGoToLevelTrans = true;
         UIManager.Instance.SetGoToInBetweenBTNActive(true);
-        PlayerPrefs.SetInt("Level_" + (GameManager.Instance.currentLevel - 1), 1);
+        if(!GameManager.Instance.explorationMode)PlayerPrefs.SetInt("Level_" + (GameManager.Instance.currentLevel - 1), 1);
     }
     public void GoToInbetweenLevels()
     {
@@ -203,71 +204,79 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetMostTimeSavedSliderActive(false);
         UIManager.Instance.SetTimeSavedSliderActive(false);
         UIManager.Instance.SetEndGameUIActive(true);
-        yield return new WaitForSeconds(1f);
-        if (!PlayerPrefs.HasKey("MostTimeSaved") || TimeManager.Instance.currentTime > PlayerPrefs.GetFloat("MostTimeSaved"))
+        if (!GameManager.Instance.explorationMode)
         {
-            
-            UIManager.Instance.SetTimeSavedSlidiers(0);
-
-            UIManager.Instance.SetTimeSavedSliderActive(true);
-            yield return new WaitForSeconds(0.5f);
-
-            float currentTimeB = 0;
-            while (currentTimeB < TimeManager.Instance.currentTime)
-            {
-                UIManager.Instance.SetTimeSavedSlidiers(currentTimeB);
-                currentTimeB += 0.1f;
-                yield return new WaitForEndOfFrame();
-            }
-            UIManager.Instance.SetTimeSavedSlidiers(TimeManager.Instance.currentTime);
-
-            PlayerPrefs.SetFloat("MostTimeSaved", TimeManager.Instance.currentTime);
-            UIManager.Instance.SetMostTimeSavedSlidiers(0);
             yield return new WaitForSeconds(1f);
-            UIManager.Instance.SetMostTimeSavedSliderActive(true);
-            yield return new WaitForSeconds(0.5f);
-            float currentTimeA = 0;
-            while (currentTimeA < TimeManager.Instance.currentTime)
+            if (!PlayerPrefs.HasKey("MostTimeSaved") || TimeManager.Instance.currentTime > PlayerPrefs.GetFloat("MostTimeSaved"))
             {
-                UIManager.Instance.SetMostTimeSavedSlidiers(currentTimeA);
-                currentTimeA += 0.1f;
-                yield return new WaitForEndOfFrame();
-            }
-            UIManager.Instance.SetMostTimeSavedSlidiers(TimeManager.Instance.currentTime);
 
-            UIManager.Instance.SetNewRecordTextActive(true);
-            //NEW RECORD!
+                UIManager.Instance.SetTimeSavedSlidiers(0);
+
+                UIManager.Instance.SetTimeSavedSliderActive(true);
+                yield return new WaitForSeconds(0.5f);
+
+                float currentTimeB = 0;
+                while (currentTimeB < TimeManager.Instance.currentTime)
+                {
+                    UIManager.Instance.SetTimeSavedSlidiers(currentTimeB);
+                    currentTimeB += 0.1f;
+                    yield return new WaitForEndOfFrame();
+                }
+                UIManager.Instance.SetTimeSavedSlidiers(TimeManager.Instance.currentTime);
+
+                PlayerPrefs.SetFloat("MostTimeSaved", TimeManager.Instance.currentTime);
+                UIManager.Instance.SetMostTimeSavedSlidiers(0);
+                yield return new WaitForSeconds(1f);
+                UIManager.Instance.SetMostTimeSavedSliderActive(true);
+                yield return new WaitForSeconds(0.5f);
+                float currentTimeA = 0;
+                while (currentTimeA < TimeManager.Instance.currentTime)
+                {
+                    UIManager.Instance.SetMostTimeSavedSlidiers(currentTimeA);
+                    currentTimeA += 0.1f;
+                    yield return new WaitForEndOfFrame();
+                }
+                UIManager.Instance.SetMostTimeSavedSlidiers(TimeManager.Instance.currentTime);
+
+                UIManager.Instance.SetNewRecordTextActive(true);
+                //NEW RECORD!
+            }
+            else
+            {
+                UIManager.Instance.SetTimeSavedSlidiers(0);
+                UIManager.Instance.SetTimeSavedSliderActive(true);
+                yield return new WaitForSeconds(0.5f);
+
+                float currentTimeB = 0;
+                while (currentTimeB < TimeManager.Instance.currentTime)
+                {
+                    UIManager.Instance.SetTimeSavedSlidiers(currentTimeB);
+                    currentTimeB += 0.1f;
+                    yield return new WaitForEndOfFrame();
+                }
+                UIManager.Instance.SetTimeSavedSlidiers(TimeManager.Instance.currentTime);
+
+                UIManager.Instance.SetMostTimeSavedSlidiers(0);
+                yield return new WaitForSeconds(1f);
+                UIManager.Instance.SetMostTimeSavedSliderActive(true);
+                yield return new WaitForSeconds(0.5f);
+
+                float currentTimeA = 0;
+                while (currentTimeA < PlayerPrefs.GetFloat("MostTimeSaved"))
+                {
+                    UIManager.Instance.SetMostTimeSavedSlidiers(currentTimeA);
+                    currentTimeA += 0.1f;
+                    yield return new WaitForEndOfFrame();
+                }
+                UIManager.Instance.SetMostTimeSavedSlidiers(PlayerPrefs.GetFloat("MostTimeSaved"));
+
+            }
         }
         else
-        {    
-            UIManager.Instance.SetTimeSavedSlidiers(0);
-            UIManager.Instance.SetTimeSavedSliderActive(true);
-            yield return new WaitForSeconds(0.5f);
-
-            float currentTimeB = 0;
-            while (currentTimeB < TimeManager.Instance.currentTime)
-            {
-                UIManager.Instance.SetTimeSavedSlidiers(currentTimeB);
-                currentTimeB += 0.1f;
-                yield return new WaitForEndOfFrame();
-            }
-            UIManager.Instance.SetTimeSavedSlidiers(TimeManager.Instance.currentTime);
-
-            UIManager.Instance.SetMostTimeSavedSlidiers(0);
-            yield return new WaitForSeconds(1f);
-            UIManager.Instance.SetMostTimeSavedSliderActive(true);
-            yield return new WaitForSeconds(0.5f);
-
-            float currentTimeA = 0;
-            while (currentTimeA < PlayerPrefs.GetFloat("MostTimeSaved"))
-            {
-                UIManager.Instance.SetMostTimeSavedSlidiers(currentTimeA);
-                currentTimeA += 0.1f;
-                yield return new WaitForEndOfFrame();
-            }
-            UIManager.Instance.SetMostTimeSavedSlidiers(PlayerPrefs.GetFloat("MostTimeSaved"));
+        {
 
         }
+        
 
         yield return new WaitForSeconds(1f);
         UIManager.Instance.SetGoToCreditsBTNActive(true);
@@ -309,6 +318,7 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetInBetweenLevelsScreenActive(false);
         UIManager.Instance.SetLevelOverviewActive(true);
         UIManager.Instance.SetInlevelUIActive(true);
+
         yield return new WaitForSeconds(1f);
         UIManager.Instance.SetFade(false);
         yield return new WaitForSeconds(1f);
@@ -363,6 +373,7 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
         UIManager.Instance.SetTimerUIToIdle();
         UIManager.Instance.SetInlevelUIActive(false);
+
         UIManager.Instance.SetPuntuationScreenActive(false);
         UIManager.Instance.SetGameOverScreenctive(false);
         UIManager.Instance.SetInitialSceneUIActive(true);
