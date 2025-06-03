@@ -100,17 +100,17 @@ public class SoundManager : MonoBehaviour
     }
 }
 
-[CustomEditor(typeof(SoundManager))]
-public class SoundManagerEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-        SoundManager SM = (SoundManager)target;
+//[CustomEditor(typeof(SoundManager))]
+//public class SoundManagerEditor : Editor
+//{
+//    public override void OnInspectorGUI()
+//    {
+//        base.OnInspectorGUI();
+//        SoundManager SM = (SoundManager)target;
 
-        if(GUILayout.Button("Mute/Unmute Level Music"))
-        {
-            SM.MuteLevelMusic();
-        }
-    }
-}
+//        if(GUILayout.Button("Mute/Unmute Level Music"))
+//        {
+//            SM.MuteLevelMusic();
+//        }
+//    }
+//}
