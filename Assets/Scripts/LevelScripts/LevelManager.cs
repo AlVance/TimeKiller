@@ -179,7 +179,8 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetPuntuationScreenActive(false);
 
 
-        if (GameManager.Instance.currentLevel < levelsGO.Length)
+        if ((GameManager.Instance.currentLevel < levelsGO.Length && !GameManager.Instance.explorationMode)
+            || (GameManager.Instance.currentLevel < levelsGO.Length - 1 && GameManager.Instance.explorationMode))
         {
             SetNextLevel();
             UIManager.Instance.SetLevelCountText(GameManager.Instance.currentLevel + 1, levelsGO.Length);
