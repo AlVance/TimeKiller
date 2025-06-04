@@ -275,7 +275,7 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-
+            UIManager.Instance.SetEndGameExplorationTextActive(true);
         }
         
 

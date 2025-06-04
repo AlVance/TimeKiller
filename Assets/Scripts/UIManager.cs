@@ -40,12 +40,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text mostTimeSavedText;
     [SerializeField] private GameObject mostTimeSavedSliderGO;
     [SerializeField] private GameObject newRecordText;
-
+    [SerializeField] private GameObject endExplorationModeTextGO;
 
 
     [Header("Credits UI Stuff")]
     [SerializeField] private GameObject GoToCreditsBTN;
     [SerializeField] private GameObject creditsUI;
+    [SerializeField] private TMP_Text creditsDownText;
 
     [Header("Level UI Variables")]
     [SerializeField] private TMP_Text currentTimeText;
@@ -350,6 +351,8 @@ public class UIManager : MonoBehaviour
     public void SetCreditsScreenActive(bool isActive)
     {
         creditsUI.SetActive(isActive);
+        if (GameManager.Instance.explorationMode) creditsDownText.text = "You're ready to become a real Time Killer!";
+        else creditsDownText.text = "You're a real Time Killer <3";
     }
     public void SetLevelNameText(string newText)
     {
@@ -379,6 +382,7 @@ public class UIManager : MonoBehaviour
             SetTimeSavedSliderActive(false);
             SetMostTimeSavedSliderActive(false);
             newRecordText.SetActive(false);
+            SetEndGameExplorationTextActive(false);
         }
     }
 
@@ -421,5 +425,10 @@ public class UIManager : MonoBehaviour
     public void SetExplorationTagActive(bool isActive)
     {
         ExplorationModeTagGO.SetActive(isActive);
+    }
+
+    public void SetEndGameExplorationTextActive(bool isActive)
+    {
+        endExplorationModeTextGO.SetActive(isActive);
     }
 }
