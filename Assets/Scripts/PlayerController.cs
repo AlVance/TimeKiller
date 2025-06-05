@@ -473,7 +473,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (groundHit.rigidbody != null)
                 {
-                    otherVel = groundHit.rigidbody.linearVelocity;
+                    otherVel = new Vector3(groundHit.rigidbody.linearVelocity.x, 0, groundHit.rigidbody.linearVelocity.z);
                 }
                 else otherVel = Vector3.zero;
             }
