@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -52,17 +52,17 @@ public class GameManager : MonoBehaviour
 
 }
 
-[CustomEditor(typeof(GameManager))]
-public class SoundManagerEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-        GameManager GM = (GameManager)target;
+//[CustomEditor(typeof(GameManager))]
+//public class SoundManagerEditor : Editor
+//{
+//    public override void OnInspectorGUI()
+//    {
+//        base.OnInspectorGUI();
+//        GameManager GM = (GameManager)target;
 
-        if(GUILayout.Button("Set/Quit Exploration Mode"))
-        {
-            GM.explorationMode = !GM.explorationMode;
-        }
-    }
-}
+//        if(GUILayout.Button("Set/Quit Exploration Mode"))
+//        {
+//            GM.explorationMode = !GM.explorationMode;
+//        }
+//    }
+//}
