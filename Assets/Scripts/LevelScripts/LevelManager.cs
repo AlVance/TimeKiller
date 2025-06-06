@@ -147,7 +147,7 @@ public class LevelManager : MonoBehaviour
         canGoToLevelTrans = true;
         UIManager.Instance.SetGoToInBetweenBTNActive(true);
         if(!GameManager.Instance.explorationMode)PlayerPrefs.SetInt("Level_" + (GameManager.Instance.currentLevel - 1), 1);
-        if (!GameManager.Instance.explorationMode) PlayerPrefs.SetInt("CompletedLevels", GameManager.Instance.currentLevel);
+        if (!GameManager.Instance.explorationMode && PlayerPrefs.GetInt("CompletedLevels") < GameManager.Instance.currentLevel) PlayerPrefs.SetInt("CompletedLevels", GameManager.Instance.currentLevel);
     }
     public void GoToInbetweenLevels()
     {

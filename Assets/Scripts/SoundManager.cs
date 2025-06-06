@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using System.Collections;
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
@@ -7,6 +8,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField]public AudioSource musicSourceON;
     [SerializeField]public AudioSource musicSourceOFF;
     [SerializeField]public AudioClip[] musicClips;
+    [SerializeField] private float levelMusicMergeTime;
 
     public bool isLevelMusicMuted = false;
     private void Awake()
@@ -41,29 +43,35 @@ public class SoundManager : MonoBehaviour
     {
         musicSource.Play();
     }
-
-    public void LevelMusicVolumeOnOff(bool ToOn)
-    {
-        if (ToOn)
-        {
-            musicSourceON.volume = 0.0f;
-            musicSourceOFF.volume = 0f;
-        }
-        else
-        {
-            musicSourceON.volume = 0f;
-            musicSourceOFF.volume = 0.0f;
-        }
-    }
     public void MusicOnOff(bool ToOn)
     {
-        if (ToOn)
+        StartCoroutine(_MusicLevelOnOff(ToOn));
+    }
+    private IEnumerator _MusicLevelOnOff(bool _ToOn)
+    {
+        if (_ToOn)
         {
+            float goTime = 0f;
+            while (musicSourceON.volume < 0.1f)
+            {
+                musicSourceON.volume = Mathf.Lerp(0, 0.1f, levelMusicMergeTime / goTime);
+                musicSourceOFF.volume = Mathf.Lerp(0.05f, 0f, levelMusicMergeTime / goTime);
+                goTime += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
             musicSourceON.volume = 0.1f;
             musicSourceOFF.volume = 0f;
         }
         else
         {
+            float goTime = 0f;
+            while (musicSourceOFF.volume < 0.05f)
+            {
+                musicSourceON.volume = Mathf.Lerp(0.1f, 0f, levelMusicMergeTime / goTime);
+                musicSourceOFF.volume = Mathf.Lerp(0f, 0.05f, levelMusicMergeTime / goTime);
+                goTime += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
             musicSourceON.volume = 0f;
             musicSourceOFF.volume = 0.05f;
         }
