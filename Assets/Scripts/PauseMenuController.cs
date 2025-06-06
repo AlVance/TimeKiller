@@ -35,7 +35,7 @@ public class PauseMenuController : MonoBehaviour
             UIManager.Instance.SetPauseMenuActive(false);
             Time.timeScale = 1f;
             GameManager.Instance.playerWork = playerWasWorking;
-            SoundManager.Instance.MusicOnOff(playerWasWorking);
+            if(!SoundManager.Instance.isLevelMusicMuted) SoundManager.Instance.MusicOnOff(playerWasWorking);
             if (UIManager.Instance.currentBTN != null) UIManager.Instance.currentBTN.GetComponent<Button>().Select();
         }
         else
@@ -44,7 +44,7 @@ public class PauseMenuController : MonoBehaviour
             UIManager.Instance.SetPauseMenuActive(true);
             Time.timeScale = 0f;
             GameManager.Instance.playerWork = false;
-            SoundManager.Instance.MusicOnOff(false);
+            if (!SoundManager.Instance.isLevelMusicMuted) SoundManager.Instance.MusicOnOff(false);
             resumeBTN.Select();
         }
         isOpened = !isOpened;

@@ -33,6 +33,9 @@ public class SoundManager : MonoBehaviour
         {
             MuteLevelMusic();
         }
+        musicSourceON.volume = 0f;
+        musicSourceOFF.volume = 0f;
+ 
     }
 
     public void PlayOneShootAudio(AudioClip AC, float volume = 1f)
