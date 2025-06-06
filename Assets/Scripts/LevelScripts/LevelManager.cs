@@ -23,6 +23,7 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private Slider[] recordTimeSavedSlidersLobby;
     [SerializeField] private TMP_Text recordTimeSavedText;
+    [SerializeField] private TMP_Text mostCompletedLevelsText;
     private void Start()
     {
         isStart = true;
@@ -146,6 +147,7 @@ public class LevelManager : MonoBehaviour
         canGoToLevelTrans = true;
         UIManager.Instance.SetGoToInBetweenBTNActive(true);
         if(!GameManager.Instance.explorationMode)PlayerPrefs.SetInt("Level_" + (GameManager.Instance.currentLevel - 1), 1);
+        if (!GameManager.Instance.explorationMode) PlayerPrefs.SetInt("CompletedLevels", GameManager.Instance.currentLevel);
     }
     public void GoToInbetweenLevels()
     {
@@ -352,6 +354,7 @@ public class LevelManager : MonoBehaviour
             recordTimeSavedSlidersLobby[i].value = PlayerPrefs.GetFloat("MostTimeSaved");
         }
         recordTimeSavedText.text = PlayerPrefs.GetFloat("MostTimeSaved").ToString("0.00");
+        mostCompletedLevelsText.text = PlayerPrefs.GetInt("CompletedLevels").ToString() + "/ 10";
         yield return new WaitForEndOfFrame();
         GOLoaderByPlayerPrefs[] SL = startLevelGO.GetComponentsInChildren<GOLoaderByPlayerPrefs>();
         foreach (GOLoaderByPlayerPrefs sl in SL)

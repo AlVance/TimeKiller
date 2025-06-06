@@ -86,6 +86,10 @@ public class UIManager : MonoBehaviour
 
     [Header("Debug UI Varables")]
     [SerializeField] private TMP_Text fpsText;
+
+    [Header("Misc Variables")]
+    [SerializeField] private GameObject startLvlExplorationScreen;
+    [SerializeField] private GameObject startLvlTKScreen;
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -425,6 +429,16 @@ public class UIManager : MonoBehaviour
     public void SetExplorationTagActive(bool isActive)
     {
         ExplorationModeTagGO.SetActive(isActive);
+        if (isActive)
+        {
+            startLvlExplorationScreen.SetActive(true);
+            startLvlTKScreen.SetActive(false);
+        }
+        else
+        {
+            startLvlExplorationScreen.SetActive(false);
+            startLvlTKScreen.SetActive(true);
+        }
     }
 
     public void SetEndGameExplorationTextActive(bool isActive)
