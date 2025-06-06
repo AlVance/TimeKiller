@@ -47,12 +47,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Reload"",
-                    ""type"": ""Value"",
-                    ""id"": ""154f90e9-4124-47e1-b373-acd201b6172d"",
-                    ""expectedControlType"": ""Integer"",
+                    ""type"": ""Button"",
+                    ""id"": ""7ec32e77-a8c3-40da-aa3c-cf72a518e0ac"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -168,7 +168,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""7c2ea6e9-44cd-4569-8d34-dd14f73ef5b7"",
+                    ""id"": ""fe8dda3d-8304-42f4-97a7-7e8a32c36a36"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e1bb4462-b0a9-463d-90eb-7671193308fc"",
                     ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -179,7 +190,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a7553901-fc01-4721-ba41-cb5ca43f1d15"",
+                    ""id"": ""5a684600-31cc-4195-8ce7-8e35e01813fb"",
                     ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -190,7 +201,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""64c0fcda-e4cd-47a7-a65a-1918afddacea"",
+                    ""id"": ""08f18c59-4d37-4651-b660-59eb48ff6913"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -275,6 +286,11 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             ""devices"": [
                 {
                     ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Joystick>"",
                     ""isOptional"": false,
                     ""isOR"": false
                 }
