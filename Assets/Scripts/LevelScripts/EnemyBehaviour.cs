@@ -59,6 +59,11 @@ public class EnemyBehaviour : MonoBehaviour
     private GameObject enemyModelGO;
 
     private Vector3 gunTr;
+
+
+    [Header("Sound Variables")]
+    [SerializeField] private AudioSource enemyAS;
+    [SerializeField] private AudioClip getHitAC, tpPlayerAC;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -100,12 +105,14 @@ public class EnemyBehaviour : MonoBehaviour
     public void SetHealth(int healthModfier)
     {
         if (!isInvulnerable && (GameManager.Instance.levelStarted || forceEnemyToWork))
-        {
+        { 
             currentEnemyHealth += healthModfier;
             if (currentEnemyHealth <= 0)
             {
                 EnemyDeath();
             }
+
+            enemyAS.PlayOneShot(getHitAC);
         }
     }
 
@@ -118,13 +125,16 @@ public class EnemyBehaviour : MonoBehaviour
         if (canRespawn) StartCoroutine(_RespawnEnemy());
         else
         {
-            this.gameObject.SetActive(false);
+            enemyStuff.SetActive(false);
+            currentShootCD = 0;
+            if (currentProjectileGO != null) Destroy(currentProjectileGO);
         }
         if (this.GetComponent<Objective>() != null) this.GetComponent<Objective>().SetCompletedObjective();
 
         if(enemyBehaviourType == enemyOnHitTypes.TpOnKill)
         {
             GameManager.Instance.currentPlayer.ForcedMovement(this.transform.position);
+            enemyAS.PlayOneShot(tpPlayerAC);
         }  
     }
 

@@ -7,6 +7,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField]private AudioSource audioSource;
     [SerializeField]public AudioSource musicSourceON;
     [SerializeField]public AudioSource musicSourceOFF;
+    [SerializeField]public AudioSource musicLobby;
     [SerializeField]public AudioClip[] musicClips;
     [SerializeField] private float levelMusicMergeTime;
 
@@ -33,9 +34,9 @@ public class SoundManager : MonoBehaviour
         {
             MuteLevelMusic();
         }
-        musicSourceON.volume = 0f;
-        musicSourceOFF.volume = 0f;
- 
+        LobbyMusicOnOff(true);
+
+
     }
 
     public void PlayOneShootAudio(AudioClip AC, float volume = 1f)
@@ -52,6 +53,7 @@ public class SoundManager : MonoBehaviour
     }
     private IEnumerator _MusicLevelOnOff(bool _ToOn)
     {
+        musicLobby.Stop();
         if (_ToOn)
         {
             float goTime = 0f;
@@ -85,7 +87,11 @@ public class SoundManager : MonoBehaviour
         {
             musicSourceON.volume = 0f;
             musicSourceOFF.volume = 0f;
-            //Play lobby music
+            musicLobby.Play();
+        }
+        else
+        {
+            musicLobby.Stop();
         }
     }
 
