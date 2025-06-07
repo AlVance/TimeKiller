@@ -296,6 +296,7 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetGoToCreditsBTNActive(false);
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1.5f);
+        SoundManager.Instance.LobbyMusicOnOff(true);
         levelTransSceneGO.SetActive(false);
         UIManager.Instance.SetCreditsScreenActive(true);
         yield return new WaitForEndOfFrame();

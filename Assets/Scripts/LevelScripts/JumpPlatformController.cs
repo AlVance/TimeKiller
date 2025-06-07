@@ -10,6 +10,13 @@ public class JumpPlatformController : MonoBehaviour
     [SerializeField] private float blockInputTime = 0.05f;
     [SerializeField] private Animator platformAnim;
     [SerializeField] private bool forcePlayerToCenter = false;
+    [SerializeField] private AudioSource jumpAS;
+    private float basePich;
+
+    private void Start()
+    {
+        basePich = jumpAS.pitch;
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
@@ -23,6 +30,9 @@ public class JumpPlatformController : MonoBehaviour
             _rb.AddForce(JumpDirectionTr.up.normalized * Jumpspeed);
             platformAnim.SetTrigger("On");
             particle.Play();
+
+            jumpAS.pitch = basePich + Random.Range(-0.3f, 0.3f);
+            jumpAS.Play();
         }
     }
 }

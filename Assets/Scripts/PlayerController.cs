@@ -526,7 +526,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    currentProjectileGO.GetComponent<PlayerProjectile>().SetCharged();
+                    if(!currentProjectileGO.GetComponent<PlayerProjectile>().charged) currentProjectileGO.GetComponent<PlayerProjectile>().SetCharged();
                 }
             }
         }

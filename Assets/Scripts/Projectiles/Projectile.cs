@@ -13,22 +13,21 @@ public class Projectile : MonoBehaviour
     public bool isActive = false;
     public Transform spawnPos;
     private SphereCollider collidier;
+    [SerializeField] private AudioSource shootAS;
+    [SerializeField] private AudioClip chargeShootAC, holdShootAC, setChargeAC, shootAC;
+
     private void Awake()
     {
         collidier = this.gameObject.GetComponent<SphereCollider>();
         collidier.radius = 0;
     }
-    private void Start()
-    {
-        
-    }
+
 
     private void Update()
     {
         if (launched)
         {
             timeLaunched += Time.deltaTime;
-            //this.transform.localScale = Vector3.Slerp(launchSize, Vector3.zero, (timeLaunched / lifeTime));
             if (timeLaunched >= lifeTime) SetProjectileInactive();
         }
     }
@@ -40,6 +39,10 @@ public class Projectile : MonoBehaviour
         lifeTime = _lifeTime;
         isActive = true;
         spawnPos = _spawnPos;
+
+        shootAS.loop = false;
+        shootAS.clip = chargeShootAC;
+        shootAS.Play();
     }
     public void LaunchProjectile(Vector3 direction, float speed)
     {
@@ -48,6 +51,11 @@ public class Projectile : MonoBehaviour
         launched = true;
         rb.isKinematic = false;
         rb.linearVelocity = direction * speed;
+
+
+        shootAS.Stop();
+        shootAS.loop = false;
+        shootAS.PlayOneShot(shootAC);
     }
 
     public void SetCharged()
@@ -55,6 +63,13 @@ public class Projectile : MonoBehaviour
         //this.GetComponent<MeshRenderer>().material.color = Color.green;
         collidier.radius = 0.5f;
         charged = true;
+
+        shootAS.Stop();
+        shootAS.loop = true;
+        shootAS.clip = holdShootAC;
+        shootAS.Play();
+
+        shootAS.PlayOneShot(setChargeAC);
     }
 
     public void SetProjectileInactive()
@@ -70,6 +85,10 @@ public class Projectile : MonoBehaviour
             this.gameObject.transform.SetParent(spawnPos);           
         }
         timeLaunched = 0;
+
+        shootAS.loop = false;
+        shootAS.Stop();
+
         this.gameObject.SetActive(false);
 
     }
