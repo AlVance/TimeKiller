@@ -13,8 +13,8 @@ public class Projectile : MonoBehaviour
     public bool isActive = false;
     public Transform spawnPos;
     private SphereCollider collidier;
-    [SerializeField] private AudioSource shootAS;
-    [SerializeField] private AudioClip chargeShootAC, holdShootAC, setChargeAC, shootAC;
+    [SerializeField] public AudioSource shootAS;
+    [SerializeField] private AudioClip chargeShootAC, holdShootAC, setChargeAC, shootAC, hitAC;
 
     private void Awake()
     {
