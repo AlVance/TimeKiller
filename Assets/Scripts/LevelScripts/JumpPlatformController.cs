@@ -35,4 +35,6 @@ public class JumpPlatformController : MonoBehaviour
             jumpAS.Play();
         }
     }
+
+   
 }

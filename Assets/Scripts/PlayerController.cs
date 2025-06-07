@@ -284,6 +284,11 @@ public class PlayerController : MonoBehaviour
     [Header("Player Events")]
     public UnityEvent OnStartFlyEvent;
 
+    [Header("Sound Variables")]
+    [SerializeField] private AudioSource playerAS;
+    [SerializeField] private AudioClip playerGetHitAC;
+    private float initialPitchAS;
+
     private void Awake()
     {
         playerInput = new PlayerInput();
@@ -303,6 +308,8 @@ public class PlayerController : MonoBehaviour
         currentMaxSpeed = maxSpeed;
         currentGravityForce = gravityForce;
         ProjectilePooling();
+
+        initialPitchAS = playerAS.pitch;
     }
 
     private List<GameObject> projectilePool = new List<GameObject>();
@@ -745,6 +752,9 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator _GetHit(Vector3 hitPos, float hitForce)
     {
+        playerAS.pitch = initialPitchAS + Random.Range(-0.1f, 0.1f);
+        playerAS.PlayOneShot(playerGetHitAC);
+
         canGetHitted = false;
         isHitted = true;
         m_GoalVel = Vector3.zero;

@@ -17,7 +17,6 @@ public class PlayerProjectile : Projectile
                 Destroy(Instantiate(impactParticle, this.transform.position, Quaternion.Euler(rotation)), 2);
                 if(!launched)GameManager.Instance.currentPlayer.ResetCharge();
                 else SetProjectileInactive();
-
             }
 
         }
