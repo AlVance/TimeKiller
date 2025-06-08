@@ -31,7 +31,7 @@ public class JumpPlatformController : MonoBehaviour
             platformAnim.SetTrigger("On");
             particle.Play();
 
-            jumpAS.pitch = basePich + Random.Range(-0.3f, 0.3f);
+            jumpAS.pitch = basePich + Random.Range(-0.2f, 0.2f);
             jumpAS.Play();
         }
     }
