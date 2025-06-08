@@ -3,7 +3,8 @@ Shader "MyShaders/VR/SpatialMapping/Wireframe"
     Properties
     {
         _WireThickness ("Wire Thickness", RANGE(0, 800)) = 100
-        _ColoredLines("Colored Lines", Int) = 1
+        _ColoredLines("Colored Lines", int) = 1
+        _LineColor("Line Color", Color) = (1,1,1,1)
     }
     SubShader
     {
@@ -32,6 +33,7 @@ Shader "MyShaders/VR/SpatialMapping/Wireframe"
 
             float _WireThickness;
             int _ColoredLines;
+            half4 _LineColor;
 
             struct Attributes
             {
@@ -146,7 +148,7 @@ Shader "MyShaders/VR/SpatialMapping/Wireframe"
                 half4 finalColor = lerp(float4(0,0,0,1), wireColor, t);
                 finalColor.a = t;
                   
-                if(_ColoredLines == 0) finalColor = colors[0];
+                if(_ColoredLines == 0) finalColor = _LineColor;
 
 
                 return finalColor;
