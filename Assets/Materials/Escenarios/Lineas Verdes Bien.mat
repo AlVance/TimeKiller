@@ -64,6 +64,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Normal_Texture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -116,7 +120,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0.2
+    - _Smoothness: 0.1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -127,6 +131,7 @@ Material:
     - _ZWrite: 1
     - _hasBackGradient: 0
     - _hasMainGradient: 1
+    - _hasNormal: 0
     - _isTriplanar: 0
     m_Colors:
     - _Back_Color_1: {r: 0, g: 0.1981132, b: 0.017271394, a: 1}
@@ -139,6 +144,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emission_color: {r: 0, g: 0, b: 0, a: 0}
     - _Main_Color: {r: 0, g: 0.7647059, b: 0.067634374, a: 1}
+    - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Tiling: {r: 0.4, g: 0.4, b: 0, a: 0}
   m_BuildTextureStacks: []
