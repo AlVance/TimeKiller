@@ -771,17 +771,20 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.6f);
         canGetHitted = true;
     }
-    public void BlockPlayer(float blockTime)
+    public void BlockPlayer(float blockTime, bool blockAim = true)
     {
-        StartCoroutine(_BlockPlayer(blockTime));
+        StartCoroutine(_BlockPlayer(blockTime, blockAim));
     }
-    private IEnumerator _BlockPlayer(float blockTime)
+    private IEnumerator _BlockPlayer(float blockTime, bool blockAim)
     {
         canFly = false;
         isFlying = false;
         canMove = false;
-        canAim = false;
-        EndAim();
+        if (blockAim)
+        {
+            canAim = false;
+            EndAim();
+        }
         currentMaxSpeed = 0;
         yield return new WaitForSeconds(blockTime);
         canFly = true;
