@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public bool isMobile = false;
     [SerializeField] private MobileDetector MD;
     private bool m_explorationMode = false;
+    public bool isInLobby = false;
     public bool explorationMode
     {
         get {return m_explorationMode;}

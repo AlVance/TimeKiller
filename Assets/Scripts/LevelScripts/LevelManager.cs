@@ -169,6 +169,7 @@ public class LevelManager : MonoBehaviour
             GameManager.Instance.playerWork = false;
             startLevelGO.SetActive(false);      
             isStart = false;
+            GameManager.Instance.isInLobby = false;
             UIManager.Instance.SetInitialSceneUIActive(false);
         }
         levelTransSceneGO.SetActive(true);
@@ -339,6 +340,7 @@ public class LevelManager : MonoBehaviour
     {
         canGoToStartLevel = false;
         isStart = true;
+        GameManager.Instance.isInLobby = true;
         UIManager.Instance.SetFade(true);
         SoundManager.Instance.LobbyMusicOnOff(true);
         yield return new WaitForSeconds(1f);
