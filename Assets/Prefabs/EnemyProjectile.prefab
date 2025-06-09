@@ -249,10 +249,10 @@ MonoBehaviour:
   isActive: 0
   spawnPos: {fileID: 0}
   shootAS: {fileID: 5461754796496671628}
-  chargeShootAC: {fileID: 8300000, guid: b1c85cfc9d4bf0b489718bd196ff6fbc, type: 3}
-  holdShootAC: {fileID: 8300000, guid: 0416577b90b9f934f903fbf8c46a7458, type: 3}
-  setChargeAC: {fileID: 8300000, guid: 8c3e8d53f301ac24aa5f8e059193fec3, type: 3}
-  shootAC: {fileID: 8300000, guid: 8c3e8d53f301ac24aa5f8e059193fec3, type: 3}
+  chargeShootAC: {fileID: 8300000, guid: 01d714e7da64edc488b5a6c617c2309c, type: 3}
+  holdShootAC: {fileID: 8300000, guid: 01d714e7da64edc488b5a6c617c2309c, type: 3}
+  setChargeAC: {fileID: 8300000, guid: 01d714e7da64edc488b5a6c617c2309c, type: 3}
+  shootAC: {fileID: 8300000, guid: ceae89875bdbe104f9a61744b7793a21, type: 3}
   hitAC: {fileID: 8300000, guid: dea494ccd36b7224987f7b8da26e2fff, type: 3}
   hitForce: 0
 --- !u!135 &2015905639402838448
@@ -369,8 +369,8 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.3
-  m_Pitch: 1
+  m_Volume: 1
+  m_Pitch: 0.8
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -413,7 +413,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0.8
       inSlope: 0
       outSlope: 0
       tangentMode: 0

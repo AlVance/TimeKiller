@@ -8,7 +8,7 @@ public class ChangeLevelPlayerStart : MonoBehaviour
     [SerializeField] GameObject rippleGO;
     [SerializeField] GameObject playerGO;
     [SerializeField] Color matColor;
-
+    [SerializeField] private AudioSource spawnAS;
 
     private void Start()
     {
@@ -24,6 +24,8 @@ public class ChangeLevelPlayerStart : MonoBehaviour
             rippleGO.GetComponent<MeshRenderer>().material.SetColor("_Wave_Color", matColor);
             playerGO.GetComponent<MeshRenderer>().material.SetColor("_Main_Color", matColor);
             playerGO.GetComponent<MeshRenderer>().material.SetColor("_Fresnel_Color", matColor);
+
+            spawnAS.Play();
         }
     }
 }
