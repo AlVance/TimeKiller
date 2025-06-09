@@ -778,6 +778,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator _BlockPlayer(float blockTime)
     {
         canFly = false;
+        isFlying = false;
         canMove = false;
         canAim = false;
         EndAim();
