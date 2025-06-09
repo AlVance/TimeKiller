@@ -11,7 +11,8 @@ public class SoundManager : MonoBehaviour
     [SerializeField]public AudioClip[] musicClips;
     [SerializeField] private float levelMusicMergeTime;
 
-    public bool isLevelMusicMuted = false;
+    private bool isLevelMusicMuted = false;
+    private bool isMusicMuted = true;
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -30,10 +31,6 @@ public class SoundManager : MonoBehaviour
     {
         PlayMusic(musicSourceON);
         PlayMusic(musicSourceOFF);
-        if (isLevelMusicMuted)
-        {
-            MuteLevelMusic();
-        }
         LobbyMusicOnOff(true);
     }
 
@@ -95,17 +92,19 @@ public class SoundManager : MonoBehaviour
 
     public void MuteLevelMusic()
     {
-        if (isLevelMusicMuted)
+        if (isMusicMuted)
         {
             musicSourceON.mute = true;
             musicSourceOFF.mute = true;
-            isLevelMusicMuted = false;
+            musicLobby.mute = true;
+            isMusicMuted = false;
         }
-        else
+        else 
         {
             musicSourceON.mute = false;
             musicSourceOFF.mute = false;
-            isLevelMusicMuted = true;
+            musicLobby.mute = false;
+            isMusicMuted = true;
         }
     }
 
