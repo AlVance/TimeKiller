@@ -789,13 +789,16 @@ public class PlayerController : MonoBehaviour
         canAim = true;
     }
 
+    private bool isOffLimits = false;
+
     public void PlayerOffLimits(Transform tpPos)
     {
-        StartCoroutine(_PlayerOfLimits(tpPos));
+        if(!isOffLimits) StartCoroutine(_PlayerOfLimits(tpPos));
     }
 
     private IEnumerator _PlayerOfLimits(Transform tpPos)
     {
+        isOffLimits = true;
         canGetHitted = false;
         TimeManager.Instance.timerStarted = false;
         m_GoalVel = Vector3.zero;
@@ -823,6 +826,7 @@ public class PlayerController : MonoBehaviour
         canAim = true;
         this.GetComponentInChildren<PlayerVFX>().ChangeMaterialProperties(2, 0, 1);
         TimeManager.Instance.timerStarted = true;
+        isOffLimits = false;
         yield return new WaitForSeconds(1f);
         canGetHitted = true;
     }
