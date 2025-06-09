@@ -82,6 +82,9 @@ public class UIManager : MonoBehaviour
 
     [Header("Pause Menu Variables")]
     [SerializeField] private GameObject pauseMenuGO;
+    [SerializeField] private GameObject musicBTNGO;
+    [SerializeField] private TMP_Text musicBTNText;
+    [SerializeField] private TMP_Text soundBTNText;
     public GameObject currentBTN;
 
     [Header("Debug UI Varables")]
@@ -424,6 +427,21 @@ public class UIManager : MonoBehaviour
     public void SetPauseMenuActive(bool isActive)
     {
         pauseMenuGO.SetActive(isActive);
+    }
+
+    public void SetMusicMuteText(string newText)
+    {
+        musicBTNText.text = newText;
+    }
+
+    public void SetSoundMuteText(string newText)
+    {
+        soundBTNText.text = newText;
+    }
+
+    public void SetMusicBTNGOActive(bool isActive)
+    {
+        musicBTNGO.SetActive(isActive);
     }
 
     public void SetExplorationTagActive(bool isActive)

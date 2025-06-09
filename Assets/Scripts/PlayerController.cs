@@ -739,6 +739,7 @@ public class PlayerController : MonoBehaviour
         canMove = false;
         m_GoalVel = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
+        moveDir = Vector2.zero;
         ResetCharge();
         //currentBullets = maxBullets;
         currentFuel = maxFuel;

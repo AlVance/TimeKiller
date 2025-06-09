@@ -13,6 +13,7 @@ public class SoundManager : MonoBehaviour
 
     private bool isLevelMusicMuted = false;
     private bool isMusicMuted = true;
+    private AudioListener mainCamAL;
     private void Awake()
     {
         // If there is an instance, and it's not me, delete myself.
@@ -32,6 +33,8 @@ public class SoundManager : MonoBehaviour
         PlayMusic(musicSourceON);
         PlayMusic(musicSourceOFF);
         LobbyMusicOnOff(true);
+
+        mainCamAL = Camera.main.GetComponent<AudioListener>();
     }
 
     public void PlayOneShootAudio(AudioClip AC, float volume = 1f)
@@ -98,6 +101,7 @@ public class SoundManager : MonoBehaviour
             musicSourceOFF.mute = true;
             musicLobby.mute = true;
             isMusicMuted = false;
+            UIManager.Instance.SetMusicMuteText("Music On");
         }
         else 
         {
@@ -105,12 +109,30 @@ public class SoundManager : MonoBehaviour
             musicSourceOFF.mute = false;
             musicLobby.mute = false;
             isMusicMuted = true;
+
+            UIManager.Instance.SetMusicMuteText("Music Off");
         }
     }
 
     public void MuteMusic()
     {
         MuteLevelMusic();
+    }
+
+    public void MuteSound()
+    {
+        if (mainCamAL.enabled)
+        {
+            mainCamAL.enabled = false;
+            UIManager.Instance.SetSoundMuteText("Sound On");
+            UIManager.Instance.SetMusicBTNGOActive(false);
+        }
+        else
+        {
+            mainCamAL.enabled = true;
+            UIManager.Instance.SetSoundMuteText("Sound Off");
+            UIManager.Instance.SetMusicBTNGOActive(true);
+        }
     }
 }
 
