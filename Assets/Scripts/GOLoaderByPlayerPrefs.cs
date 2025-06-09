@@ -5,6 +5,7 @@ public class GOLoaderByPlayerPrefs : MonoBehaviour
     [SerializeField] private string playerPrefsToLoad = "Level_0";
     [SerializeField] private GameObject GOToActive;
     [SerializeField] private bool load = true;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
