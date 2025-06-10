@@ -111,8 +111,8 @@ public class UIManager : MonoBehaviour
     {
         if (GameManager.Instance.isMobile) 
         {
-            ProggressionBTNsInputPromts.SetActive(false);
-            mobileControlsUI.SetActive(true);
+            //ProggressionBTNsInputPromts.SetActive(false);
+            //mobileControlsUI.SetActive(true);
         } 
         else 
         {

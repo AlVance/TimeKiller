@@ -3,9 +3,11 @@ using UnityEngine;
 public class ChangeGameMode : MonoBehaviour
 {
     private Animator anim;
+    [SerializeField] private bool startAsExplorationMode = true;
     private void Start()
     {
         anim = this.GetComponent<Animator>();
+        GameManager.Instance.explorationMode = startAsExplorationMode;
     }
     private void OnTriggerEnter(Collider other)
     {
