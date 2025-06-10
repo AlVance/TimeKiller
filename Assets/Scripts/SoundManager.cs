@@ -123,13 +123,15 @@ public class SoundManager : MonoBehaviour
     {
         if (mainCamAL.enabled)
         {
-            mainCamAL.enabled = false;
+            AudioListener.volume = 0;
+            //mainCamAL.enabled = false;
             UIManager.Instance.SetSoundMuteText("Sound On");
             UIManager.Instance.SetMusicBTNGOActive(false);
         }
         else
         {
-            mainCamAL.enabled = true;
+            AudioListener.volume = 1;
+            //mainCamAL.enabled = true;
             UIManager.Instance.SetSoundMuteText("Sound Off");
             UIManager.Instance.SetMusicBTNGOActive(true);
         }
