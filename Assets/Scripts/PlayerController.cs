@@ -286,7 +286,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Sound Variables")]
     [SerializeField] private AudioSource playerAS;
-    [SerializeField] private AudioClip playerGetHitAC;
+    [SerializeField] private AudioClip playerGetHitAC, playerStartFlyAC, playerFlyAC;
     private float initialPitchAS;
 
     private void Awake()
@@ -653,6 +653,9 @@ public class PlayerController : MonoBehaviour
             CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = flyTargetTr;
 
             OnStartFlyEvent.Invoke();
+
+            playerAS.PlayOneShot(playerStartFlyAC);
+            StartCoroutine(PlayFlySound());
         }
     }
     private void Fly()
@@ -661,6 +664,7 @@ public class PlayerController : MonoBehaviour
         {
             if(m_GoalVel.magnitude > 0) currentFuel -= fuelBurnSpeed * Time.deltaTime;
             else currentFuel -= fuelBurnSpeed / 4 * Time.deltaTime;
+
 
         }
         else
@@ -677,9 +681,22 @@ public class PlayerController : MonoBehaviour
             currentMaxSpeed = maxSpeed;
             isFlying = false;
             CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+
+            playerAS.clip = null;
+            playerAS.Stop();
         }
     }
 
+    private IEnumerator PlayFlySound()
+    {
+        yield return new WaitForSeconds(0.1f);
+        if (isFlying)
+        {
+            playerAS.clip = playerFlyAC;
+            playerAS.Play();
+        }
+       
+    }
     private bool UpRayHitted;
     private bool FrontRayHitted;
     private void CheckLedgeGrab()
@@ -779,6 +796,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator _BlockPlayer(float blockTime, bool blockAim)
     {
         canFly = false;
+        EndFly();
         isFlying = false;
         canMove = false;
         if (blockAim)
