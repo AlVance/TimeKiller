@@ -286,6 +286,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Sound Variables")]
     [SerializeField] private AudioSource playerAS;
+    [SerializeField] private AudioSource flyAS;
     [SerializeField] private AudioClip playerGetHitAC, playerStartFlyAC, playerFlyAC;
     private float initialPitchAS;
 
@@ -682,8 +683,8 @@ public class PlayerController : MonoBehaviour
             isFlying = false;
             CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
 
-            playerAS.clip = null;
-            playerAS.Stop();
+            flyAS.clip = null;
+            flyAS.Stop();
         }
     }
 
@@ -692,8 +693,8 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         if (isFlying)
         {
-            playerAS.clip = playerFlyAC;
-            playerAS.Play();
+            flyAS.clip = playerFlyAC;
+            flyAS.Play();
         }
        
     }
