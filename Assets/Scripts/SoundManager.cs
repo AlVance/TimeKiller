@@ -55,14 +55,14 @@ public class SoundManager : MonoBehaviour
         if (_ToOn)
         {
             float goTime = 0f;
-            while (musicSourceON.volume < 0.065f)
+            while (musicSourceON.volume < 0.06f)
             {
-                musicSourceON.volume = Mathf.Lerp(0, 0.065f, levelMusicMergeTime / goTime);
+                musicSourceON.volume = Mathf.Lerp(0, 0.06f, levelMusicMergeTime / goTime);
                 musicSourceOFF.volume = Mathf.Lerp(0.05f, 0f, levelMusicMergeTime / goTime);
                 goTime += Time.deltaTime;
                 yield return new WaitForEndOfFrame();
             }
-            musicSourceON.volume = 0.065f;
+            musicSourceON.volume = 0.06f;
             musicSourceOFF.volume = 0f;
         }
         else
@@ -70,7 +70,7 @@ public class SoundManager : MonoBehaviour
             float goTime = 0f;
             while (musicSourceOFF.volume < 0.05f)
             {
-                musicSourceON.volume = Mathf.Lerp(0.075f, 0f, levelMusicMergeTime / goTime);
+                musicSourceON.volume = Mathf.Lerp(0.06f, 0f, levelMusicMergeTime / goTime);
                 musicSourceOFF.volume = Mathf.Lerp(0f, 0.05f, levelMusicMergeTime / goTime);
                 goTime += Time.deltaTime;
                 yield return new WaitForEndOfFrame();

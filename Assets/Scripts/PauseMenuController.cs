@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using System.Collections;
 public class PauseMenuController : MonoBehaviour
 {
     private bool isOpened = false;
@@ -32,8 +33,8 @@ public class PauseMenuController : MonoBehaviour
     {
         if (isOpened)
         {
-            UIManager.Instance.SetPauseMenuActive(false);
             Time.timeScale = 1f;
+            UIManager.Instance.SetPauseMenuActive(false); 
             GameManager.Instance.playerWork = playerWasWorking;
             if (!GameManager.Instance.isInLobby)
             {
@@ -56,10 +57,20 @@ public class PauseMenuController : MonoBehaviour
         isOpened = !isOpened;
     }
 
+    private bool canAutodestroy = true;
     public void Autodestroy()
     {
+        //OpenClosePauseMenu();
+        //GameManager.Instance.currentPlayer.PlayerOffLimits(GameManager.Instance.currentLevelGO.GetComponent<Level>().playerStartTr);
+        if (canAutodestroy) StartCoroutine(_Autodestroy());
+    }
+    private IEnumerator _Autodestroy()
+    {
+        canAutodestroy = false;
         OpenClosePauseMenu();
+        yield return new WaitForEndOfFrame();
         GameManager.Instance.currentPlayer.PlayerOffLimits(GameManager.Instance.currentLevelGO.GetComponent<Level>().playerStartTr);
+        canAutodestroy = true;
     }
 
     public void ReturnToLobby()

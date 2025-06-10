@@ -29,7 +29,7 @@ public class MeshTrail : MonoBehaviour
 
     public void ActivateSandevistan()
     {
-        StartCoroutine(ActivateTrail());
+        _ActivateSandevistan();
     }
     
     private void SpawnMesh()
@@ -37,7 +37,7 @@ public class MeshTrail : MonoBehaviour
         this.gameObject.transform.SetParent(null);
     }
 
-    IEnumerator ActivateTrail()
+    private void _ActivateSandevistan()
     {
         smoke_VFX[0].Play();
         smoke_VFX[1].Play();
@@ -58,12 +58,16 @@ public class MeshTrail : MonoBehaviour
 
         GOmeshes[index].SetActive(true);
         StartCoroutine(SetActiveFalse(GOmeshes[index]));
-        index = index >= poolNumber -1 ? 0 : ++index;
-
-        yield return new WaitForSeconds(meshResfreshRate);
+        index = index >= poolNumber - 1 ? 0 : ++index;
         nColor = nColor >= sandColors.Length - 1 ? 0 : ++nColor;
 
-        if (GameManager.Instance.currentPlayer.isFlying) StartCoroutine(ActivateTrail());
+        StartCoroutine(_ActivateTrail());
+    }
+    private IEnumerator _ActivateTrail()
+    {
+        yield return new WaitForSeconds(meshResfreshRate);
+
+        if (GameManager.Instance.currentPlayer.isFlying) _ActivateSandevistan();
         else
         {
             smoke_VFX[0].Stop();

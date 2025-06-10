@@ -50,7 +50,14 @@ public class GameManager : MonoBehaviour
         isMobile = MD.IsRunningOnMobile();
     }
 
-
+    private void Start()
+    {
+#if UNITY_STANDALONE_WIN
+        Application.targetFrameRate = 90;
+#elif UNITY_WEBGL
+        Application.targetFrameRate = 60;
+#endif
+    }
 }
 
 //[CustomEditor(typeof(GameManager))]
