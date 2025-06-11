@@ -5,6 +5,7 @@ Shader "MyShaders/VR/SpatialMapping/Wireframe"
         _WireThickness ("Wire Thickness", RANGE(0, 800)) = 100
         _ColoredLines("Colored Lines", int) = 1
         _LineColor("Line Color", Color) = (1,1,1,1)
+        _BackColor("Back Color", Color) = (0,0,0,1)
     }
     SubShader
     {
@@ -34,6 +35,7 @@ Shader "MyShaders/VR/SpatialMapping/Wireframe"
             float _WireThickness;
             int _ColoredLines;
             half4 _LineColor;
+            half4 _BackColor;
 
             struct Attributes
             {
@@ -120,7 +122,7 @@ Shader "MyShaders/VR/SpatialMapping/Wireframe"
                 // Early out if we know we are not on a line segment.
                 if(minDistanceToEdge > 0.9)
                 {
-                    return half4(0,0,0,0);
+                    return _BackColor;
                 }
 
                 // Smooth our line out
