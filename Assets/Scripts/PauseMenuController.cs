@@ -73,15 +73,33 @@ public class PauseMenuController : MonoBehaviour
         canAutodestroy = true;
     }
 
+    private bool canReturnToLobby = true;
     public void ReturnToLobby()
     {
+        if (canReturnToLobby) StartCoroutine(_ReturnToLobby());
+    }
+    private IEnumerator _ReturnToLobby()
+    {
+        canReturnToLobby = false;
         OpenClosePauseMenu();
+        yield return new WaitForEndOfFrame();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        yield return new WaitForEndOfFrame();
+        canReturnToLobby = true;
     }
 
+
+    private bool canExitGame = true;
     public void ExitGame()
     {
+        if (canExitGame) StartCoroutine(_ExitGame());
+    }
+    private IEnumerator _ExitGame()
+    {
+        canExitGame = false;
         OpenClosePauseMenu();
+        yield return new WaitForEndOfFrame();
         Application.Quit();
+        canExitGame = true;
     }
 }
