@@ -52,7 +52,7 @@ public class PauseMenuController : MonoBehaviour
             {
                 SoundManager.Instance.MusicOnOff(false);
             }
-            resumeBTN.Select();
+            if(resumeBTN != null)resumeBTN.Select();
         }
         isOpened = !isOpened;
     }

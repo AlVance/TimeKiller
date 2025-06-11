@@ -85,6 +85,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject musicBTNGO;
     [SerializeField] private TMP_Text musicBTNText;
     [SerializeField] private TMP_Text soundBTNText;
+    [SerializeField] private GameObject exitGameBTNGO;
     public GameObject currentBTN;
 
     [Header("Debug UI Varables")]
@@ -118,7 +119,10 @@ public class UIManager : MonoBehaviour
         {
             ProggressionBTNsInputPromts.SetActive(true);
             mobileControlsUI.SetActive(false);
-        } 
+        }
+#if PLATFORM_WEBGL
+        exitGameBTNGO.SetActive(false);
+#endif
     }
 
     private void Update()

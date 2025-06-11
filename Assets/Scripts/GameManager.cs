@@ -52,9 +52,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-#if UNITY_STANDALONE_WIN
-        Application.targetFrameRate = 90;
-#elif UNITY_WEBGL
+#if PLATFORM_WIN
+        Application.targetFrameRate = 120;
+#elif PLATFORM_WEBGL
         Application.targetFrameRate = 60;
 #endif
     }

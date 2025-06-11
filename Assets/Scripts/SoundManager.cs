@@ -121,7 +121,7 @@ public class SoundManager : MonoBehaviour
 
     public void MuteSound()
     {
-        if (mainCamAL.enabled)
+        if (AudioListener.volume == 1)
         {
             AudioListener.volume = 0;
             //mainCamAL.enabled = false;
