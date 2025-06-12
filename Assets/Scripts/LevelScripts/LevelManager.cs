@@ -77,7 +77,12 @@ public class LevelManager : MonoBehaviour
             CameraManager.Instance.ChangeCam(CameraManager.Instance.basePlayerCam);
         }
 
+        yield return new WaitForEndOfFrame();
+        GameManager.Instance.UnloadMemory();
+        yield return new WaitForEndOfFrame();
         UIManager.Instance.SetFade(false);
+
+        
     }
     private bool canGoToStartLevelGameplay = true;
     public void StartLevelGameplay()
@@ -385,7 +390,12 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetGameOverScreenctive(false);
         UIManager.Instance.SetInitialSceneUIActive(true);
         if (GameManager.Instance.isMobile) UIManager.Instance.SetMobileGameplayControlsActive(true);
-        canGoToLevelTrans = true; 
+        canGoToLevelTrans = true;
+
+        yield return new WaitForEndOfFrame();
+        GameManager.Instance.UnloadMemory();
+        yield return new WaitForEndOfFrame();
+
         yield return new WaitForSeconds(1f);
         UIManager.Instance.SetFade(false);
         GameManager.Instance.playerWork = true;

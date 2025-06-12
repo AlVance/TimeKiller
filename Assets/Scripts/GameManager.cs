@@ -1,6 +1,7 @@
 using UnityEngine;
 //using UnityEditor;
-
+using System.Collections;
+using System;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -14,7 +15,7 @@ public class GameManager : MonoBehaviour
     public bool isInLobby = false;
     public bool explorationMode
     {
-        get {return m_explorationMode;}
+        get { return m_explorationMode; }
         set
         {
             m_explorationMode = value;
@@ -22,14 +23,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public bool levelStarted 
-    { 
+    public bool levelStarted
+    {
         get { return m_levelStarted; }
-        set {
+        set
+        {
             m_levelStarted = value;
             playerWork = value;
         }
-    } 
+    }
     public bool playerWork = false;
 
     private void Awake()
@@ -59,7 +61,19 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 60;
 #endif
     }
+    public void UnloadMemory()
+    {
+        StartCoroutine(_UnloadRoutine());
+    }
+
+    IEnumerator _UnloadRoutine()
+    {
+        yield return null; // o `yield return new WaitForSeconds(5f);`
+        Resources.UnloadUnusedAssets();
+        GC.Collect();
+    }
 }
+
 
 //[CustomEditor(typeof(GameManager))]
 //public class SoundManagerEditor : Editor
