@@ -84,6 +84,10 @@ public class Projectile : MonoBehaviour
             this.transform.position = spawnPos.position;
             this.gameObject.transform.SetParent(spawnPos);           
         }
+        else
+        {
+            Destroy(this.gameObject);
+        }
         timeLaunched = 0;
 
         shootAS.loop = false;
