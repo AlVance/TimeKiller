@@ -54,10 +54,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        QualitySettings.vSyncCount = 0;
-#if PLATFORM_WIN
-        Application.targetFrameRate = 120;
+
+#if PLATFORM_STANDALONE_WIN
+        Application.targetFrameRate = 90;
 #elif PLATFORM_WEBGL
+        QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
 #endif
     }
