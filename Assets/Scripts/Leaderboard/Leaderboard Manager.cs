@@ -25,13 +25,8 @@ public class LeaderboardManager : MonoBehaviour
     }
     async void Update()
     {
-        if (leaderboardParent.activeInHierarchy)
-        {
-        }
-        else
-        {
-            UpdateLeaderboard();
-        }
+        
+        UpdateLeaderboard();
         
     }
 
