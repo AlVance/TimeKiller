@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Authentication;
@@ -9,42 +11,55 @@ using UnityEngine;
 
 public class LeaderboardManager : MonoBehaviour
 {
+    [Header("Leaderboard")]
     [SerializeField] private GameObject leaderboardParent;
     [SerializeField] private Transform leaderboardContentParent;
     [SerializeField] private Transform leaderboardItemPref;
 
     private string leaderboardID = "Main_Leaderboard";
 
+    [Header("Profile setup")]
+    [SerializeField] private GameObject profileSetupParent;
+    [SerializeField] private TMP_InputField profileNameField;
+    private string playerName = "";
 
     async void Start()
     {
         await UnityServices.InitializeAsync();
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
-
-        //await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, PlayerPrefs.GetFloat("MostTimeSaved"));
-    }
-    async void Update()
-    {
-        
-        UpdateLeaderboard();
-        
     }
 
-    async void UpdateLeaderboard()
+    public async void UpdateLeaderboard()
     {
-        while (Application.isPlaying && leaderboardParent.activeInHierarchy)
+        //while (Application.isPlaying && leaderboardParent.activeInHierarchy)
+        //{
+        await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, PlayerPrefs.GetFloat("MostTimeSaved"));
+
+        LeaderboardScoresPage leaderboardScoresPage = await LeaderboardsService.Instance.GetScoresAsync(leaderboardID);
+        foreach (Transform item in leaderboardContentParent) { Destroy(item.gameObject); }
+        foreach (LeaderboardEntry entry in leaderboardScoresPage.Results)
         {
-            await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, PlayerPrefs.GetFloat("MostTimeSaved"));
-
-            LeaderboardScoresPage leaderboardScoresPage = await LeaderboardsService.Instance.GetScoresAsync(leaderboardID);
-            foreach (Transform item in leaderboardContentParent) { Destroy(item.gameObject); }
-            foreach (LeaderboardEntry entry in leaderboardScoresPage.Results) {
-                Transform leaderboardItem = Instantiate(leaderboardItemPref, leaderboardContentParent);
-                leaderboardItem.GetChild(0).GetComponent<TextMeshProUGUI>().text = entry.PlayerName;
-                leaderboardItem.GetChild(1).GetComponent<TextMeshProUGUI>().text = entry.Score.ToString("0.00");
-            }
-            await Task.Delay(500);
+            Transform leaderboardItem = Instantiate(leaderboardItemPref, leaderboardContentParent);
+            leaderboardItem.GetChild(0).GetComponent<TextMeshProUGUI>().text = string.Join("", entry.PlayerName.SkipLast(5));
+            leaderboardItem.GetChild(1).GetComponent<TextMeshProUGUI>().text = entry.Score.ToString("0.00");
         }
+        // await Task.Delay(500);
+        //}
     }
-    
+
+
+    public void CreateProfile()
+    {
+        playerName = profileNameField.text;
+        AuthenticationService.Instance.UpdatePlayerNameAsync(playerName);
+        //Comentar cuando pongamos este menú en la pantalla de nuevo récord
+        UpdateLeaderboard();
+        CloseMenu();
+    }
+
+    public void CloseMenu()
+    {
+        profileSetupParent.SetActive(false);
+    }
+
 }

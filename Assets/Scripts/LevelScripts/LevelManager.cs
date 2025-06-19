@@ -24,11 +24,14 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Slider[] recordTimeSavedSlidersLobby;
     [SerializeField] private TMP_Text recordTimeSavedText;
     [SerializeField] private TMP_Text mostCompletedLevelsText;
+
+    private LeaderboardManager leaderboardManager;
     private void Start()
     {
         isStart = true;
         UIManager.Instance.SetInlevelUIActive(false);
         GoToStartLevel();
+        leaderboardManager = GetComponent<LeaderboardManager>();
     }
 
     private void SetNextLevel()
@@ -363,6 +366,8 @@ public class LevelManager : MonoBehaviour
         }
         recordTimeSavedText.text = PlayerPrefs.GetFloat("MostTimeSaved").ToString("0.00");
         mostCompletedLevelsText.text = PlayerPrefs.GetInt("CompletedLevels").ToString() + "/ 10";
+        leaderboardManager.UpdateLeaderboard();
+
         yield return new WaitForEndOfFrame();
         GOLoaderByPlayerPrefs[] SL = startLevelGO.GetComponentsInChildren<GOLoaderByPlayerPrefs>();
         foreach (GOLoaderByPlayerPrefs sl in SL)

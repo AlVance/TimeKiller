@@ -78013,7 +78013,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9057338904675871107}
   - component: {fileID: 2140098636391445106}
-  - component: {fileID: 3860603298918718682}
   m_Layer: 0
   m_Name: StartGameLevel
   m_TagString: Untagged
@@ -78241,21 +78240,6 @@ MonoBehaviour:
   levelTime: 10
   levelCam: {fileID: 0}
   currentObjectives: 0
---- !u!114 &3860603298918718682
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8454349058028808683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2593007857d5d214d81db50cde863190, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leaderboardParent: {fileID: 1559938446321510347}
-  leaderboardContentParent: {fileID: 1230175477659878186}
-  leaderboardItemPref: {fileID: 615804767415577330, guid: 470eb666b0c6a7046ba911c58bf42597, type: 3}
 --- !u!1 &8465979259259972652
 GameObject:
   m_ObjectHideFlags: 0
@@ -101560,16 +101544,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06c419bea20f3a142b299e558f46480d, type: 3}
---- !u!224 &1230175477659878186 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6871968240188351460, guid: 06c419bea20f3a142b299e558f46480d, type: 3}
-  m_PrefabInstance: {fileID: 5641977482805584078}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1559938446321510347 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6623202273056442117, guid: 06c419bea20f3a142b299e558f46480d, type: 3}
-  m_PrefabInstance: {fileID: 5641977482805584078}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1700726823115717597 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6473474386848078611, guid: 06c419bea20f3a142b299e558f46480d, type: 3}
