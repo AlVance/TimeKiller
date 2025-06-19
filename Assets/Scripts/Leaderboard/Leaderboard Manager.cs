@@ -21,52 +21,35 @@ public class LeaderboardManager : MonoBehaviour
         await UnityServices.InitializeAsync();
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
-        await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, 70);
-
-        leaderboardParent.SetActive(false);
+        //await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, PlayerPrefs.GetFloat("MostTimeSaved"));
     }
-    int i = 0;
-    // Update is called once per frame
     async void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (leaderboardParent.activeInHierarchy)
         {
-            if (leaderboardParent.activeInHierarchy)
-            {
-                leaderboardParent.SetActive(false);
-            }
-            else
-            {
-                leaderboardParent.SetActive(true);
-                UpdateLeaderboard();
-
-                try
-                {
-
-                    await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, 300);
-                }
-                catch (LeaderboardsException e)
-                {
-                    Debug.Log(e.Reason);
-                }
-
-            }
         }
+        else
+        {
+            UpdateLeaderboard();
+        }
+        
     }
 
     async void UpdateLeaderboard()
     {
         while (Application.isPlaying && leaderboardParent.activeInHierarchy)
         {
+            await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, PlayerPrefs.GetFloat("MostTimeSaved"));
+
             LeaderboardScoresPage leaderboardScoresPage = await LeaderboardsService.Instance.GetScoresAsync(leaderboardID);
             foreach (Transform item in leaderboardContentParent) { Destroy(item.gameObject); }
             foreach (LeaderboardEntry entry in leaderboardScoresPage.Results) {
                 Transform leaderboardItem = Instantiate(leaderboardItemPref, leaderboardContentParent);
                 leaderboardItem.GetChild(0).GetComponent<TextMeshProUGUI>().text = entry.PlayerName;
-                leaderboardItem.GetChild(1).GetComponent<TextMeshProUGUI>().text = entry.Score.ToString();
-
+                leaderboardItem.GetChild(1).GetComponent<TextMeshProUGUI>().text = entry.Score.ToString("0.00");
             }
             await Task.Delay(500);
         }
     }
+    
 }
