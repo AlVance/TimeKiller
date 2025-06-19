@@ -88,6 +88,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject exitGameBTNGO;
     public GameObject currentBTN;
 
+    [Header("Leaderboard variables")]
+    [SerializeField] private GameObject profileSetupParentGO;
+    [SerializeField] public TMP_InputField profileNameField;
+
     [Header("Debug UI Varables")]
     [SerializeField] private TMP_Text fpsText;
 
@@ -466,5 +470,12 @@ public class UIManager : MonoBehaviour
     public void SetEndGameExplorationTextActive(bool isActive)
     {
         endExplorationModeTextGO.SetActive(isActive);
+    }
+
+    public void SetProfileScreenGOActive(bool isActive)
+    {
+        profileSetupParentGO.SetActive(isActive);
+        if (isActive) profileNameField.Select();
+        if (!isActive && currentBTN != null) currentBTN.GetComponent<Button>().Select();
     }
 }

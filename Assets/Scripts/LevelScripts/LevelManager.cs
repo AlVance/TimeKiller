@@ -252,6 +252,11 @@ public class LevelManager : MonoBehaviour
 
                 UIManager.Instance.SetNewRecordTextActive(true);
                 //NEW RECORD!
+                if (!PlayerPrefs.HasKey("PlayerName"))
+                {
+                    yield return new WaitForSeconds(0.5f);
+                    UIManager.Instance.SetProfileScreenGOActive(true);
+                }
             }
             else
             {

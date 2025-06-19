@@ -50,16 +50,17 @@ public class LeaderboardManager : MonoBehaviour
 
     public void CreateProfile()
     {
-        playerName = profileNameField.text;
+        playerName = UIManager.Instance.profileNameField.text;
         AuthenticationService.Instance.UpdatePlayerNameAsync(playerName);
+        PlayerPrefs.SetString("PlayerName", playerName);
         //Comentar cuando pongamos este menú en la pantalla de nuevo récord
-        UpdateLeaderboard();
+        //UpdateLeaderboard();
         CloseMenu();
     }
 
     public void CloseMenu()
     {
-        profileSetupParent.SetActive(false);
+        UIManager.Instance.SetProfileScreenGOActive(false);
     }
 
 }
