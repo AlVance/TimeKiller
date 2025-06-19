@@ -28,8 +28,12 @@ public class LeaderboardManager : MonoBehaviour
         await UnityServices.InitializeAsync();
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
-        await AuthenticationService.Instance.UpdatePlayerNameAsync("*");
-        PlayerPrefs.SetString("PlayerName", "*");
+        if (PlayerPrefs.GetString("PlayerName") == null)
+        {
+            await AuthenticationService.Instance.UpdatePlayerNameAsync("*");
+            PlayerPrefs.SetString("PlayerName", "*");
+        }
+        
     }
 
     public async void UpdateLeaderboard()
@@ -43,8 +47,9 @@ public class LeaderboardManager : MonoBehaviour
         foreach (LeaderboardEntry entry in leaderboardScoresPage.Results.Take(10))
         {
             Transform leaderboardItem = Instantiate(leaderboardItemPref, leaderboardContentParent);
-            leaderboardItem.GetChild(0).GetComponent<TextMeshProUGUI>().text = string.Join("", entry.PlayerName.SkipLast(5));
+            leaderboardItem.GetChild(0).GetComponent<TextMeshProUGUI>().text = string.Join("", entry.PlayerName.SkipLast(8));
             leaderboardItem.GetChild(1).GetComponent<TextMeshProUGUI>().text = entry.Score.ToString("0.00");
+            leaderboardItem.GetChild(2).GetComponent<TextMeshProUGUI>().text = (entry.Rank + 1).ToString();
         }
         // await Task.Delay(500);
         //}
