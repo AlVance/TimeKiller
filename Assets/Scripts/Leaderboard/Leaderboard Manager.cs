@@ -27,6 +27,9 @@ public class LeaderboardManager : MonoBehaviour
     {
         await UnityServices.InitializeAsync();
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+        await AuthenticationService.Instance.UpdatePlayerNameAsync("*");
+        PlayerPrefs.SetString("PlayerName", "*");
     }
 
     public async void UpdateLeaderboard()
