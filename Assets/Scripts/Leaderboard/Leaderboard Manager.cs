@@ -15,6 +15,8 @@ public class LeaderboardManager : MonoBehaviour
     [SerializeField] private GameObject leaderboardParent;
     [SerializeField] private Transform leaderboardContentParent;
     [SerializeField] private Transform leaderboardItemPref;
+    [SerializeField] private Transform leaderboardSelfScore;
+
 
     private string leaderboardID = "Main_Leaderboard";
 
@@ -28,7 +30,7 @@ public class LeaderboardManager : MonoBehaviour
         await UnityServices.InitializeAsync();
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
-        if (PlayerPrefs.GetString("PlayerName") == null)
+        if (!PlayerPrefs.HasKey("PlayerName"))
         {
             await AuthenticationService.Instance.UpdatePlayerNameAsync("*");
             PlayerPrefs.SetString("PlayerName", "*");
@@ -44,13 +46,20 @@ public class LeaderboardManager : MonoBehaviour
 
         LeaderboardScoresPage leaderboardScoresPage = await LeaderboardsService.Instance.GetScoresAsync(leaderboardID);
         foreach (Transform item in leaderboardContentParent) { Destroy(item.gameObject); }
-        foreach (LeaderboardEntry entry in leaderboardScoresPage.Results.Take(10))
+        foreach (LeaderboardEntry entry in leaderboardScoresPage.Results.Take(8))
         {
             Transform leaderboardItem = Instantiate(leaderboardItemPref, leaderboardContentParent);
-            leaderboardItem.GetChild(0).GetComponent<TextMeshProUGUI>().text = string.Join("", entry.PlayerName.SkipLast(8));
+            leaderboardItem.GetChild(0).GetComponent<TextMeshProUGUI>().text = string.Join("", entry.PlayerName.SkipLast(5));
             leaderboardItem.GetChild(1).GetComponent<TextMeshProUGUI>().text = entry.Score.ToString("0.00");
             leaderboardItem.GetChild(2).GetComponent<TextMeshProUGUI>().text = (entry.Rank + 1).ToString();
         }
+
+        var playerEntry = await LeaderboardsService.Instance.GetPlayerScoreAsync(leaderboardID);
+        leaderboardSelfScore.GetChild(0).GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetString("PlayerName");
+        leaderboardSelfScore.GetChild(1).GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetFloat("MostTimeSaved").ToString("0.00");
+        leaderboardSelfScore.GetChild(2).GetComponent<TextMeshProUGUI>().text = (playerEntry.Rank + 1).ToString();
+
+
         // await Task.Delay(500);
         //}
     }
@@ -61,6 +70,7 @@ public class LeaderboardManager : MonoBehaviour
         playerName = UIManager.Instance.profileNameField.text;
         AuthenticationService.Instance.UpdatePlayerNameAsync(playerName);
         PlayerPrefs.SetString("PlayerName", playerName);
+
         //Comentar cuando pongamos este menú en la pantalla de nuevo récord
         //UpdateLeaderboard();
         CloseMenu();
