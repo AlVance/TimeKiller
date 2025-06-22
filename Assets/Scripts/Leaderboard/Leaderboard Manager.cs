@@ -45,7 +45,7 @@ public class LeaderboardManager : MonoBehaviour
 
         LeaderboardScoresPage leaderboardScoresPage = await LeaderboardsService.Instance.GetScoresAsync(leaderboardID);
         foreach (Transform item in leaderboardContentParent) { Destroy(item.gameObject); }
-        foreach (LeaderboardEntry entry in leaderboardScoresPage.Results.Take(8))
+        foreach (LeaderboardEntry entry in leaderboardScoresPage.Results.Take(5))
         {
             Transform leaderboardItem = Instantiate(leaderboardItemPref, leaderboardContentParent);
             leaderboardItem.GetChild(0).GetComponent<TextMeshProUGUI>().text = string.Join("", entry.PlayerName.SkipLast(5));
