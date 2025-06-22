@@ -45,7 +45,7 @@ public class LeaderboardManager : MonoBehaviour
 
         LeaderboardScoresPage leaderboardScoresPage = await LeaderboardsService.Instance.GetScoresAsync(leaderboardID);
         foreach (Transform item in leaderboardContentParent) { Destroy(item.gameObject); }
-        foreach (LeaderboardEntry entry in leaderboardScoresPage.Results.Take(5))
+        foreach (LeaderboardEntry entry in leaderboardScoresPage.Results.Take(10))
         {
             Transform leaderboardItem = Instantiate(leaderboardItemPref, leaderboardContentParent);
             leaderboardItem.GetChild(0).GetComponent<TextMeshProUGUI>().text = string.Join("", entry.PlayerName.SkipLast(5));
@@ -54,9 +54,9 @@ public class LeaderboardManager : MonoBehaviour
         }
 
         var playerEntry = await LeaderboardsService.Instance.GetPlayerScoreAsync(leaderboardID);
-        leaderboardSelfScore.GetChild(0).GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetString("PlayerName");
-        leaderboardSelfScore.GetChild(1).GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetFloat("MostTimeSaved").ToString("0.00");
-        leaderboardSelfScore.GetChild(2).GetComponent<TextMeshProUGUI>().text = (playerEntry.Rank + 1).ToString();
+        leaderboardSelfScore.GetChild(1).GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetString("PlayerName");
+        leaderboardSelfScore.GetChild(2).GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetFloat("MostTimeSaved").ToString("0.00");
+        leaderboardSelfScore.GetChild(3).GetComponent<TextMeshProUGUI>().text = (playerEntry.Rank + 1).ToString();
 
 
         // await Task.Delay(500);
