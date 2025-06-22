@@ -33,7 +33,6 @@ public class LeaderboardManager : MonoBehaviour
         if (!PlayerPrefs.HasKey("PlayerName"))
         {
             await AuthenticationService.Instance.UpdatePlayerNameAsync("*");
-            PlayerPrefs.SetString("PlayerName", "*");
         }
         
     }
@@ -79,6 +78,7 @@ public class LeaderboardManager : MonoBehaviour
     public void CloseMenu()
     {
         UIManager.Instance.SetProfileScreenGOActive(false);
+        UIManager.Instance.SetGoToCreditsBTNActive(true);
     }
 
 }

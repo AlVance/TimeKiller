@@ -228,10 +228,12 @@ public class LevelManager : MonoBehaviour
                 yield return new WaitForSeconds(0.5f);
 
                 float currentTimeB = 0;
+                float advanceTimeB = 0.05f;
                 while (currentTimeB < TimeManager.Instance.currentTime)
                 {
                     UIManager.Instance.SetTimeSavedSlidiers(currentTimeB);
-                    currentTimeB += 0.1f;
+                    currentTimeB += advanceTimeB;
+                    advanceTimeB += 0.0007f;
                     yield return new WaitForEndOfFrame();
                 }
                 UIManager.Instance.SetTimeSavedSlidiers(TimeManager.Instance.currentTime);
@@ -242,21 +244,18 @@ public class LevelManager : MonoBehaviour
                 UIManager.Instance.SetMostTimeSavedSliderActive(true);
                 yield return new WaitForSeconds(0.5f);
                 float currentTimeA = 0;
+                float advanceTimeA = 0.05f;
                 while (currentTimeA < TimeManager.Instance.currentTime)
                 {
                     UIManager.Instance.SetMostTimeSavedSlidiers(currentTimeA);
-                    currentTimeA += 0.1f;
+                    currentTimeA += advanceTimeA;
+                    advanceTimeA += 0.0007f;
                     yield return new WaitForEndOfFrame();
                 }
                 UIManager.Instance.SetMostTimeSavedSlidiers(TimeManager.Instance.currentTime);
 
                 UIManager.Instance.SetNewRecordTextActive(true);
                 //NEW RECORD!
-                if (!PlayerPrefs.HasKey("PlayerName"))
-                {
-                    yield return new WaitForSeconds(0.5f);
-                    UIManager.Instance.SetProfileScreenGOActive(true);
-                }
             }
             else
             {
@@ -265,10 +264,12 @@ public class LevelManager : MonoBehaviour
                 yield return new WaitForSeconds(0.5f);
 
                 float currentTimeB = 0;
+                float advanceTimeB = 0.05f;
                 while (currentTimeB < TimeManager.Instance.currentTime)
                 {
                     UIManager.Instance.SetTimeSavedSlidiers(currentTimeB);
-                    currentTimeB += 0.1f;
+                    currentTimeB += advanceTimeB;
+                    advanceTimeB += 0.0007f;
                     yield return new WaitForEndOfFrame();
                 }
                 UIManager.Instance.SetTimeSavedSlidiers(TimeManager.Instance.currentTime);
@@ -279,24 +280,39 @@ public class LevelManager : MonoBehaviour
                 yield return new WaitForSeconds(0.5f);
 
                 float currentTimeA = 0;
+                float advanceTimeA = 0.05f;
                 while (currentTimeA < PlayerPrefs.GetFloat("MostTimeSaved"))
                 {
                     UIManager.Instance.SetMostTimeSavedSlidiers(currentTimeA);
-                    currentTimeA += 0.1f;
+                    currentTimeA += advanceTimeA;
+                    advanceTimeA += 0.0007f;
                     yield return new WaitForEndOfFrame();
                 }
                 UIManager.Instance.SetMostTimeSavedSlidiers(PlayerPrefs.GetFloat("MostTimeSaved"));
+            }
 
+            if (!PlayerPrefs.HasKey("PlayerName"))
+            {
+                yield return new WaitForSeconds(0.5f);
+                UIManager.Instance.SetProfileScreenGOActive(true);
             }
         }
         else
         {
             UIManager.Instance.SetEndGameExplorationTextActive(true);
         }
-        
 
-        yield return new WaitForSeconds(1f);
-        UIManager.Instance.SetGoToCreditsBTNActive(true);
+
+        if (!PlayerPrefs.HasKey("PlayerName") && !GameManager.Instance.explorationMode)
+        {
+            yield return new WaitForSeconds(0.5f);
+            UIManager.Instance.SetProfileScreenGOActive(true);
+        }
+        else
+        {
+            yield return new WaitForSeconds(1f);
+            UIManager.Instance.SetGoToCreditsBTNActive(true);
+        }   
     }
 
     private bool canGoToCredits = true;
