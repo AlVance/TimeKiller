@@ -16,7 +16,8 @@ public class LeaderboardManager : MonoBehaviour
     [SerializeField] private Transform leaderboardContentParent;
     [SerializeField] private Transform leaderboardItemPref;
     [SerializeField] private Transform leaderboardSelfScore;
-
+    [SerializeField] private GameObject ownRecordGO;
+    [SerializeField] private GameObject notRegisteredTextGO;
 
     private string leaderboardID = "Main_Leaderboard";
 
@@ -58,7 +59,16 @@ public class LeaderboardManager : MonoBehaviour
         leaderboardSelfScore.GetChild(2).GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetFloat("MostTimeSaved").ToString("0.00");
         leaderboardSelfScore.GetChild(3).GetComponent<TextMeshProUGUI>().text = (playerEntry.Rank + 1).ToString();
 
-
+        if (PlayerPrefs.HasKey("PlayerName")) 
+        {
+            ownRecordGO.SetActive(true);
+            notRegisteredTextGO.SetActive(false);
+        }
+        else
+        {
+            ownRecordGO.SetActive(false);
+            notRegisteredTextGO.SetActive(true);
+        }
         // await Task.Delay(500);
         //}
     }

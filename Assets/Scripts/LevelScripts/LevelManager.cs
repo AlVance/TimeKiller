@@ -26,6 +26,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private TMP_Text mostCompletedLevelsText;
 
     private LeaderboardManager leaderboardManager;
+    
     private void Start()
     {
         isStart = true;
