@@ -82,6 +82,7 @@ public class LeaderboardManager : MonoBehaviour
 
         //Comentar cuando pongamos este menú en la pantalla de nuevo récord
         //UpdateLeaderboard();
+        UIManager.Instance.profileNameField.text = "";
         CloseMenu();
     }
 
