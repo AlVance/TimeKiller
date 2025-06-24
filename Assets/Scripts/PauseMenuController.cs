@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using System.Collections;
+
 public class PauseMenuController : MonoBehaviour
 {
     private bool isOpened = false;
@@ -28,14 +29,19 @@ public class PauseMenuController : MonoBehaviour
     {
         unscaled_mat.SetFloat("_UnscaledTime", Time.unscaledTime);
     }
-    private bool playerWasWorking;
+    private Vector3 playerLV = Vector3.zero;
+    private bool playerWasWorking = true;
     public void OpenClosePauseMenu()
     {
         if (isOpened)
         {
+            GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+            
             Time.timeScale = 1f;
             UIManager.Instance.SetPauseMenuActive(false); 
             GameManager.Instance.playerWork = playerWasWorking;
+            GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().linearVelocity = playerLV;
             if (!GameManager.Instance.isInLobby)
             {
                 SoundManager.Instance.MusicOnOff(playerWasWorking);
@@ -47,6 +53,9 @@ public class PauseMenuController : MonoBehaviour
             playerWasWorking = GameManager.Instance.playerWork;
             UIManager.Instance.SetPauseMenuActive(true);
             Time.timeScale = 0f;
+            playerLV = GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().linearVelocity;
+            GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
+            GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
             GameManager.Instance.playerWork = false;
             if (!GameManager.Instance.isInLobby)
             {

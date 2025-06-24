@@ -49,7 +49,7 @@ public class LeaderboardManager : MonoBehaviour
         else
         {
             await UnityServices.InitializeAsync();
-            await AuthenticationService.Instance.SignInAnonymouslyAsync(); 
+            if(!AuthenticationService.Instance.IsSignedIn) await AuthenticationService.Instance.SignInAnonymouslyAsync(); 
             if (!PlayerPrefs.HasKey("PlayerName"))
             {
                 await AuthenticationService.Instance.UpdatePlayerNameAsync("*");
