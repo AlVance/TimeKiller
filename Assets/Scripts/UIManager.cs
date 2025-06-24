@@ -478,4 +478,9 @@ public class UIManager : MonoBehaviour
         if (isActive) profileNameField.Select();
         if (!isActive && currentBTN != null) currentBTN.GetComponent<Button>().Select();
     }
+
+    public void RepleaceNameIFSpaces()
+    {
+        profileNameField.text = profileNameField.text.Replace(" ", "");
+    }
 }
