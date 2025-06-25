@@ -12,58 +12,75 @@ public class PauseMenuController : MonoBehaviour
 
     [SerializeField] private Image unscaled_img;
     private Material unscaled_mat;
-    private void Start()
+
+    private void Awake()
     {
         playerInput = new PlayerInput();
-        playerInput.UI.Enable();
         playerInput.UI.Click.performed += ctx =>
         {
             OpenClosePauseMenu();
 
         };
-
+    }
+    private void Start()
+    {
         unscaled_mat = unscaled_img.material;
     }
 
     private void Update()
     {
-        unscaled_mat.SetFloat("_UnscaledTime", Time.unscaledTime);
+        if(isOpened) unscaled_mat.SetFloat("_UnscaledTime", Time.unscaledTime);
     }
+
     private Vector3 playerLV = Vector3.zero;
     private bool playerWasWorking = true;
     public void OpenClosePauseMenu()
     {
-        if (isOpened)
+        StartCoroutine(_OpenCloseMenu());        
+    }
+
+    private bool canOpenMenu = true;
+    private IEnumerator _OpenCloseMenu()
+    {
+        if (canOpenMenu)
         {
-            GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-            GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
-            
-            Time.timeScale = 1f;
-            UIManager.Instance.SetPauseMenuActive(false); 
-            GameManager.Instance.playerWork = playerWasWorking;
-            GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().linearVelocity = playerLV;
-            if (!GameManager.Instance.isInLobby)
+            canOpenMenu = false;
+            if (isOpened)
             {
-                SoundManager.Instance.MusicOnOff(playerWasWorking);
+                Time.timeScale = 1f;
+                yield return new WaitForEndOfFrame();
+                GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+                GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+                
+                UIManager.Instance.SetPauseMenuActive(false);
+                GameManager.Instance.playerWork = playerWasWorking;
+                GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().linearVelocity = playerLV;
+                if (!GameManager.Instance.isInLobby)
+                {
+                    SoundManager.Instance.MusicOnOff(true);
+                }
+                if (UIManager.Instance.currentBTN != null) UIManager.Instance.currentBTN.GetComponent<Button>().Select();
             }
-            if (UIManager.Instance.currentBTN != null) UIManager.Instance.currentBTN.GetComponent<Button>().Select();
-        }
-        else
-        {
-            playerWasWorking = GameManager.Instance.playerWork;
-            UIManager.Instance.SetPauseMenuActive(true);
-            Time.timeScale = 0f;
-            playerLV = GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().linearVelocity;
-            GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
-            GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
-            GameManager.Instance.playerWork = false;
-            if (!GameManager.Instance.isInLobby)
+            else
             {
-                SoundManager.Instance.MusicOnOff(false);
+                playerWasWorking = GameManager.Instance.playerWork;
+                UIManager.Instance.SetPauseMenuActive(true);
+                playerLV = GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().linearVelocity;
+                GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
+                GameManager.Instance.currentPlayer.gameObject.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+                GameManager.Instance.playerWork = false;
+                if (!GameManager.Instance.isInLobby)
+                {
+                    SoundManager.Instance.MusicOnOff(false);
+                }
+                if (resumeBTN != null) resumeBTN.Select();
+                yield return new WaitForEndOfFrame();
+                Time.timeScale = 0f;                
             }
-            if(resumeBTN != null)resumeBTN.Select();
-        }
-        isOpened = !isOpened;
+            isOpened = !isOpened;
+            yield return new WaitForEndOfFrame();
+            canOpenMenu = true;
+        }        
     }
 
     private bool canAutodestroy = true;
@@ -110,5 +127,15 @@ public class PauseMenuController : MonoBehaviour
         yield return new WaitForEndOfFrame();
         Application.Quit();
         canExitGame = true;
+    }
+
+    private void OnEnable()
+    {
+        playerInput.UI.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerInput.UI.Disable();
     }
 }
