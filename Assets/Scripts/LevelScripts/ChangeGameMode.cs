@@ -8,6 +8,15 @@ public class ChangeGameMode : MonoBehaviour
     {
         anim = this.GetComponent<Animator>();
         GameManager.Instance.explorationMode = startAsExplorationMode;
+        if(PlayerPrefs.HasKey("GameMode"))
+        {
+            if (PlayerPrefs.GetInt("GameMode") == 0) GameManager.Instance.explorationMode = true;
+            else GameManager.Instance.explorationMode = false;
+        }
+        else
+        {
+            PlayerPrefs.SetInt("GameMode", 0);
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -15,8 +24,11 @@ public class ChangeGameMode : MonoBehaviour
         {
             GameManager.Instance.explorationMode = !GameManager.Instance.explorationMode;
             anim.SetBool("On", true);
+
+            if(GameManager.Instance.explorationMode) PlayerPrefs.SetInt("GameMode", 0);
+            else PlayerPrefs.SetInt("GameMode", 1);
         }
-        
+
     }
     private void OnTriggerExit(Collider other)
     {
