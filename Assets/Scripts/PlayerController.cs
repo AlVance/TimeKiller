@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
-    private PlayerInput1 playerInput;
+    private PlayerInput playerInput;
     private Rigidbody rb;
 
 
@@ -292,7 +292,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        playerInput = new PlayerInput1();
+        playerInput = new PlayerInput();
         HandleInput();
         rb = this.GetComponent<Rigidbody>();
     }
