@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
-    private PlayerInput playerInput;
+    private PlayerInput1 playerInput;
     private Rigidbody rb;
 
 
@@ -292,9 +292,8 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        playerInput = new PlayerInput();
+        playerInput = new PlayerInput1();
         HandleInput();
-
         rb = this.GetComponent<Rigidbody>();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -900,7 +899,7 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Aim.performed += ctx =>
         {
-#if !PLATFORM_ANDROID
+
             if (Mouse.current.leftButton.isPressed)
             {
                 Vector2 tempAimDir = ctx.ReadValue<Vector2>();
@@ -919,10 +918,106 @@ public class PlayerController : MonoBehaviour
                 } 
                 
             }
-         
-#else
-            aimDir = ctx.ReadValue<Vector2>();
-#endif
+
+            aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
+            //if (aimDir.x < 0.2f && aimDir.x > -0.2f && aimDir.y < 0.2f && aimDir.y > -0.2f)
+            //{
+            //    shootDir = aimDir;
+            //    shootDirRelativeToCam = GetV3RelativeToCamera(shootDir);
+            //    aimPressed = false;
+            //    aimDir = Vector2.zero;
+            //    aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
+            //    AimFinished();
+            //}
+        };
+
+        playerInput.PlayerControls.Aim.canceled += ctx =>
+        {
+            shootDir = aimDir;
+            shootDirRelativeToCam = GetV3RelativeToCamera(shootDir);
+            aimPressed = false;
+            aimDir = Vector2.zero;
+            aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
+            AimFinished();
+        };
+
+
+        playerInput.PlayerControls.Reload.started += ctx =>
+        {
+            if (GameManager.Instance.playerWork) ReloadStarted();
+        };
+
+        playerInput.PlayerControls.Reload.performed += ctx =>
+        {
+            if (GameManager.Instance.playerWork) ReloadPerformed();
+        };
+
+        playerInput.PlayerControls.Reload.canceled += ctx =>
+        {
+            if (GameManager.Instance.playerWork) ReloadEnded();
+        };
+
+        playerInput.PlayerControls.Shoot.started += ctx =>
+        {
+            if (currentChargeTime >= shootChargeTime)
+            {
+                shootDir = aimDir;
+                shootDirRelativeToCam = GetV3RelativeToCamera(shootDir);
+                AimFinished();
+            } 
+        };
+    }
+
+    private void HandleInput1()
+    {
+        playerInput.PlayerControls.Move.started += ctx =>
+        {
+            MoveStarted();
+        };
+        //When a move input is used its value is read and stored as the move direction and as a bool
+        playerInput.PlayerControls.Move.performed += ctx =>
+        {
+            moveDir = ctx.ReadValue<Vector2>();
+            movePressed = moveDir.x != 0 || moveDir.y != 0;
+
+            moveDirRelativeToCam = GetV3RelativeToCamera(moveDir);
+        };
+        //When the move input is canceled it resets the move direction to 0 and the moving bool to false
+        playerInput.PlayerControls.Move.canceled += ctx =>
+        {
+            movePressed = false;
+            lastMoveDir = moveDir;
+            moveDir = Vector2.zero;
+            moveDirRelativeToCam = GetV3RelativeToCamera(moveDir);
+        };
+
+
+        playerInput.PlayerControls.Aim.started += ctx =>
+        {
+            if (GameManager.Instance.playerWork && Mouse.current.leftButton.isPressed) AimStarted();
+        };
+
+        playerInput.PlayerControls.Aim.performed += ctx =>
+        {
+            if (Mouse.current.leftButton.isPressed)
+            {
+                Vector2 tempAimDir = ctx.ReadValue<Vector2>();
+                Vector3 PlayerScreenPos = Camera.main.WorldToScreenPoint(this.transform.position);
+                tempAimDir.x -= PlayerScreenPos.x;
+                tempAimDir.y -= PlayerScreenPos.y;
+                aimDir = tempAimDir.normalized;
+            }
+            else
+            {
+                Vector2 tempAimDir = ctx.ReadValue<Vector2>();
+                if (tempAimDir.x > 0.1f || tempAimDir.x < -0.1f || tempAimDir.y > 0.1f || tempAimDir.y < -0.1f)
+                {
+                    aimDir = tempAimDir;
+                    if (GameManager.Instance.playerWork) AimStarted();
+                }
+
+            }
+
             aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
             //if (aimDir.x < 0.2f && aimDir.x > -0.2f && aimDir.y < 0.2f && aimDir.y > -0.2f)
             //{
@@ -961,7 +1056,6 @@ public class PlayerController : MonoBehaviour
             if (GameManager.Instance.playerWork) ReloadEnded();
         };
     }
-
     private void HandleAnimations()
     {
         anim.SetBool("isGrounded", isGrounded);
