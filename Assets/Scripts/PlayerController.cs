@@ -288,6 +288,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioSource playerAS;
     [SerializeField] private AudioSource flyAS;
     [SerializeField] private AudioClip playerGetHitAC, playerStartFlyAC, playerFlyAC;
+    [SerializeField] private AudioClip deathSound;
     private float initialPitchAS;
 
     private void Awake()
@@ -824,6 +825,7 @@ public class PlayerController : MonoBehaviour
         isOffLimits = true;
         canGetHitted = false;
         TimeManager.Instance.timerStarted = false;
+        SoundManager.Instance.PlayOneShootAudio(deathSound);
         m_GoalVel = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
         canFly = false;

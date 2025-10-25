@@ -11,6 +11,7 @@ public class LevelManager : MonoBehaviour
     [HideInInspector] public GameObject currentLevelGO;
 
     [SerializeField] private float startLevelTime = 3f;
+    [SerializeField] private AudioClip VictorySound;
 
 
     [Header("LevelTransition variables")]
@@ -138,6 +139,7 @@ public class LevelManager : MonoBehaviour
         CameraManager.Instance.ChangeCam(CameraManager.Instance.winCam);
         GameManager.Instance.currentPlayer.gameObject.transform.eulerAngles = new Vector3(0,-180,0);
         GameManager.Instance.currentPlayer.anim.SetBool("IsWin", true);
+        SoundManager.Instance.PlayOneShootAudio(VictorySound);
         yield return new WaitForSeconds(0.1f);
         UIManager.Instance.SetTimerUIToWinScreen();
         yield return new WaitForSeconds(0.8f);
