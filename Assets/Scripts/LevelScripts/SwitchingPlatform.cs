@@ -8,6 +8,9 @@ public class SwitchingPlatform : MonoBehaviour
     [SerializeField] private Animator switchingPlatformAnimator;
     [SerializeField] private bool switchPlatformState = false;
 
+    [SerializeField] private AudioSource switchPlatformAS;
+    [SerializeField] private AudioClip switchAC;
+
     private IEnumerator Start()
     {
         yield return new WaitForEndOfFrame();
@@ -21,6 +24,7 @@ public class SwitchingPlatform : MonoBehaviour
     private void ChangePlatformState()
     {
         switchPlatformState = !switchPlatformState;
+        switchPlatformAS.PlayOneShot(switchAC);
         switchingPlatformAnimator.SetBool("SwitchingPlatformState", switchPlatformState);
     }
 }
