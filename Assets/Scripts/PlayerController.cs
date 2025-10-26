@@ -825,6 +825,7 @@ public class PlayerController : MonoBehaviour
         isOffLimits = true;
         canGetHitted = false;
         TimeManager.Instance.timerStarted = false;
+        playerAS.PlayOneShot(playerGetHitAC);
         SoundManager.Instance.PlayOneShootAudio(deathSound);
         m_GoalVel = Vector3.zero;
         rb.linearVelocity = Vector3.zero;

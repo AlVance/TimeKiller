@@ -23,8 +23,8 @@ public class SwitchingPlatform : MonoBehaviour
 
     private void ChangePlatformState()
     {
-        switchPlatformState = !switchPlatformState;
         switchPlatformAS.PlayOneShot(switchAC);
+        switchPlatformState = !switchPlatformState;
         switchingPlatformAnimator.SetBool("SwitchingPlatformState", switchPlatformState);
     }
 }
