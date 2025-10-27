@@ -12,6 +12,8 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private float startLevelTime = 3f;
     [SerializeField] private AudioClip VictorySound;
+    [SerializeField] private AudioClip Countdown;
+    [SerializeField] private AudioClip CountdownEnd;
 
 
     [Header("LevelTransition variables")]
@@ -105,10 +107,13 @@ public class LevelManager : MonoBehaviour
         for (int i = 0; i < startLevelTime; i++)
         {
             UIManager.Instance.SetStartLevelTimerText((startLevelTime - i).ToString("0"));
+            SoundManager.Instance.PlayOneShootAudio(Countdown);
+
             yield return new WaitForSeconds(1f);
         }
         
         GameManager.Instance.levelStarted = true;
+        SoundManager.Instance.PlayOneShootAudio(CountdownEnd);
         UIManager.Instance.SetStartLevelTimerText("GO!");
         TimeManager.Instance.timerStarted = true;
         SoundManager.Instance.MusicOnOff(true);
