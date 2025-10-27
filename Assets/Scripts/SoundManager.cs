@@ -49,6 +49,27 @@ public class SoundManager : MonoBehaviour
     {
         StartCoroutine(_MusicLevelOnOff(ToOn));
     }
+    //Myr ha hecho esto para la caja del silecio
+    public void FadeInOut(bool InOut, float finalVolume)
+    {
+        StartCoroutine(Fade(InOut, musicLobby, 2f, finalVolume));
+    }
+
+    //Myr ha hecho esto para la caja del silecio
+    public IEnumerator Fade(bool fadeIn,AudioSource musicLobby, float duration, float targetVolume)
+    {
+        float time = 1f;
+        float startVol = musicLobby.volume;
+        while (time < duration) 
+        {
+            time += Time.deltaTime;
+            musicLobby.volume = Mathf.Lerp(startVol, targetVolume, time / duration);
+            yield return null;
+        }
+        yield break;
+
+    }
+
     private IEnumerator _MusicLevelOnOff(bool _ToOn)
     {
         musicLobby.Stop();
