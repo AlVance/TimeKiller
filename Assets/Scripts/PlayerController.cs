@@ -333,7 +333,7 @@ public class PlayerController : MonoBehaviour
             Aim();
             ChargeShot();
             //Dash();
-            ReloadQTE();
+            //ReloadQTE();
             Fly();
         }
         HandleAnimations();
@@ -361,7 +361,7 @@ public class PlayerController : MonoBehaviour
     private void AimStarted()
     {
         aimPressed = true;
-        if(canAim && currentBullets > 0 && (!isFlying && !isDashing))
+        if(canAim && currentBullets > 0 /*&& (!isFlying && !isDashing)*/)
         {
             aimDirAidGO.SetActive(true);
             CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
@@ -503,7 +503,7 @@ public class PlayerController : MonoBehaviour
 
     private void Aim()
     {
-        if (canAim && aimPressed && (!isFlying && !isDashing))
+        if (canAim && aimPressed && (/*!isFlying &&*/ !isDashing))
         {
             if (!isAiming) AimStarted();
             //this.transform.rotation = Quaternion.LookRotation(new Vector3(aimDir.x, 0, aimDir.y));
@@ -515,7 +515,7 @@ public class PlayerController : MonoBehaviour
 
     private void ChargeShot()
     {
-        if (canAim && aimPressed && !shootCD && !isDashing && !isFlying)
+        if (canAim && aimPressed && !shootCD /*&& !isDashing && !isFlying*/)
         {
             if(currentBullets > 0)
             {
@@ -649,9 +649,9 @@ public class PlayerController : MonoBehaviour
             isFlying = true;
             currentMaxSpeed = flySpeed;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-            ResetCharge();
-            EndAim();
-            CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = flyTargetTr;
+            //ResetCharge();
+            //EndAim();
+            //CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = flyTargetTr;
 
             OnStartFlyEvent.Invoke();
 
