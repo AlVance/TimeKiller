@@ -3,7 +3,8 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField]private Rigidbody rb;
-
+    public bool autoAim = false;
+    public float autoAimForce;
     public bool launched = false;
     public bool charged = false;
     public int projectileDamage;
@@ -15,6 +16,7 @@ public class Projectile : MonoBehaviour
     private SphereCollider collidier;
     [SerializeField] public AudioSource shootAS;
     [SerializeField] private AudioClip chargeShootAC, holdShootAC, setChargeAC, shootAC, hitAC;
+    [SerializeField] private NearbyEnemyDetector enemyDetector;
 
     private void Awake()
     {
@@ -32,6 +34,11 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        if(autoAim && launched) AutoAim();
+    }
+
     public void ProjectileSetUp(int _damage, float _lifeTime, Transform _spawnPos)
     {
         this.gameObject.SetActive(true);
@@ -43,6 +50,12 @@ public class Projectile : MonoBehaviour
         shootAS.loop = false;
         shootAS.clip = chargeShootAC;
         shootAS.Play();
+
+        if (autoAim)
+        {
+            enemyDetector.enemyToAutoAim = null;
+            enemyDetector.enemyList.Clear();
+        }
     }
     public void LaunchProjectile(Vector3 direction, float speed)
     {
@@ -93,7 +106,22 @@ public class Projectile : MonoBehaviour
         shootAS.loop = false;
         shootAS.Stop();
 
+        if (autoAim) 
+        {
+            enemyDetector.enemyToAutoAim = null;
+            enemyDetector.enemyList.Clear();
+        }
         this.gameObject.SetActive(false);
 
+    }
+
+    private void AutoAim()
+    {
+        if(enemyDetector.enemyToAutoAim != null)
+        {
+            //rb.AddForce((this.transform.position - enemyDetector.enemyToAutoAim.transform.position) * autoAimForce);
+            Vector3 newDir = (enemyDetector.enemyToAutoAim.transform.position - this.transform.position).normalized;
+            rb.linearVelocity = newDir * autoAimForce;
+        }
     }
 }

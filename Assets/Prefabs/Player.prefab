@@ -2729,6 +2729,7 @@ GameObject:
   - component: {fileID: 8548522797890374881}
   - component: {fileID: 1692504682927899489}
   - component: {fileID: 7678551199976857478}
+  - component: {fileID: 4162820512495519511}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -2799,7 +2800,7 @@ MonoBehaviour:
   projectileGO: {fileID: 7151585630043099556, guid: 245438c43b2898f499fb31acbf069fc2, type: 3}
   porjectileSpawnPos: {fileID: 8164237971392927003}
   m_projectileSize: 1
-  m_projectileSpeed: 22
+  m_projectileSpeed: 75
   m_projectileRange: 1.5
   m_projectileDamage: 1
   m_maxBullets: 2
@@ -2844,9 +2845,10 @@ MonoBehaviour:
         m_CallState: 2
   playerAS: {fileID: 1692504682927899489}
   flyAS: {fileID: 7678551199976857478}
-  playerGetHitAC: {fileID: 8300000, guid: c76b44b3d1ced2347808756c77f5c52e, type: 3}
+  playerGetHitAC: {fileID: 8300000, guid: 44f7f7e86c4cb114aa8efe494c5424c8, type: 3}
   playerStartFlyAC: {fileID: 8300000, guid: 4d64321021a61a24292e7f9b98b720a2, type: 3}
   playerFlyAC: {fileID: 8300000, guid: 1d410517a1e5a4d489f6aca7a0904891, type: 3}
+  deathSound: {fileID: 8300000, guid: 2a7faf6b74e24d940af3bc28798db0d1, type: 3}
 --- !u!54 &2411601841555775349
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3109,6 +3111,14 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!81 &4162820512495519511
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2389697036688943303}
+  m_Enabled: 1
 --- !u!1 &2431031924040320084
 GameObject:
   m_ObjectHideFlags: 0
