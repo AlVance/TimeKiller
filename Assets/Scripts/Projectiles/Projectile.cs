@@ -119,8 +119,8 @@ public class Projectile : MonoBehaviour
     {
         if(enemyDetector.enemyToAutoAim != null)
         {
-            //rb.AddForce((this.transform.position - enemyDetector.enemyToAutoAim.transform.position) * autoAimForce);
             Vector3 newDir = (enemyDetector.enemyToAutoAim.transform.position - this.transform.position).normalized;
+            //rb.AddForce(newDir * autoAimForce);
             rb.linearVelocity = newDir * autoAimForce;
         }
     }

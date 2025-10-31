@@ -19,7 +19,9 @@ public class NearbyEnemyDetector : MonoBehaviour
                     EnemyBehaviour enemyToAdd = enemyList[0].GetComponentInParent<EnemyBehaviour>();
                     for (int i = 0; i < enemyList.Count; i++)
                     {
-                        if (enemyList[i].GetComponentInParent<EnemyBehaviour>().hitPriority > enemyToAdd.hitPriority)
+                        if (enemyList[i].GetComponentInParent<EnemyBehaviour>().hitPriority > enemyToAdd.hitPriority ||
+                            (enemyList[i].GetComponentInParent<EnemyBehaviour>().hitPriority == enemyToAdd.hitPriority 
+                            && Vector3.Distance(this.transform.position, enemyList[i].transform.position) < Vector3.Distance(this.transform.position, enemyToAdd.gameObject.transform.position)))
                         {
                             enemyToAdd = enemyList[i].GetComponentInParent<EnemyBehaviour>();
                         }
