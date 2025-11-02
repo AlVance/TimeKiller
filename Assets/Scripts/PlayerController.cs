@@ -83,6 +83,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveDirShootInertia;
     private bool shootCD = false;
     [SerializeField] private float shootCDTime;
+    [SerializeField] private float onShootTpMoveSpeed;
 
 
     [Header("Projectile Variables")]
@@ -747,9 +748,31 @@ public class PlayerController : MonoBehaviour
 
     public void ForcedMovement(Vector3 targetPos)
     {
+        //canMove = false;
+        //this.transform.position = targetPos;
+        //canMove = true;
+        StartCoroutine(_ForcedMovement(targetPos));
+    }
+    private IEnumerator _ForcedMovement(Vector3 _targetPos)
+    {
+        canFly = false;
+        EndFly();
+        isFlying = false;
         canMove = false;
-        this.transform.position = targetPos;
+
+        canAim = false;
+        EndAim();
+
+        currentMaxSpeed = 0;
+        while (Vector3.Distance(this.transform.position, _targetPos) > 1f)
+        {
+            this.transform.position += (_targetPos - this.transform.position).normalized * onShootTpMoveSpeed * Time.deltaTime;
+            yield return null;
+        }
+        canFly = true;
+        currentMaxSpeed = maxSpeed;
         canMove = true;
+        canAim = true;
     }
 
     public void ResetPlayer()
