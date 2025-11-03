@@ -4,6 +4,7 @@ public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance { get; private set; }
     [SerializeField] public GameObject basePlayerCam;
+    public GameObject levelCamera;
     public GameObject currentCam;
     [SerializeField]public GameObject winCam;
     private void Awake()

@@ -78,6 +78,7 @@ public class LevelManager : MonoBehaviour
         if (currentLevelGO.GetComponent<Level>().levelCam != null)
         {
             CameraManager.Instance.ChangeCam(currentLevelGO.GetComponent<Level>().levelCam);
+            CameraManager.Instance.levelCamera = currentLevelGO.GetComponent<Level>().levelCam;
         }
         else
         {
