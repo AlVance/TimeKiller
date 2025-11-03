@@ -111,7 +111,7 @@ public class LevelManager : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
         }
-        
+        GameManager.Instance.currentPlayer.UnblockPlayer();
         GameManager.Instance.levelStarted = true;
         SoundManager.Instance.PlayOneShootAudio(CountdownEnd);
         UIManager.Instance.SetStartLevelTimerText("GO!");
@@ -126,7 +126,7 @@ public class LevelManager : MonoBehaviour
     public void OnLevelEnded()
     {
         GameManager.Instance.levelStarted = false;
-        GameManager.Instance.currentPlayer.BlockPlayer(0.2f);
+        GameManager.Instance.currentPlayer.BlockPlayer();
         GameManager.Instance.currentPlayer.ResetPlayer();
         SetLevelPuntuationScreen();
     }
@@ -433,6 +433,7 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         UIManager.Instance.SetFade(false);
         GameManager.Instance.playerWork = true;
+        GameManager.Instance.currentPlayer.UnblockPlayer();
         canGoToStartLevel = true;
     }
     private IEnumerator DestroyGOWithDelay(GameObject GO)

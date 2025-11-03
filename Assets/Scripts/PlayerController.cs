@@ -1,15 +1,17 @@
-using UnityEngine;
-using TMPro;
 using System.Collections;
-using UnityEngine.InputSystem;
-using UnityEngine.Events;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     private PlayerInput playerInput;
     private Rigidbody rb;
 
+    [SerializeField] private Collider playerPhisicalCollider;
 
     [Header("Camera Variables")]
     [SerializeField] private Transform aimTargetTr;
@@ -755,24 +757,18 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator _ForcedMovement(Vector3 _targetPos)
     {
-        canFly = false;
-        EndFly();
-        isFlying = false;
-        canMove = false;
-
-        canAim = false;
-        EndAim();
-
+        BlockPlayer();
         currentMaxSpeed = 0;
+        playerPhisicalCollider.enabled = false;
         while (Vector3.Distance(this.transform.position, _targetPos) > 1f)
         {
-            this.transform.position += (_targetPos - this.transform.position).normalized * onShootTpMoveSpeed * Time.deltaTime;
+            rb.linearVelocity = (_targetPos - this.transform.position).normalized * onShootTpMoveSpeed;
+            //this.transform.position += (_targetPos - this.transform.position).normalized * onShootTpMoveSpeed * Time.deltaTime;
             yield return null;
         }
-        canFly = true;
-        currentMaxSpeed = maxSpeed;
-        canMove = true;
-        canAim = true;
+        rb.linearVelocity = Vector3.zero;
+        playerPhisicalCollider.enabled = true;
+        UnblockPlayer();
     }
 
     public void ResetPlayer()
@@ -805,17 +801,33 @@ public class PlayerController : MonoBehaviour
         //canFly = false;
         //canMove = false;
         rb.AddForce((this.transform.position - hitPos) * hitForce);
-        BlockPlayer(stunnedTime);
+        BlockPlayer();
         yield return new WaitForSeconds(stunnedTime);
         //canFly = true;
         //canMove = true;
         isHitted = false;
+        UnblockPlayer();
         yield return new WaitForSeconds(0.6f);
         canGetHitted = true;
     }
-    public void BlockPlayer(float blockTime, bool blockAim = true)
+    public void BlockPlayer(bool blockAim = true)
     {
-        StartCoroutine(_BlockPlayer(blockTime, blockAim));
+        canFly = false;
+        EndFly();
+        isFlying = false;
+        canMove = false;
+        if (blockAim)
+        {
+            canAim = false;
+            EndAim();
+        }
+    }
+    public void UnblockPlayer()
+    {
+        canFly = true;
+        currentMaxSpeed = maxSpeed;
+        canMove = true;
+        canAim = true;
     }
     private IEnumerator _BlockPlayer(float blockTime, bool blockAim)
     {

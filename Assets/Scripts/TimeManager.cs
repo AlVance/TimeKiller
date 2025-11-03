@@ -81,7 +81,7 @@ public class TimeManager : MonoBehaviour
     }
     private IEnumerator _GameOver()
     {
-        GameManager.Instance.currentPlayer.BlockPlayer(0.2f);
+        GameManager.Instance.currentPlayer.BlockPlayer();
         GameManager.Instance.currentPlayer.ResetPlayer();
         yield return new WaitForEndOfFrame();
         GameManager.Instance.levelStarted = false;        
