@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using MoreMountains.Feedbacks;
 
 public class PlayerController : MonoBehaviour
 {
@@ -293,6 +294,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioClip playerGetHitAC, playerStartFlyAC, playerFlyAC;
     [SerializeField] private AudioClip deathSound;
     private float initialPitchAS;
+
+    [Header("Feedbacks")]
+    [SerializeField] private MMF_Player onHitFeedback;
 
     private void Awake()
     {
@@ -790,6 +794,7 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator _GetHit(Vector3 hitPos, float hitForce)
     {
+        onHitFeedback.PlayFeedbacks();
         playerAS.pitch = initialPitchAS + Random.Range(-0.1f, 0.1f);
         playerAS.PlayOneShot(playerGetHitAC);
 
