@@ -371,7 +371,7 @@ public class PlayerController : MonoBehaviour
         if(canAim && currentBullets > 0 /*&& (!isFlying && !isDashing)*/)
         {
             aimDirAidGO.SetActive(true);
-            CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
+            if(CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
         }
     }
 
@@ -384,7 +384,7 @@ public class PlayerController : MonoBehaviour
     private void EndAim()
     {
         aimDirAidGO.SetActive(false);
-        CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+        if (CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
         isAiming = false;
     }
 
@@ -688,7 +688,7 @@ public class PlayerController : MonoBehaviour
         {
             currentMaxSpeed = maxSpeed;
             isFlying = false;
-            CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+            //if (CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
 
             flyAS.clip = null;
             flyAS.Stop();
