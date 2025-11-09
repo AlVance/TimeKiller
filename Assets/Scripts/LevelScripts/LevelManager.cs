@@ -5,9 +5,9 @@ using TMPro;
 
 public class LevelManager : MonoBehaviour
 {
-    //public static LevelManager Instance { get; private set; }
-
-    [SerializeField] private GameObject[] levelsGO;
+    [SerializeField] public World[] worlds;
+    private int currentWorld = 0;
+    //[SerializeField] private GameObject[] levelsGO;
     [HideInInspector] public GameObject currentLevelGO;
 
     [SerializeField] private float startLevelTime = 3f;
@@ -47,13 +47,11 @@ public class LevelManager : MonoBehaviour
                 StartCoroutine(DestroyGOWithDelay(go.gameObject));
             }
             Destroy(currentLevelGO);
-            
-            //++GameManager.Instance.currentLevel;
-            
+             
         }
-        if(GameManager.Instance.currentLevel < levelsGO.Length)
+        if(GameManager.Instance.currentLevel < worlds[currentWorld].worldLevelsGO.Length)
         {
-            currentLevelGO = Instantiate(levelsGO[GameManager.Instance.currentLevel]);
+            currentLevelGO = Instantiate(worlds[currentWorld].worldLevelsGO[GameManager.Instance.currentLevel]);
             GameManager.Instance.currentLevelGO = currentLevelGO;
             currentLevelGO.GetComponent<Level>().lM = this;
 
@@ -85,9 +83,8 @@ public class LevelManager : MonoBehaviour
             CameraManager.Instance.ChangeCam(CameraManager.Instance.basePlayerCam);
         }
 
-        yield return new WaitForEndOfFrame();
         GameManager.Instance.UnloadMemory();
-        yield return new WaitForEndOfFrame();
+        
         UIManager.Instance.SetFade(false);
 
         
@@ -199,11 +196,11 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetPuntuationScreenActive(false);
 
 
-        if ((GameManager.Instance.currentLevel < levelsGO.Length && !GameManager.Instance.explorationMode)
-            || (GameManager.Instance.currentLevel < levelsGO.Length - 1 && GameManager.Instance.explorationMode))
+        if ((GameManager.Instance.currentLevel < worlds[currentWorld].worldLevelsGO.Length && !GameManager.Instance.explorationMode)
+            || (GameManager.Instance.currentLevel < worlds[currentWorld].worldLevelsGO.Length - 1 && GameManager.Instance.explorationMode))
         {
             SetNextLevel();
-            UIManager.Instance.SetLevelCountText(GameManager.Instance.currentLevel + 1, levelsGO.Length);
+            UIManager.Instance.SetLevelCountText(GameManager.Instance.currentLevel + 1, worlds[currentWorld].worldLevelsGO.Length);
             UIManager.Instance.SetLevelNameText(currentLevelGO.GetComponent<Level>().levelName);
             UIManager.Instance.SetInBetweenLevelsScreenActive(true);
             UIManager.Instance.SetGoToLevelBTNActive(true);
@@ -442,4 +439,10 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         Destroy(GO);
     }
+}
+
+[System.Serializable]
+public class World
+{
+    [SerializeField] public GameObject[] worldLevelsGO;
 }

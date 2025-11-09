@@ -69,9 +69,11 @@ public class GameManager : MonoBehaviour
 
     IEnumerator _UnloadRoutine()
     {
-        yield return null; // o `yield return new WaitForSeconds(5f);`
+        yield return new WaitForEndOfFrame();
+        yield return null;
         Resources.UnloadUnusedAssets();
         GC.Collect();
+        yield return new WaitForEndOfFrame();
     }
 }
 

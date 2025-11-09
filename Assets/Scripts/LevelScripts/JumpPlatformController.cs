@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using MoreMountains.Feedbacks;
 
 public class JumpPlatformController : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class JumpPlatformController : MonoBehaviour
     [SerializeField] Transform JumpDirectionTr;
     [SerializeField] float Jumpspeed;
     [SerializeField] ParticleSystem particle;
+    [SerializeField] private MMF_Player jumpFeedback;
     [SerializeField] private float blockInputTime = 0.05f;
     [SerializeField] private Animator platformAnim;
     [SerializeField] private bool forcePlayerToCenter = false;
@@ -31,7 +33,8 @@ public class JumpPlatformController : MonoBehaviour
             StartCoroutine(_BlockPlayerOnJump(other.gameObject.GetComponent<PlayerController>()));
             _rb.AddForce(JumpDirectionTr.up.normalized * Jumpspeed);
             platformAnim.SetTrigger("On");
-            particle.Play();
+            jumpFeedback.PlayFeedbacks();
+            //particle.Play();
 
             jumpAS.pitch = basePich + Random.Range(-0.2f, 0.2f);
             jumpAS.Play();
