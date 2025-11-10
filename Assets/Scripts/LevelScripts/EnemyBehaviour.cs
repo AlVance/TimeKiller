@@ -9,6 +9,7 @@ using UnityEditor.Callbacks;
 
 public class EnemyBehaviour : MonoBehaviour
 {
+    [SerializeField] public int hitPriority = 1;
     [SerializeField] private bool forceEnemyToWork = false;
     [SerializeField] private GameObject enemyStuff;
     private enum enemyMovementTypes { Static, Movable };

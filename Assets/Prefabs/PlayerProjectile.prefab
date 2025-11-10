@@ -193,6 +193,102 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &5174944040700431616
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7119111929473685371}
+  - component: {fileID: 565551555032150674}
+  - component: {fileID: 6535432986110156614}
+  - component: {fileID: 5921068422610567592}
+  m_Layer: 0
+  m_Name: NearbyEnemyDetector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7119111929473685371
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5174944040700431616}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8589170155988983570}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &565551555032150674
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5174944040700431616}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 1
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.3
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6535432986110156614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5174944040700431616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3b69058a22a16f46acbda4a35ac76ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyList: []
+  enemyToAutoAim: {fileID: 0}
+--- !u!54 &5921068422610567592
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5174944040700431616}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &7151585630043099556
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,6 +326,7 @@ Transform:
   m_Children:
   - {fileID: 5873547108600256704}
   - {fileID: 5106016580932389125}
+  - {fileID: 7119111929473685371}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4908511155175512190
@@ -245,6 +342,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 611993597645727658}
+  autoAim: 1
+  autoAimForce: 55
   launched: 0
   charged: 0
   projectileDamage: 0
@@ -257,6 +356,7 @@ MonoBehaviour:
   setChargeAC: {fileID: 8300000, guid: bdd38721e6958014fabd8547561c45f2, type: 3}
   shootAC: {fileID: 8300000, guid: ceae89875bdbe104f9a61744b7793a21, type: 3}
   hitAC: {fileID: 0}
+  enemyDetector: {fileID: 6535432986110156614}
   impactParticle: {fileID: 3032052334957090329, guid: 994c8923838b31b458a4ddbf1fa35a1c, type: 3}
 --- !u!135 &2015905639402838448
 SphereCollider:
@@ -467,6 +567,10 @@ PrefabInstance:
     - target: {fileID: 5475169163446700362, guid: 2645ae7f8cbb3284ba277336f38a7527, type: 3}
       propertyPath: m_Name
       value: vfx_charged_electricity
+      objectReference: {fileID: 0}
+    - target: {fileID: 5475169163446700362, guid: 2645ae7f8cbb3284ba277336f38a7527, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8660860026026721492, guid: 2645ae7f8cbb3284ba277336f38a7527, type: 3}
       propertyPath: m_LocalPosition.x

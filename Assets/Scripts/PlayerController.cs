@@ -1,15 +1,18 @@
-using UnityEngine;
-using TMPro;
 using System.Collections;
-using UnityEngine.InputSystem;
-using UnityEngine.Events;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem;
+using MoreMountains.Feedbacks;
 
 public class PlayerController : MonoBehaviour
 {
     private PlayerInput playerInput;
     private Rigidbody rb;
 
+    [SerializeField] private Collider playerPhisicalCollider;
 
     [Header("Camera Variables")]
     [SerializeField] private Transform aimTargetTr;
@@ -83,6 +86,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveDirShootInertia;
     private bool shootCD = false;
     [SerializeField] private float shootCDTime;
+    [SerializeField] private float onShootTpMoveSpeed;
 
 
     [Header("Projectile Variables")]
@@ -288,7 +292,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioSource playerAS;
     [SerializeField] private AudioSource flyAS;
     [SerializeField] private AudioClip playerGetHitAC, playerStartFlyAC, playerFlyAC;
+    [SerializeField] private AudioClip deathSound;
     private float initialPitchAS;
+
+    [Header("Feedbacks")]
+    [SerializeField] private MMF_Player onHitFeedback;
 
     private void Awake()
     {
@@ -332,7 +340,7 @@ public class PlayerController : MonoBehaviour
             Aim();
             ChargeShot();
             //Dash();
-            ReloadQTE();
+            //ReloadQTE();
             Fly();
         }
         HandleAnimations();
@@ -360,10 +368,10 @@ public class PlayerController : MonoBehaviour
     private void AimStarted()
     {
         aimPressed = true;
-        if(canAim && currentBullets > 0 && (!isFlying && !isDashing))
+        if(canAim && currentBullets > 0 /*&& (!isFlying && !isDashing)*/)
         {
             aimDirAidGO.SetActive(true);
-            CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
+            if(CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
         }
     }
 
@@ -376,7 +384,7 @@ public class PlayerController : MonoBehaviour
     private void EndAim()
     {
         aimDirAidGO.SetActive(false);
-        CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+        if (CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
         isAiming = false;
     }
 
@@ -502,7 +510,7 @@ public class PlayerController : MonoBehaviour
 
     private void Aim()
     {
-        if (canAim && aimPressed && (!isFlying && !isDashing))
+        if (canAim && aimPressed && (/*!isFlying &&*/ !isDashing))
         {
             if (!isAiming) AimStarted();
             //this.transform.rotation = Quaternion.LookRotation(new Vector3(aimDir.x, 0, aimDir.y));
@@ -514,7 +522,7 @@ public class PlayerController : MonoBehaviour
 
     private void ChargeShot()
     {
-        if (canAim && aimPressed && !shootCD && !isDashing && !isFlying)
+        if (canAim && aimPressed && !shootCD /*&& !isDashing && !isFlying*/)
         {
             if(currentBullets > 0)
             {
@@ -648,9 +656,9 @@ public class PlayerController : MonoBehaviour
             isFlying = true;
             currentMaxSpeed = flySpeed;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-            ResetCharge();
-            EndAim();
-            CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = flyTargetTr;
+            //ResetCharge();
+            //EndAim();
+            //CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = flyTargetTr;
 
             OnStartFlyEvent.Invoke();
 
@@ -680,7 +688,7 @@ public class PlayerController : MonoBehaviour
         {
             currentMaxSpeed = maxSpeed;
             isFlying = false;
-            CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
+            //if (CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
 
             flyAS.clip = null;
             flyAS.Stop();
@@ -746,9 +754,25 @@ public class PlayerController : MonoBehaviour
 
     public void ForcedMovement(Vector3 targetPos)
     {
-        canMove = false;
-        this.transform.position = targetPos;
-        canMove = true;
+        //canMove = false;
+        //this.transform.position = targetPos;
+        //canMove = true;
+        StartCoroutine(_ForcedMovement(targetPos));
+    }
+    private IEnumerator _ForcedMovement(Vector3 _targetPos)
+    {
+        BlockPlayer();
+        currentMaxSpeed = 0;
+        playerPhisicalCollider.enabled = false;
+        while (Vector3.Distance(this.transform.position, _targetPos) > 1f)
+        {
+            rb.linearVelocity = (_targetPos - this.transform.position).normalized * onShootTpMoveSpeed;
+            //this.transform.position += (_targetPos - this.transform.position).normalized * onShootTpMoveSpeed * Time.deltaTime;
+            yield return null;
+        }
+        rb.linearVelocity = Vector3.zero;
+        playerPhisicalCollider.enabled = true;
+        UnblockPlayer();
     }
 
     public void ResetPlayer()
@@ -770,6 +794,7 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator _GetHit(Vector3 hitPos, float hitForce)
     {
+        onHitFeedback.PlayFeedbacks();
         playerAS.pitch = initialPitchAS + Random.Range(-0.1f, 0.1f);
         playerAS.PlayOneShot(playerGetHitAC);
 
@@ -781,17 +806,33 @@ public class PlayerController : MonoBehaviour
         //canFly = false;
         //canMove = false;
         rb.AddForce((this.transform.position - hitPos) * hitForce);
-        BlockPlayer(stunnedTime);
+        BlockPlayer();
         yield return new WaitForSeconds(stunnedTime);
         //canFly = true;
         //canMove = true;
         isHitted = false;
+        UnblockPlayer();
         yield return new WaitForSeconds(0.6f);
         canGetHitted = true;
     }
-    public void BlockPlayer(float blockTime, bool blockAim = true)
+    public void BlockPlayer(bool blockAim = true)
     {
-        StartCoroutine(_BlockPlayer(blockTime, blockAim));
+        canFly = false;
+        EndFly();
+        isFlying = false;
+        canMove = false;
+        if (blockAim)
+        {
+            canAim = false;
+            EndAim();
+        }
+    }
+    public void UnblockPlayer()
+    {
+        canFly = true;
+        currentMaxSpeed = maxSpeed;
+        canMove = true;
+        canAim = true;
     }
     private IEnumerator _BlockPlayer(float blockTime, bool blockAim)
     {
@@ -824,6 +865,8 @@ public class PlayerController : MonoBehaviour
         isOffLimits = true;
         canGetHitted = false;
         TimeManager.Instance.timerStarted = false;
+        playerAS.PlayOneShot(playerGetHitAC);
+        SoundManager.Instance.PlayOneShootAudio(deathSound);
         m_GoalVel = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
         canFly = false;

@@ -27,6 +27,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] public Animator fadeAnim;
     [SerializeField] private Animator ProgressionBTNsAnim;
 
+    [Header("World Select UI Variables")]
+    [SerializeField] private GameObject worldSelectUI;
+    [SerializeField] private GameObject selectWorldBTN;
+    [SerializeField] private TMP_Text gamemodeText;
+
     [Header("Level data Variables")]
     [SerializeField] private TMP_Text levelCountText;
     [SerializeField] private TMP_Text levelNameText;
@@ -477,6 +482,17 @@ public class UIManager : MonoBehaviour
         profileSetupParentGO.SetActive(isActive);
         if (isActive) profileNameField.Select();
         if (!isActive && currentBTN != null) currentBTN.GetComponent<Button>().Select();
+    }
+
+    public void SetSelectWorldScreenGOActive(bool isActive)
+    {
+        worldSelectUI.SetActive(isActive);
+        if(isActive) selectWorldBTN.GetComponent<Button>().Select();
+        if (!isActive && currentBTN != null) currentBTN.GetComponent<Button>().Select();
+    }
+    public void SetGameModeText(string newText)
+    {
+        gamemodeText.text = newText;
     }
 
     public void RepleaceNameIFSpaces()

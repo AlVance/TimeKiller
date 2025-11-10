@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
         {
             m_explorationMode = value;
             UIManager.Instance.SetExplorationTagActive(value);
+            if (value) UIManager.Instance.SetGameModeText("Exploration Mode");
+            else UIManager.Instance.SetGameModeText("Time Killer Mode");
         }
     }
 
@@ -69,9 +71,19 @@ public class GameManager : MonoBehaviour
 
     IEnumerator _UnloadRoutine()
     {
-        yield return null; // o `yield return new WaitForSeconds(5f);`
+        yield return new WaitForEndOfFrame();
+        yield return null;
         Resources.UnloadUnusedAssets();
         GC.Collect();
+        yield return new WaitForEndOfFrame();
+    }
+
+    public void ChangeGameMode()
+    {
+        explorationMode = !explorationMode;
+
+        if (explorationMode) PlayerPrefs.SetInt("GameMode", 0);
+        else PlayerPrefs.SetInt("GameMode", 1);
     }
 }
 

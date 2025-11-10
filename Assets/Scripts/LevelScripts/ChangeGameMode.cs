@@ -22,11 +22,8 @@ public class ChangeGameMode : MonoBehaviour
     {
         if (other.gameObject.tag == "Player") 
         {
-            GameManager.Instance.explorationMode = !GameManager.Instance.explorationMode;
+            GameManager.Instance.ChangeGameMode();
             anim.SetBool("On", true);
-
-            if(GameManager.Instance.explorationMode) PlayerPrefs.SetInt("GameMode", 0);
-            else PlayerPrefs.SetInt("GameMode", 1);
         }
 
     }
