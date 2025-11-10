@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MobileDetector MD;
     private bool m_explorationMode = false;
     public bool isInLobby = false;
+    [SerializeField] private bool startAsExplorationMode = true;
     public bool explorationMode
     {
         get { return m_explorationMode; }
@@ -63,6 +64,8 @@ public class GameManager : MonoBehaviour
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
 #endif
+
+        explorationMode = startAsExplorationMode;
     }
     public void UnloadMemory()
     {

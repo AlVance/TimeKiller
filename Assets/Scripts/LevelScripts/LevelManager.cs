@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class LevelManager : MonoBehaviour
@@ -29,7 +30,18 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private TMP_Text mostCompletedLevelsText;
 
     private LeaderboardManager leaderboardManager;
-    
+
+    private PlayerInput playerInput;
+    private void Awake()
+    {
+        playerInput = new PlayerInput();
+        playerInput.UI.Backward.performed += ctx =>
+        {
+            if(isInWorldSelect)GameManager.Instance.ChangeGameMode();
+
+        };
+    }
+
     private void Start()
     {
         isStart = true;
@@ -165,6 +177,7 @@ public class LevelManager : MonoBehaviour
     }
 
     private bool canGoToWorldSelect = true;
+    private bool isInWorldSelect = false;
     public void GoToWorldSelect()
     {
         if (canGoToWorldSelect)
@@ -175,6 +188,7 @@ public class LevelManager : MonoBehaviour
     private IEnumerator _GoToWorldSelect()
     {
         canGoToWorldSelect = false;
+        isInWorldSelect = true;
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1f);
         if (isStart)
@@ -201,6 +215,7 @@ public class LevelManager : MonoBehaviour
     private IEnumerator _GoToInbetweenLevels()
     {
         canGoToLevelTrans = false;
+        isInWorldSelect = false;
         inLevelTrans = true;
         UIManager.Instance.SetSelectWorldScreenGOActive(false);
         UIManager.Instance.SetGoToInBetweenBTNActive(false);
@@ -469,6 +484,16 @@ public class LevelManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         Destroy(GO);
+    }
+
+    private void OnEnable()
+    {
+        playerInput.UI.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerInput.UI.Disable();
     }
 }
 

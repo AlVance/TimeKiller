@@ -16,7 +16,7 @@ public class PauseMenuController : MonoBehaviour
     private void Awake()
     {
         playerInput = new PlayerInput();
-        playerInput.UI.Click.performed += ctx =>
+        playerInput.UI.Pause.performed += ctx =>
         {
             OpenClosePauseMenu();
 

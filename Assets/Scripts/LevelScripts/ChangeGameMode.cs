@@ -1,13 +1,14 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ChangeGameMode : MonoBehaviour
 {
     private Animator anim;
-    [SerializeField] private bool startAsExplorationMode = true;
+   
+
     private void Start()
     {
-        anim = this.GetComponent<Animator>();
-        GameManager.Instance.explorationMode = startAsExplorationMode;
+        anim = this.GetComponent<Animator>();        
         if(PlayerPrefs.HasKey("GameMode"))
         {
             if (PlayerPrefs.GetInt("GameMode") == 0) GameManager.Instance.explorationMode = true;
@@ -18,6 +19,8 @@ public class ChangeGameMode : MonoBehaviour
             PlayerPrefs.SetInt("GameMode", 0);
         }
     }
+
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player") 
