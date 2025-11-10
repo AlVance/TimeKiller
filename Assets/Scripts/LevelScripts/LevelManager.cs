@@ -7,7 +7,7 @@ using TMPro;
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] public World[] worlds;
-    private int currentWorld = 0;
+    [HideInInspector]public int currentWorld = 0;
     //[SerializeField] private GameObject[] levelsGO;
     [HideInInspector] public GameObject currentLevelGO;
 
@@ -31,16 +31,7 @@ public class LevelManager : MonoBehaviour
 
     private LeaderboardManager leaderboardManager;
 
-    private PlayerInput playerInput;
-    private void Awake()
-    {
-        playerInput = new PlayerInput();
-        playerInput.UI.Backward.performed += ctx =>
-        {
-            if(isInWorldSelect)GameManager.Instance.ChangeGameMode();
-
-        };
-    }
+    
 
     private void Start()
     {
@@ -177,7 +168,7 @@ public class LevelManager : MonoBehaviour
     }
 
     private bool canGoToWorldSelect = true;
-    private bool isInWorldSelect = false;
+    [HideInInspector]public bool isInWorldSelect = false;
     public void GoToWorldSelect()
     {
         if (canGoToWorldSelect)
@@ -484,16 +475,6 @@ public class LevelManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         Destroy(GO);
-    }
-
-    private void OnEnable()
-    {
-        playerInput.UI.Enable();
-    }
-
-    private void OnDisable()
-    {
-        playerInput.UI.Disable();
     }
 }
 

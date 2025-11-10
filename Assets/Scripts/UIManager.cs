@@ -99,6 +99,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Debug UI Varables")]
     [SerializeField] private TMP_Text fpsText;
+    [SerializeField] private TMP_Text currentWorldText;
 
     [Header("Misc Variables")]
     [SerializeField] private GameObject startLvlExplorationScreen;
@@ -493,6 +494,11 @@ public class UIManager : MonoBehaviour
     public void SetGameModeText(string newText)
     {
         gamemodeText.text = newText;
+    }
+
+    public void SetCurrentWorldText(string newText)
+    {
+        currentWorldText.text = newText;
     }
 
     public void RepleaceNameIFSpaces()
