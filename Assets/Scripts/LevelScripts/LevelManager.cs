@@ -163,6 +163,34 @@ public class LevelManager : MonoBehaviour
         if(!GameManager.Instance.explorationMode)PlayerPrefs.SetInt("Level_" + (GameManager.Instance.currentLevel - 1), 1);
         if (!GameManager.Instance.explorationMode && PlayerPrefs.GetInt("CompletedLevels") < GameManager.Instance.currentLevel) PlayerPrefs.SetInt("CompletedLevels", GameManager.Instance.currentLevel);
     }
+
+    private bool canGoToWorldSelect = true;
+    public void GoToWorldSelect()
+    {
+        if (canGoToWorldSelect)
+        {
+            StartCoroutine(_GoToWorldSelect());
+        }
+    }
+    private IEnumerator _GoToWorldSelect()
+    {
+        canGoToWorldSelect = false;
+        UIManager.Instance.SetFade(true);
+        yield return new WaitForSeconds(1f);
+        if (isStart)
+        {
+            GameManager.Instance.playerWork = false;
+            startLevelGO.SetActive(false);
+            isStart = false;
+            GameManager.Instance.isInLobby = false;
+            UIManager.Instance.SetInitialSceneUIActive(false);
+        }
+        UIManager.Instance.SetSelectWorldScreenGOActive(true);
+
+        UIManager.Instance.SetFade(false);
+        canGoToWorldSelect = true;
+    }
+
     public void GoToInbetweenLevels()
     {
         if (canGoToLevelTrans)
@@ -174,6 +202,7 @@ public class LevelManager : MonoBehaviour
     {
         canGoToLevelTrans = false;
         inLevelTrans = true;
+        UIManager.Instance.SetSelectWorldScreenGOActive(false);
         UIManager.Instance.SetGoToInBetweenBTNActive(false);
         UIManager.Instance.SetGoToStartBTNActive(false);
         UIManager.Instance.SetFade(true);
@@ -213,6 +242,8 @@ public class LevelManager : MonoBehaviour
         }
         ++GameManager.Instance.currentLevel;
     }
+
+
     private void SetEndGameUIStuff()
     {
         StartCoroutine(_SetEndGameUIStuff());
