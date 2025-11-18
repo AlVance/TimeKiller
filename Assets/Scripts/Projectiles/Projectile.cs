@@ -14,8 +14,6 @@ public class Projectile : MonoBehaviour
     public bool isActive = false;
     public Transform spawnPos;
     private SphereCollider collidier;
-    [SerializeField] public AudioSource shootAS;
-    [SerializeField] private AudioClip chargeShootAC, holdShootAC, setChargeAC, shootAC, hitAC;
     [SerializeField] private NearbyEnemyDetector enemyDetector;
 
     private void Awake()
@@ -47,10 +45,6 @@ public class Projectile : MonoBehaviour
         isActive = true;
         spawnPos = _spawnPos;
 
-        shootAS.loop = false;
-        shootAS.clip = chargeShootAC;
-        shootAS.Play();
-
         if (autoAim)
         {
             enemyDetector.enemyToAutoAim = null;
@@ -65,10 +59,6 @@ public class Projectile : MonoBehaviour
         rb.isKinematic = false;
         rb.linearVelocity = direction * speed;
 
-
-        shootAS.Stop();
-        shootAS.loop = false;
-        shootAS.PlayOneShot(shootAC);
     }
 
     public void SetCharged()
@@ -77,12 +67,6 @@ public class Projectile : MonoBehaviour
         collidier.radius = 0.5f;
         charged = true;
 
-        shootAS.Stop();
-        shootAS.loop = true;
-        shootAS.clip = holdShootAC;
-        shootAS.Play();
-
-        shootAS.PlayOneShot(setChargeAC);
     }
 
     public void SetProjectileInactive()
@@ -102,9 +86,6 @@ public class Projectile : MonoBehaviour
             Destroy(this.gameObject);
         }
         timeLaunched = 0;
-
-        shootAS.loop = false;
-        shootAS.Stop();
 
         if (autoAim) 
         {

@@ -7,7 +7,6 @@ public class Objective : MonoBehaviour
     [SerializeField] private GameObject objPS;
     [SerializeField] private Transform objPSSpawnPos;
     [SerializeField] private GameObject acquiredPS;
-    [SerializeField] private AudioClip objectiveAC;
 
     private void Start()
     {   
@@ -25,7 +24,6 @@ public class Objective : MonoBehaviour
         {
             GameManager.Instance.currentLevelGO.GetComponent<Level>().SetCurrentObjectivesInt(objectivePoints);
             GameObject GO = Instantiate(acquiredPS, this.transform.position, this.transform.rotation);
-            SoundManager.Instance.PlayOneShootAudio(objectiveAC);
             Destroy(GO, 3);
         }
     }

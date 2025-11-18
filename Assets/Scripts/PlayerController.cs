@@ -288,12 +288,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Events")]
     public UnityEvent OnStartFlyEvent;
 
-    [Header("Sound Variables")]
-    [SerializeField] private AudioSource playerAS;
-    [SerializeField] private AudioSource flyAS;
-    [SerializeField] private AudioClip playerGetHitAC, playerStartFlyAC, playerFlyAC;
-    [SerializeField] private AudioClip deathSound;
-    private float initialPitchAS;
+    [Header("Audio")]
 
     [Header("Feedbacks")]
     [SerializeField] private MMF_Player onHitFeedback;
@@ -316,8 +311,7 @@ public class PlayerController : MonoBehaviour
         currentMaxSpeed = maxSpeed;
         currentGravityForce = gravityForce;
         ProjectilePooling();
-
-        initialPitchAS = playerAS.pitch;
+       
     }
 
     private List<GameObject> projectilePool = new List<GameObject>();
@@ -661,9 +655,6 @@ public class PlayerController : MonoBehaviour
             //CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = flyTargetTr;
 
             OnStartFlyEvent.Invoke();
-
-            playerAS.PlayOneShot(playerStartFlyAC);
-            StartCoroutine(PlayFlySound());
         }
     }
     private void Fly()
@@ -689,22 +680,9 @@ public class PlayerController : MonoBehaviour
             currentMaxSpeed = maxSpeed;
             isFlying = false;
             //if (CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
-
-            flyAS.clip = null;
-            flyAS.Stop();
         }
     }
 
-    private IEnumerator PlayFlySound()
-    {
-        yield return new WaitForSeconds(0.1f);
-        if (isFlying)
-        {
-            flyAS.clip = playerFlyAC;
-            flyAS.Play();
-        }
-       
-    }
     private bool UpRayHitted;
     private bool FrontRayHitted;
     private void CheckLedgeGrab()
@@ -795,8 +773,6 @@ public class PlayerController : MonoBehaviour
     private IEnumerator _GetHit(Vector3 hitPos, float hitForce)
     {
         onHitFeedback.PlayFeedbacks();
-        playerAS.pitch = initialPitchAS + Random.Range(-0.1f, 0.1f);
-        playerAS.PlayOneShot(playerGetHitAC);
 
         canGetHitted = false;
         isHitted = true;
@@ -865,8 +841,6 @@ public class PlayerController : MonoBehaviour
         isOffLimits = true;
         canGetHitted = false;
         TimeManager.Instance.timerStarted = false;
-        playerAS.PlayOneShot(playerGetHitAC);
-        SoundManager.Instance.PlayOneShootAudio(deathSound);
         m_GoalVel = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
         canFly = false;

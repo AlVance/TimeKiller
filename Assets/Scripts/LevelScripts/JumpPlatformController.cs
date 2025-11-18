@@ -13,12 +13,10 @@ public class JumpPlatformController : MonoBehaviour
     [SerializeField] private float blockInputTime = 0.05f;
     [SerializeField] private Animator platformAnim;
     [SerializeField] private bool forcePlayerToCenter = false;
-    [SerializeField] private AudioSource jumpAS;
-    private float basePich;
 
     private void Start()
     {
-        basePich = jumpAS.pitch;
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -36,8 +34,6 @@ public class JumpPlatformController : MonoBehaviour
             jumpFeedback.PlayFeedbacks();
             //particle.Play();
 
-            jumpAS.pitch = basePich + Random.Range(-0.2f, 0.2f);
-            jumpAS.Play();
         }
     }
 

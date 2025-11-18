@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.Splines;
 using MyBox;
 using System.Collections.Generic;
+using FMODUnity;
+
 #if UNITY_EDITOR
 using UnityEditor.Callbacks;
 #endif
@@ -62,9 +64,9 @@ public class EnemyBehaviour : MonoBehaviour
     private Vector3 gunTr;
 
 
-    [Header("Sound Variables")]
-    [SerializeField] private AudioSource enemyAS;
-    [SerializeField] private AudioClip getHitAC, tpPlayerAC;
+    [Header("Audio")]
+    [SerializeField] StudioEventEmitter testEvent;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -113,7 +115,6 @@ public class EnemyBehaviour : MonoBehaviour
                 EnemyDeath();
             }
 
-            enemyAS.PlayOneShot(getHitAC);
         }
     }
 
@@ -135,7 +136,6 @@ public class EnemyBehaviour : MonoBehaviour
         if(enemyBehaviourType == enemyOnHitTypes.TpOnKill)
         {
             GameManager.Instance.currentPlayer.ForcedMovement(this.transform.position);
-            enemyAS.PlayOneShot(tpPlayerAC);
         }  
     }
 

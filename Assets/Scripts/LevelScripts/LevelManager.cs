@@ -11,9 +11,6 @@ public class LevelManager : MonoBehaviour
     [HideInInspector] public GameObject currentLevelGO;
 
     [SerializeField] private float startLevelTime = 3f;
-    [SerializeField] private AudioClip VictorySound;
-    [SerializeField] private AudioClip Countdown;
-    [SerializeField] private AudioClip CountdownEnd;
 
 
     [Header("LevelTransition variables")]
@@ -105,16 +102,13 @@ public class LevelManager : MonoBehaviour
         for (int i = 0; i < startLevelTime; i++)
         {
             UIManager.Instance.SetStartLevelTimerText((startLevelTime - i).ToString("0"));
-            SoundManager.Instance.PlayOneShootAudio(Countdown);
 
             yield return new WaitForSeconds(1f);
         }
         GameManager.Instance.currentPlayer.UnblockPlayer();
         GameManager.Instance.levelStarted = true;
-        SoundManager.Instance.PlayOneShootAudio(CountdownEnd);
         UIManager.Instance.SetStartLevelTimerText("GO!");
         TimeManager.Instance.timerStarted = true;
-        SoundManager.Instance.MusicOnOff(true);
         yield return new WaitForSeconds(1f);
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(false);
         canGoToStartLevelGameplay = true;
@@ -142,7 +136,6 @@ public class LevelManager : MonoBehaviour
         CameraManager.Instance.ChangeCam(CameraManager.Instance.winCam);
         GameManager.Instance.currentPlayer.gameObject.transform.eulerAngles = new Vector3(0,-180,0);
         GameManager.Instance.currentPlayer.anim.SetBool("IsWin", true);
-        SoundManager.Instance.PlayOneShootAudio(VictorySound);
         yield return new WaitForSeconds(0.1f);
         UIManager.Instance.SetTimerUIToWinScreen();
         yield return new WaitForSeconds(0.8f);
@@ -216,7 +209,6 @@ public class LevelManager : MonoBehaviour
             UIManager.Instance.SetInitialSceneUIActive(false);
         }
         levelTransSceneGO.SetActive(true);
-        SoundManager.Instance.MusicOnOff(false);
         yield return new WaitForSeconds(1f);
         GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
         GameManager.Instance.currentPlayer.anim.SetBool("IsWin", false);
@@ -363,7 +355,6 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetGoToCreditsBTNActive(false);
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1.5f);
-        SoundManager.Instance.LobbyMusicOnOff(true);
         levelTransSceneGO.SetActive(false);
         UIManager.Instance.SetCreditsScreenActive(true);
         yield return new WaitForEndOfFrame();
@@ -408,7 +399,6 @@ public class LevelManager : MonoBehaviour
         isStart = true;
         GameManager.Instance.isInLobby = true;
         UIManager.Instance.SetFade(true);
-        SoundManager.Instance.LobbyMusicOnOff(true);
         yield return new WaitForSeconds(1f);
         GameManager.Instance.currentLevel = 0;
         TimeManager.Instance.currentTime = TimeManager.Instance.startTime;
