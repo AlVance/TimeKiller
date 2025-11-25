@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using MoreMountains.Feedbacks;
+using FMODUnity;
 
 public class PlayerController : MonoBehaviour
 {
@@ -289,6 +290,11 @@ public class PlayerController : MonoBehaviour
     public UnityEvent OnStartFlyEvent;
 
     [Header("Audio")]
+    public StudioEventEmitter dashPress;
+    public StudioEventEmitter dashHold;
+    public StudioEventEmitter aimHold;
+    public StudioEventEmitter shoot;
+    [SerializeField] private AimHoldPitchController aimHoldPitchController;
 
     [Header("Feedbacks")]
     [SerializeField] private MMF_Player onHitFeedback;
@@ -309,7 +315,7 @@ public class PlayerController : MonoBehaviour
         maxFuel = m_maxFuel;
         currentFuel = maxFuel;
         currentMaxSpeed = maxSpeed;
-        currentGravityForce = gravityForce;
+        currentGravityForce = gravityForce;     
         ProjectilePooling();
        
     }
@@ -366,6 +372,8 @@ public class PlayerController : MonoBehaviour
         {
             aimDirAidGO.SetActive(true);
             if(CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
+            aimHoldPitchController.AudStartCharging();
+            aimHold.Play();
         }
     }
 
@@ -380,6 +388,8 @@ public class PlayerController : MonoBehaviour
         aimDirAidGO.SetActive(false);
         if (CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
         isAiming = false;
+        aimHoldPitchController.AudStopCharging();
+        aimHold.Stop();
     }
 
     private void ReloadStarted()
@@ -550,6 +560,7 @@ public class PlayerController : MonoBehaviour
             currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(shootDirRelativeToCam + moveDirRelativeToCam * moveDirShootInertia, projectileSpeed);
             currentProjectileGO = null;
             currentChargeTime = 0;
+            shoot.Play();
             //--currentBullets;
         }
         else
@@ -650,6 +661,8 @@ public class PlayerController : MonoBehaviour
             isFlying = true;
             currentMaxSpeed = flySpeed;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+            dashPress.Play();
+            dashHold.Play();
             //ResetCharge();
             //EndAim();
             //CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = flyTargetTr;
@@ -662,7 +675,7 @@ public class PlayerController : MonoBehaviour
         if(isFlying && currentFuel > 0 && canFly)
         {
             if(m_GoalVel.magnitude > 0) currentFuel -= fuelBurnSpeed * Time.deltaTime;
-            else currentFuel -= fuelBurnSpeed / 4 * Time.deltaTime;
+            else currentFuel -= fuelBurnSpeed / 4 * Time.deltaTime;         
 
 
         }
@@ -679,6 +692,7 @@ public class PlayerController : MonoBehaviour
         {
             currentMaxSpeed = maxSpeed;
             isFlying = false;
+            dashHold.Stop();
             //if (CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
         }
     }

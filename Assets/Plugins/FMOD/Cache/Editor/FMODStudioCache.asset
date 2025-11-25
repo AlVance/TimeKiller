@@ -21,9 +21,10 @@ MonoBehaviour:
   Banks:
   - {fileID: 6215465024054916536}
   IsStream: 0
-  Is3D: 1
-  IsOneShot: 1
-  Parameters: []
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: 4971965270160302636}
   MinDistance: 1
   MaxDistance: 20
   Length: 5494
@@ -48,7 +49,7 @@ MonoBehaviour:
   Banks:
   - {fileID: 6215465024054916536}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -75,7 +76,7 @@ MonoBehaviour:
   Banks:
   - {fileID: 6215465024054916536}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -102,7 +103,7 @@ MonoBehaviour:
   Banks:
   - {fileID: 6215465024054916536}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -150,10 +151,10 @@ MonoBehaviour:
   Path: ../../FMOD/TimeKiller/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638988111178910939
+  lastModified: 638995960844070557
   FileSizes:
   - Name: Desktop
-    Value: 1692
+    Value: 1742
   Exists: 1
 --- !u!114 &-2868795883653063162
 MonoBehaviour:
@@ -230,7 +231,7 @@ MonoBehaviour:
   Banks:
   - {fileID: 6215465024054916536}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -257,7 +258,7 @@ MonoBehaviour:
   Banks:
   - {fileID: 6215465024054916536}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -284,7 +285,7 @@ MonoBehaviour:
   Banks:
   - {fileID: 6215465024054916536}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -332,7 +333,7 @@ MonoBehaviour:
   - {fileID: 8163343064106644898}
   StringsBanks:
   - {fileID: -4353633066982350397}
-  cacheTime: 638988111178910939
+  cacheTime: 638996028398788133
   cacheVersion: 131632
 --- !u!114 &37666955512615397
 MonoBehaviour:
@@ -355,7 +356,7 @@ MonoBehaviour:
   Banks:
   - {fileID: 6215465024054916536}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -382,7 +383,7 @@ MonoBehaviour:
   Banks:
   - {fileID: 6215465024054916536}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -436,7 +437,7 @@ MonoBehaviour:
   Banks:
   - {fileID: 6215465024054916536}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -464,7 +465,7 @@ MonoBehaviour:
   - {fileID: 6215465024054916536}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
+  IsOneShot: 0
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
@@ -491,7 +492,7 @@ MonoBehaviour:
   - {fileID: 6215465024054916536}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
+  IsOneShot: 0
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
@@ -523,6 +524,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 426
+--- !u!114 &4971965270160302636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/ShootHold/AimPitch
+  m_EditorClassIdentifier: 
+  Name: AimPitch
+  StudioPath: 
+  Min: 0
+  Max: 6
+  Default: 0
+  ID:
+    data1: 1168801509
+    data2: 1071716322
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
 --- !u!114 &6148974809428129530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -544,7 +569,7 @@ MonoBehaviour:
   Banks:
   - {fileID: 6215465024054916536}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -565,10 +590,10 @@ MonoBehaviour:
   Path: ../../FMOD/TimeKiller/Build/Desktop/AllSounds.bank
   Name: AllSounds
   StudioPath: bank:/AllSounds
-  lastModified: 638988111178679057
+  lastModified: 638996028398788133
   FileSizes:
   - Name: Desktop
-    Value: 5007456
+    Value: 5007680
   Exists: 1
 --- !u!114 &7767529718778259706
 MonoBehaviour:
@@ -591,7 +616,7 @@ MonoBehaviour:
   Banks:
   - {fileID: 6215465024054916536}
   IsStream: 0
-  Is3D: 1
+  Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
@@ -618,8 +643,8 @@ MonoBehaviour:
   Banks:
   - {fileID: 6215465024054916536}
   IsStream: 0
-  Is3D: 1
-  IsOneShot: 1
+  Is3D: 0
+  IsOneShot: 0
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
@@ -639,7 +664,7 @@ MonoBehaviour:
   Path: ../../FMOD/TimeKiller/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638988111178890910
+  lastModified: 638995960844055406
   FileSizes:
   - Name: Desktop
     Value: 1036
