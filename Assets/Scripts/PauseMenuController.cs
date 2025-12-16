@@ -77,6 +77,7 @@ public class PauseMenuController : MonoBehaviour
                 yield return new WaitForEndOfFrame();
                 Time.timeScale = 0f;                
             }
+            unscaled_mat.SetFloat("_UnscaledTime", 0);
             isOpened = !isOpened;
             yield return new WaitForEndOfFrame();
             canOpenMenu = true;
@@ -131,7 +132,6 @@ public class PauseMenuController : MonoBehaviour
 
     private void OnEnable()
     {
-        unscaled_mat.SetFloat("_UnscaledTime", 0);
         playerInput.UI.Enable();
     }
 
