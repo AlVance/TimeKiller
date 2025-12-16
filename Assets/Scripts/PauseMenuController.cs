@@ -131,11 +131,13 @@ public class PauseMenuController : MonoBehaviour
 
     private void OnEnable()
     {
+        unscaled_mat.SetFloat("_UnscaledTime", 0);
         playerInput.UI.Enable();
     }
 
     private void OnDisable()
     {
+        unscaled_mat.SetFloat("_UnscaledTime", 0);
         playerInput.UI.Disable();
     }
 }
