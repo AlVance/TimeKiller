@@ -7,9 +7,9 @@ public class OffLimitsColController : MonoBehaviour
     private Level currentLevel;
     private void Start()
     {
-        if (this.transform.parent.TryGetComponent<Level>(out Level parentLevel))
+        if (this.transform.GetComponentInParent<Level>() != null)
         {
-            currentLevel = parentLevel;
+            currentLevel = this.transform.GetComponentInParent<Level>();
         }
     }
     private void OnTriggerEnter(Collider other)
