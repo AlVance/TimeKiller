@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: _Master material
+  m_Name: _MasterMat_Player1
   m_Shader: {fileID: -6465566751694194690, guid: 29c115ded06c81145a4eef2cd895a054, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -72,8 +72,9 @@ Material:
     - _isDissolving: 0
     - _isUpwards: 1
     m_Colors:
+    - _BaseColor: {r: 0, g: 0, b: 0, a: 1}
     - _Edge_color: {r: 2, g: 1.3019608, b: 0, a: 1}
     - _Emission_color: {r: 2.297397, g: 0.3336468, b: 0, a: 1}
-    - _Light_intensity: {r: 0.05, g: 1, b: 0, a: 0}
+    - _Light_intensity: {r: 0.01, g: 0.3, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
