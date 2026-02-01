@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using MoreMountains.Feedbacks;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
@@ -51,6 +52,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     [SerializeField] private float accelerationSpeed;
+    private float currentAccelerationSpeed;
     [SerializeField] private float maxAccelerationForce;
     private bool movePressed;
     private bool canMove = true;
@@ -169,53 +171,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    [Header("Reload Variables")]
-    [SerializeField] private float m_reloadBarSpeed;
-    private float reloadBarSpeed
-    {
-        get { return m_reloadBarSpeed; }
-        set
-        {
-            m_reloadBarSpeed = value;
-            UIManager.Instance.SetReloadValueBar(m_reloadBarSpeed);
-        }
-    }
-    private float reloadBarCurrentValue = 0;
-    [SerializeField] private float m_successReloadRate;
-    private float successReloadRate
-    {
-        get { return m_successReloadRate; }
-        set
-        {
-            m_successReloadRate = value;
-            UIManager.Instance.SetReloadSuccessBar(m_successReloadRate);
-        }
-    }
-    [SerializeField] private int extraBulletsOnSuccess;
-    private bool isReloading = false;
-
-    [Header("Dash Variables")]
-    [SerializeField] private float m_dashTime;
-    public float dashTime
-    {
-        get { return m_dashTime; }
-        set 
-        {
-            m_dashTime = value;      
-        }
-    }
-    [SerializeField] private float m_dashSpeed;
-    public float dashSpeed
-    {
-        get { return m_dashSpeed; }
-        set
-        {
-            m_dashSpeed = value;
-        }
-    }
-    private bool isDashing = false;
-
     [Header("Fly Variables")]
     [SerializeField] private float m_maxFuel;
     public float maxFuel
@@ -310,11 +265,11 @@ public class PlayerController : MonoBehaviour
         if (GameManager.Instance != null) GameManager.Instance.currentPlayer = this;
         maxBullets = m_maxBullets;
         currentBullets = maxBullets;
-        successReloadRate = m_successReloadRate;
         maxFuel = m_maxFuel;
         currentFuel = maxFuel;
         currentMaxSpeed = maxSpeed;
         currentGravityForce = gravityForce;
+        currentAccelerationSpeed = accelerationSpeed;
         ProjectilePooling();
 
         initialPitchAS = playerAS.pitch;
@@ -339,8 +294,7 @@ public class PlayerController : MonoBehaviour
         {
             Aim();
             ChargeShot();
-            //Dash();
-            //ReloadQTE();
+
             Fly();
         }
         HandleAnimations();
@@ -352,7 +306,7 @@ public class PlayerController : MonoBehaviour
         if (GameManager.Instance.playerWork)
         {  
             Movement();
-            //if (!isDashing && !isFlying) AddGravityForce();
+
             if(affectedByGravity) AddGravityForce();
             CheckLedgeGrab();
         }
@@ -390,21 +344,6 @@ public class PlayerController : MonoBehaviour
 
     private void ReloadStarted()
     {
-        //if (!isReloading)
-        //{
-        //    if (currentBullets <= 0)
-        //    {
-        //        ReloadBullets();
-        //    }
-        //    else
-        //    {
-        //        EnterDash();
-        //    }
-        //}
-        //else
-        //{
-        //    StopReloadQTE();
-        //}
         EnterFly();
     }
     private void ReloadPerformed()
@@ -430,12 +369,12 @@ public class PlayerController : MonoBehaviour
 
     private void AddGravityForce()
     {
-        if ((isDashing || isFlying) && rb.linearVelocity.y <= 0)
+        if (isFlying && rb.linearVelocity.y <= 0)
         {
             currentGravityForce = 0;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         }
-        else if ((isDashing || isFlying) && rb.linearVelocity.y > 0)
+        else if (isFlying && rb.linearVelocity.y > 0)
         {
             currentGravityForce = dashGravityForce;
         }
@@ -493,11 +432,10 @@ public class PlayerController : MonoBehaviour
                 else otherVel = Vector3.zero;
             }
             else otherVel = Vector3.zero;
-            //Vector3 unitGoal = new Vector3(moveDir.x, 0, moveDir.y);
             Vector3 unitGoal = moveDirRelativeToCam;
             Vector3 goalVel = unitGoal * currentMaxSpeed + otherVel;
 
-            m_GoalVel = Vector3.MoveTowards(m_GoalVel, goalVel, accelerationSpeed * Time.fixedDeltaTime);
+            m_GoalVel = Vector3.MoveTowards(m_GoalVel, goalVel, currentAccelerationSpeed * Time.fixedDeltaTime);
 
             Vector3 neededAccel = (m_GoalVel - new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z)) / Time.fixedDeltaTime;
 
@@ -510,10 +448,9 @@ public class PlayerController : MonoBehaviour
 
     private void Aim()
     {
-        if (canAim && aimPressed && (/*!isFlying &&*/ !isDashing))
+        if (canAim && aimPressed)
         {
             if (!isAiming) AimStarted();
-            //this.transform.rotation = Quaternion.LookRotation(new Vector3(aimDir.x, 0, aimDir.y));
             this.transform.rotation = Quaternion.LookRotation(aimDirRelativeToCam);
             isAiming = true;
         }
@@ -522,13 +459,12 @@ public class PlayerController : MonoBehaviour
 
     private void ChargeShot()
     {
-        if (canAim && aimPressed && !shootCD /*&& !isDashing && !isFlying*/)
+        if (canAim && aimPressed && !shootCD)
         {
             if(currentBullets > 0)
             {
                 if (currentChargeTime <= 0)
                 {
-                    //currentProjectileGO = Instantiate(projectileGO, porjectileSpawnPos.position, Quaternion.identity, porjectileSpawnPos);
                     currentProjectileGO = projectilePool[currentProjectilePooled];
                     if (currentProjectilePooled < projectilePool.Count - 1) ++currentProjectilePooled;
                     else currentProjectilePooled = 0;
@@ -552,11 +488,9 @@ public class PlayerController : MonoBehaviour
         if(currentChargeTime >= shootChargeTime)
         {
             currentProjectileGO.transform.parent = null;
-            //currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(new Vector3(shootDir.x, 0, shootDir.y) + (new Vector3(moveDir.x, 0, moveDir.y) * moveDirShootInertia), projectileSpeed);
             currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(shootDirRelativeToCam + moveDirRelativeToCam * moveDirShootInertia, projectileSpeed);
             currentProjectileGO = null;
             currentChargeTime = 0;
-            //--currentBullets;
         }
         else
         {
@@ -583,41 +517,8 @@ public class PlayerController : MonoBehaviour
         shootCD = false;
     }
 
-    private void ReloadBullets()
-    {
-        reloadBarCurrentValue = 1;
-        UIManager.Instance.SetReloadValueBar(reloadBarCurrentValue);
-        UIManager.Instance.SetReloadQTEActive(true);
-        isReloading = true;        
-    }
-    
-    private void ReloadQTE()
-    {
-        if (isReloading)
-        {
-            reloadBarCurrentValue -= reloadBarSpeed * Time.deltaTime;
-            UIManager.Instance.SetReloadValueBar(reloadBarCurrentValue);
-            if (reloadBarCurrentValue <= 0) StopReloadQTE();
-        }
-    }
-    private void StopReloadQTE()
-    {
-        if(reloadBarCurrentValue < successReloadRate + 0.1f && reloadBarCurrentValue > 0.1f)
-        {
-            currentBullets = maxBullets + extraBulletsOnSuccess;
-        }
-        else
-        {
-            currentBullets = maxBullets;
-        }
-        isReloading = false;
-        UIManager.Instance.SetReloadQTEActive(false);
-        reloadBarCurrentValue = 1;
-    }
 
-
-
-    Vector2 dashDir;
+    /*Vector2 dashDir;
     private void EnterDash()
     {
         --currentBullets;
@@ -648,7 +549,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
+    */
     private void EnterFly()
     {
         if (currentFuel > 0 && canFly)
@@ -656,9 +557,6 @@ public class PlayerController : MonoBehaviour
             isFlying = true;
             currentMaxSpeed = flySpeed;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
-            //ResetCharge();
-            //EndAim();
-            //CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = flyTargetTr;
 
             OnStartFlyEvent.Invoke();
 
@@ -666,6 +564,35 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(PlayFlySound());
         }
     }
+
+    ////////////////////////////////////////////////
+    float currentDriftCharge = 0;
+    float driftChargeSpeed = 1;
+    float maxChargeTime = 1f;
+    bool isChargingDrift = false;
+    bool isDrifting = false;
+    private void EnterChargeDrift()
+    {
+
+    }
+    private void ChargeDrift()
+    {
+
+    }
+    private void EnterDrift()
+    {
+
+    }
+    private void Drift()
+    {
+
+    }
+    private void ExitDrift()
+    {
+
+    }
+    ///////////////////////////////////////////////////////
+
     private void Fly()
     {
         if(isFlying && currentFuel > 0 && canFly)
@@ -818,7 +745,8 @@ public class PlayerController : MonoBehaviour
     public void BlockPlayer(bool blockAim = true)
     {
         canFly = false;
-        EndFly();
+        //EndFly();
+        ExitDrift();
         isFlying = false;
         canMove = false;
         if (blockAim)
@@ -834,27 +762,8 @@ public class PlayerController : MonoBehaviour
         canMove = true;
         canAim = true;
     }
-    private IEnumerator _BlockPlayer(float blockTime, bool blockAim)
-    {
-        canFly = false;
-        EndFly();
-        isFlying = false;
-        canMove = false;
-        if (blockAim)
-        {
-            canAim = false;
-            EndAim();
-        }
-        currentMaxSpeed = 0;
-        yield return new WaitForSeconds(blockTime);
-        canFly = true;
-        currentMaxSpeed = maxSpeed;
-        canMove = true;
-        canAim = true;
-    }
 
     private bool isOffLimits = false;
-
     public void PlayerOffLimits(Transform tpPos)
     {
         if(!isOffLimits) StartCoroutine(_PlayerOfLimits(tpPos));
@@ -963,15 +872,6 @@ public class PlayerController : MonoBehaviour
             }
 
             aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
-            //if (aimDir.x < 0.2f && aimDir.x > -0.2f && aimDir.y < 0.2f && aimDir.y > -0.2f)
-            //{
-            //    shootDir = aimDir;
-            //    shootDirRelativeToCam = GetV3RelativeToCamera(shootDir);
-            //    aimPressed = false;
-            //    aimDir = Vector2.zero;
-            //    aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
-            //    AimFinished();
-            //}
         };
 
         playerInput.PlayerControls.Aim.canceled += ctx =>
@@ -1008,95 +908,6 @@ public class PlayerController : MonoBehaviour
                 shootDirRelativeToCam = GetV3RelativeToCamera(shootDir);
                 AimFinished();
             } 
-        };
-    }
-
-    private void HandleInput1()
-    {
-        playerInput.PlayerControls.Move.started += ctx =>
-        {
-            MoveStarted();
-        };
-        //When a move input is used its value is read and stored as the move direction and as a bool
-        playerInput.PlayerControls.Move.performed += ctx =>
-        {
-            moveDir = ctx.ReadValue<Vector2>();
-            movePressed = moveDir.x != 0 || moveDir.y != 0;
-
-            moveDirRelativeToCam = GetV3RelativeToCamera(moveDir);
-        };
-        //When the move input is canceled it resets the move direction to 0 and the moving bool to false
-        playerInput.PlayerControls.Move.canceled += ctx =>
-        {
-            movePressed = false;
-            lastMoveDir = moveDir;
-            moveDir = Vector2.zero;
-            moveDirRelativeToCam = GetV3RelativeToCamera(moveDir);
-        };
-
-
-        playerInput.PlayerControls.Aim.started += ctx =>
-        {
-            if (GameManager.Instance.playerWork && Mouse.current.leftButton.isPressed) AimStarted();
-        };
-
-        playerInput.PlayerControls.Aim.performed += ctx =>
-        {
-            if (Mouse.current.leftButton.isPressed)
-            {
-                Vector2 tempAimDir = ctx.ReadValue<Vector2>();
-                Vector3 PlayerScreenPos = Camera.main.WorldToScreenPoint(this.transform.position);
-                tempAimDir.x -= PlayerScreenPos.x;
-                tempAimDir.y -= PlayerScreenPos.y;
-                aimDir = tempAimDir.normalized;
-            }
-            else
-            {
-                Vector2 tempAimDir = ctx.ReadValue<Vector2>();
-                if (tempAimDir.x > 0.1f || tempAimDir.x < -0.1f || tempAimDir.y > 0.1f || tempAimDir.y < -0.1f)
-                {
-                    aimDir = tempAimDir;
-                    if (GameManager.Instance.playerWork) AimStarted();
-                }
-
-            }
-
-            aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
-            //if (aimDir.x < 0.2f && aimDir.x > -0.2f && aimDir.y < 0.2f && aimDir.y > -0.2f)
-            //{
-            //    shootDir = aimDir;
-            //    shootDirRelativeToCam = GetV3RelativeToCamera(shootDir);
-            //    aimPressed = false;
-            //    aimDir = Vector2.zero;
-            //    aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
-            //    AimFinished();
-            //}
-        };
-
-        playerInput.PlayerControls.Aim.canceled += ctx =>
-        {
-            shootDir = aimDir;
-            shootDirRelativeToCam = GetV3RelativeToCamera(shootDir);
-            aimPressed = false;
-            aimDir = Vector2.zero;
-            aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
-            AimFinished();
-        };
-
-
-        playerInput.PlayerControls.Reload.started += ctx =>
-        {
-            if (GameManager.Instance.playerWork) ReloadStarted();
-        };
-
-        playerInput.PlayerControls.Reload.performed += ctx =>
-        {
-            if (GameManager.Instance.playerWork) ReloadPerformed();
-        };
-
-        playerInput.PlayerControls.Reload.canceled += ctx =>
-        {
-            if (GameManager.Instance.playerWork) ReloadEnded();
         };
     }
     private void HandleAnimations()

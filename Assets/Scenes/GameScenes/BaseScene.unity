@@ -12311,6 +12311,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6905120389310956165, guid: 5e537cddc441d7f43bec932d35e7af34, type: 3}
+      propertyPath: m_flySpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905120389310956165, guid: 5e537cddc441d7f43bec932d35e7af34, type: 3}
+      propertyPath: m_maxSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6905120389310956165, guid: 5e537cddc441d7f43bec932d35e7af34, type: 3}
+      propertyPath: accelerationSpeed
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20329,7 +20341,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6977948145005582760, guid: b6b36c985488a184b8ac70517b96516c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 3.2000122
+      value: 3.2000885
       objectReference: {fileID: 0}
     - target: {fileID: 7088025329249418648, guid: b6b36c985488a184b8ac70517b96516c, type: 3}
       propertyPath: m_AnchoredPosition.x
