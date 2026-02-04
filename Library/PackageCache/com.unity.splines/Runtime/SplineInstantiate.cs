@@ -644,9 +644,7 @@ namespace UnityEngine.Splines
 
                     if (invalid)
 #if UNITY_EDITOR
-                        if(Application.isPlaying) Destroy(child);
-                            else DestroyImmediate(child);
-                        
+                        DestroyImmediate(child);
 #else
                         Destroy(child);
 #endif
@@ -729,19 +727,14 @@ namespace UnityEngine.Splines
                 for (int i = m_Instances.Count - 1; i >= 0; --i)
                 {
 #if UNITY_EDITOR
-                            if(Application.isPlaying) Destroy(m_Instances[i]);
-                            else DestroyImmediate(m_Instances[i]);
-                    
+                    DestroyImmediate(m_Instances[i]);
 #else
                     Destroy(m_Instances[i]);
 #endif
-
                 }
 
 #if UNITY_EDITOR
-                if(Application.isPlaying) Destroy(m_InstancesRoot);
-                            else DestroyImmediate(m_InstancesRoot);
-                            
+                DestroyImmediate(m_InstancesRoot);
 #else
                 Destroy(m_InstancesRoot);
 #endif
@@ -755,9 +748,7 @@ namespace UnityEngine.Splines
             foreach (var instance in m_DeprecatedInstances)
             {
 #if UNITY_EDITOR
-                if(Application.isPlaying) Destroy(instance);
-                            else DestroyImmediate(instance);
-                            
+                DestroyImmediate(instance);
 #else
                 Destroy(instance);
 #endif
@@ -940,9 +931,8 @@ namespace UnityEngine.Splines
                     {
                         if (m_Instances[i] != null)
                         {
-#if UNITY_EDITOR            
-                            if(Application.isPlaying) Destroy(m_Instances[i]);
-                            else DestroyImmediate(m_Instances[i]);
+#if UNITY_EDITOR
+                            DestroyImmediate(m_Instances[i]);
 #else
                             Destroy(m_Instances[i]);
 #endif
