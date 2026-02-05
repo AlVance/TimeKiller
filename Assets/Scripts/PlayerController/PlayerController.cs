@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     [SerializeField] private float accelerationSpeed;
-    private float currentAccelerationSpeed;
+    [SerializeField] private float currentAccelerationSpeed;
     [SerializeField] private float maxAccelerationForce;
     private bool movePressed;
     private bool canMove = true;
@@ -252,12 +252,15 @@ public class PlayerController : MonoBehaviour
 
     [Header("Feedbacks")]
     [SerializeField] private MMF_Player onHitFeedback;
+    private Tween aimRotationTween;
+    private Tween moveRotationTween;
 
     private void Awake()
     {
         playerInput = new PlayerInput();
         HandleInput();
         rb = this.GetComponent<Rigidbody>();
+        DOTween.Init();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -294,7 +297,6 @@ public class PlayerController : MonoBehaviour
         {
             Aim();
             ChargeShot();
-
             Fly();
         }
         HandleAnimations();
@@ -304,10 +306,11 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
         FloatOnGround();
         if (GameManager.Instance.playerWork)
-        {  
-            Movement();
+        {
+            if (!isChargingDrift) Movement();
+            ChargeDrift();
 
-            if(affectedByGravity) AddGravityForce();
+            if (affectedByGravity) AddGravityForce();
             CheckLedgeGrab();
         }
         
@@ -321,12 +324,36 @@ public class PlayerController : MonoBehaviour
 
     private void AimStarted()
     {
-        aimPressed = true;
-        if(canAim && currentBullets > 0 /*&& (!isFlying && !isDashing)*/)
+        if(canAim && currentBullets > 0)
         {
+            if (moveRotationTween.IsActive() && moveRotationTween.IsPlaying()) moveRotationTween.Kill();
+            if (aimDir != Vector2.zero) aimRotationTween = transform.DORotate(Quaternion.LookRotation(aimDirRelativeToCam).eulerAngles, 0f, RotateMode.Fast);
+            if (CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
             aimDirAidGO.SetActive(true);
-            if(CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
+            ExitChargeDrift();
+
+            isAiming = true;
+            aimPressed = true;
         }
+        
+    }
+    private void Aim()
+    {
+        if (canAim && aimPressed)
+        {
+            if (!isAiming)
+            {
+                AimStarted();
+            }
+
+            if (aimDir != Vector2.zero)
+            {
+                aimRotationTween = transform.DORotate(Quaternion.LookRotation(aimDirRelativeToCam).eulerAngles, 0.25f, RotateMode.Fast);
+            }
+
+            isAiming = true;
+        }
+        else isAiming = false;
     }
 
     private void AimFinished()
@@ -353,6 +380,19 @@ public class PlayerController : MonoBehaviour
     private void ReloadEnded()
     {
         EndFly();
+    }
+
+    private void DriftStarted()
+    {
+        EnterChargeDrift();
+    }
+    private void DriftPerformed()
+    {
+        
+    }
+    private void DriftEnded()
+    {
+        ExitChargeDrift();
     }
 
     private void GroundCheck()
@@ -432,8 +472,8 @@ public class PlayerController : MonoBehaviour
                 else otherVel = Vector3.zero;
             }
             else otherVel = Vector3.zero;
-            Vector3 unitGoal = moveDirRelativeToCam;
-            Vector3 goalVel = unitGoal * currentMaxSpeed + otherVel;
+
+            Vector3 goalVel = moveDirRelativeToCam * currentMaxSpeed + otherVel;
 
             m_GoalVel = Vector3.MoveTowards(m_GoalVel, goalVel, currentAccelerationSpeed * Time.fixedDeltaTime);
 
@@ -441,21 +481,16 @@ public class PlayerController : MonoBehaviour
 
             neededAccel = Vector3.ClampMagnitude(neededAccel, maxAccelerationForce);
             rb.AddForce(neededAccel * rb.mass);
-
-            if (!isAiming && moveDirRelativeToCam != Vector3.zero) this.transform.rotation = Quaternion.LookRotation(moveDirRelativeToCam);
+            if (!isAiming && moveDirRelativeToCam != Vector3.zero)
+            {
+                if (aimRotationTween.IsActive()) aimRotationTween.Kill();
+                moveRotationTween = transform.DORotate(Quaternion.LookRotation(moveDirRelativeToCam).eulerAngles, 0.2f, RotateMode.Fast);
+            }
+                
         }
     }
 
-    private void Aim()
-    {
-        if (canAim && aimPressed)
-        {
-            if (!isAiming) AimStarted();
-            this.transform.rotation = Quaternion.LookRotation(aimDirRelativeToCam);
-            isAiming = true;
-        }
-        else isAiming = false;
-    }
+    
 
     private void ChargeShot()
     {
@@ -518,42 +553,124 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    /*Vector2 dashDir;
-    private void EnterDash()
-    {
-        --currentBullets;
-        if (movePressed) dashDir = moveDir;
-        else dashDir = lastMoveDir;
+    
+   
 
-        ResetCharge();
-        rb.linearVelocity = Vector3.zero;
-        isDashing = true;
-        canMove = false;
-    }
+    ////////////////////////////////////////////////
+    [Header("Drift Variables")]
+    float currentDriftCharge = 0;
+    [SerializeField] private float driftSpeed;
+    [SerializeField] private float driftBoostChargeSpeed = 2;
+    [SerializeField] private float boostChargeSpeed = 2;
+    [SerializeField] private float driftConsumeSpeed = 2;
+    private float maxDriftChargeTime = 1f;
+    bool isChargingDrift = false;
+    bool isDrifting = false;
+    Vector3 targetDriftChargeVel;
+    Vector3 currentDriftChargeVel;
+    [SerializeField] private float driftRotationForce;
+    [SerializeField] private GameObject driftPS;
+    private bool driftPressed = false;
 
-    private float currentDashTime = 0;
-    private void Dash()
+
+    private void EnterChargeDrift()
     {
-        if (isDashing)
+        if (isGrounded && !isFlying)
         {
-            currentDashTime += Time.deltaTime;
-            if(currentDashTime<= dashTime)
-            {
-                rb.linearVelocity = new Vector3(dashDir.x * dashSpeed, rb.linearVelocity.y, dashDir.y * dashSpeed);
-            }
-            else
-            {
-                canMove = true;
-                currentDashTime = 0;
-                isDashing = false;
-            }
+            targetDriftChargeVel = transform.forward;
+            currentDriftChargeVel = targetDriftChargeVel;
+            isChargingDrift = true;
+            driftPS.SetActive(true);
         }
     }
-    */
+    private void ChargeDrift()
+    {
+        if (isGrounded)
+        {
+            if (isChargingDrift)
+            {
+                targetDriftChargeVel = transform.forward;
+                if (currentDriftChargeVel != targetDriftChargeVel)
+                {
+                    currentDriftChargeVel = Vector3.Lerp(currentDriftChargeVel, targetDriftChargeVel, driftRotationForce).normalized;
+                }
+
+                if (Vector3.Distance(currentDriftChargeVel, targetDriftChargeVel) > 0.2f)
+                {
+                    if (currentFuel < maxDriftChargeTime) currentFuel += driftBoostChargeSpeed * Time.deltaTime;
+                    else currentFuel = maxDriftChargeTime;
+                }
+
+                if (moveDir != Vector2.zero)
+                {
+                    transform.DORotate(Quaternion.LookRotation(moveDirRelativeToCam).eulerAngles, 0.2f, RotateMode.Fast);
+
+                }
+
+                rb.linearVelocity = new Vector3(currentDriftChargeVel.x * driftSpeed, rb.linearVelocity.y, currentDriftChargeVel.z * driftSpeed);
+            }
+            else if(driftPressed)
+            {
+                EnterChargeDrift();
+            }
+        }       
+        else if (isChargingDrift)
+        {
+            ExitChargeDrift();
+        }
+
+        if (!isFlying)
+        {
+            if (currentFuel < maxDriftChargeTime) currentFuel += boostChargeSpeed * Time.deltaTime;
+            else currentFuel = maxDriftChargeTime;
+        }       
+    }
+    private void ExitChargeDrift()
+    {
+        //rb.linearVelocity = new Vector3(0, 0, 0);
+        isChargingDrift = false;
+        driftPS.SetActive(false);
+
+
+    }
+    private void EnterDrift()
+    {
+        isDrifting = true;
+        isChargingDrift = false;
+        rb.linearVelocity = new Vector3(0, 0, 0);
+
+        isFlying = true;
+    }
+    private void Drift()
+    {
+        if (isDrifting)
+        {
+            if (currentDriftCharge > 0)
+            {
+                currentDriftCharge -= driftConsumeSpeed * Time.deltaTime;
+                currentMaxSpeed = flySpeed;
+                UIManager.Instance.SetFlyFuelSlderValue(currentDriftCharge);
+            }                
+            else
+            {
+                
+                ExitDrift();
+            }
+                
+        }
+    }
+    private void ExitDrift()
+    {
+        currentMaxSpeed = maxSpeed;
+        currentDriftCharge = 0;
+        isDrifting = false;
+    }
+    ///////////////////////////////////////////////////////
     private void EnterFly()
     {
         if (currentFuel > 0 && canFly)
         {
+            ExitChargeDrift();
             isFlying = true;
             currentMaxSpeed = flySpeed;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
@@ -565,47 +682,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    ////////////////////////////////////////////////
-    float currentDriftCharge = 0;
-    float driftChargeSpeed = 1;
-    float maxChargeTime = 1f;
-    bool isChargingDrift = false;
-    bool isDrifting = false;
-    private void EnterChargeDrift()
-    {
-
-    }
-    private void ChargeDrift()
-    {
-
-    }
-    private void EnterDrift()
-    {
-
-    }
-    private void Drift()
-    {
-
-    }
-    private void ExitDrift()
-    {
-
-    }
-    ///////////////////////////////////////////////////////
-
     private void Fly()
     {
         if(isFlying && currentFuel > 0 && canFly)
         {
             if(m_GoalVel.magnitude > 0) currentFuel -= fuelBurnSpeed * Time.deltaTime;
             else currentFuel -= fuelBurnSpeed / 4 * Time.deltaTime;
-
-
         }
         else
         {
             EndFly();
-            if(currentFuel < maxFuel && isGrounded) currentFuel += fuelRecoverSpeed * Time.deltaTime;
         }
     }
 
@@ -615,7 +701,6 @@ public class PlayerController : MonoBehaviour
         {
             currentMaxSpeed = maxSpeed;
             isFlying = false;
-            //if (CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = this.gameObject.transform;
 
             flyAS.clip = null;
             flyAS.Stop();
@@ -658,14 +743,6 @@ public class PlayerController : MonoBehaviour
             }
             else FrontRayHitted = false;
         }
-        //if (Physics.Raycast(frontRayTr[0].position, this.transform.forward, out frontRayHit, frontRayDistance, groundCheckLayersToCheck) ||
-        //    Physics.Raycast(frontRayTr[1].position, this.transform.forward, out frontRayHit, frontRayDistance, groundCheckLayersToCheck) ||
-        //    Physics.Raycast(frontRayTr[2].position, this.transform.forward, out frontRayHit, frontRayDistance, groundCheckLayersToCheck))
-        //{
-        //    FrontRayHitted = true;
-        //}
-        //else FrontRayHitted = false;
-
 
         if (UpRayHitted && FrontRayHitted && !isGrounded && m_GoalVel.magnitude > 0)
         {
@@ -681,9 +758,6 @@ public class PlayerController : MonoBehaviour
 
     public void ForcedMovement(Vector3 targetPos)
     {
-        //canMove = false;
-        //this.transform.position = targetPos;
-        //canMove = true;
         StartCoroutine(_ForcedMovement(targetPos));
     }
     private IEnumerator _ForcedMovement(Vector3 _targetPos)
@@ -694,7 +768,6 @@ public class PlayerController : MonoBehaviour
         while (Vector3.Distance(this.transform.position, _targetPos) > 1f)
         {
             rb.linearVelocity = (_targetPos - this.transform.position).normalized * onShootTpMoveSpeed;
-            //this.transform.position += (_targetPos - this.transform.position).normalized * onShootTpMoveSpeed * Time.deltaTime;
             yield return null;
         }
         rb.linearVelocity = Vector3.zero;
@@ -709,7 +782,6 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
         moveDir = Vector2.zero;
         ResetCharge();
-        //currentBullets = maxBullets;
         currentFuel = maxFuel;
         UIManager.Instance.SetFlyFuelSliderColor(Color.white);
         canMove = true;
@@ -846,7 +918,18 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerControls.Aim.started += ctx =>
         {
-            if (GameManager.Instance.playerWork && Mouse.current.leftButton.isPressed) AimStarted();
+            if (GameManager.Instance.playerWork && Mouse.current.leftButton.isPressed)
+            {
+                Vector2 tempAimDir = ctx.ReadValue<Vector2>();
+                Vector3 PlayerScreenPos = Camera.main.WorldToScreenPoint(this.transform.position);
+                tempAimDir.x -= PlayerScreenPos.x;
+                tempAimDir.y -= PlayerScreenPos.y;
+                aimDir = tempAimDir.normalized;
+                aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
+
+                AimStarted();
+            }
+                
         };
 
         playerInput.PlayerControls.Aim.performed += ctx =>
@@ -909,11 +992,29 @@ public class PlayerController : MonoBehaviour
                 AimFinished();
             } 
         };
+
+        playerInput.PlayerControls.Drift.started += ctx =>
+        {
+            driftPressed = true;
+            if (GameManager.Instance.playerWork) DriftStarted();
+        };
+
+        playerInput.PlayerControls.Drift.performed += ctx =>
+        {
+            if (GameManager.Instance.playerWork) DriftPerformed();
+        };
+
+        playerInput.PlayerControls.Drift.canceled += ctx =>
+        {
+            driftPressed = false;
+            if (GameManager.Instance.playerWork) DriftEnded();
+        };
     }
     private void HandleAnimations()
     {
         anim.SetBool("isGrounded", isGrounded);
         anim.SetBool("isDashing", isFlying);
+        anim.SetBool("isChargingDrift", isChargingDrift);
         anim.SetBool("isMoving", canMove && m_GoalVel.magnitude > 0 && moveDir != Vector2.zero);
         if (!isAiming)
         {
