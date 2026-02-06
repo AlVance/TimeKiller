@@ -308,7 +308,7 @@ public class PlayerController : MonoBehaviour
         if (GameManager.Instance.playerWork)
         {
             if (!isChargingDrift) Movement();
-            ChargeDrift();
+            Drift();
 
             if (affectedByGravity) AddGravityForce();
             CheckLedgeGrab();
@@ -330,7 +330,7 @@ public class PlayerController : MonoBehaviour
             if (aimDir != Vector2.zero) aimRotationTween = transform.DORotate(Quaternion.LookRotation(aimDirRelativeToCam).eulerAngles, 0f, RotateMode.Fast);
             if (CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
             aimDirAidGO.SetActive(true);
-            ExitChargeDrift();
+            ExitDrift();
 
             isAiming = true;
             aimPressed = true;
@@ -384,7 +384,7 @@ public class PlayerController : MonoBehaviour
 
     private void DriftStarted()
     {
-        EnterChargeDrift();
+        EnterDrift();
     }
     private void DriftPerformed()
     {
@@ -392,7 +392,7 @@ public class PlayerController : MonoBehaviour
     }
     private void DriftEnded()
     {
-        ExitChargeDrift();
+        ExitDrift();
     }
 
     private void GroundCheck()
@@ -566,7 +566,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float driftConsumeSpeed = 2;
     private float maxDriftChargeTime = 1f;
     bool isChargingDrift = false;
-    bool isDrifting = false;
     Vector3 targetDriftChargeVel;
     Vector3 currentDriftChargeVel;
     [SerializeField] private float driftRotationForce;
@@ -576,7 +575,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float stearingFactor;
     [SerializeField] private Vector2 minMaxDriftSpeed;
 
-    private void EnterChargeDrift()
+    private void EnterDrift()
     {
         if (isGrounded && !isFlying && canDrift)
         {
@@ -588,7 +587,7 @@ public class PlayerController : MonoBehaviour
             driftPS.SetActive(true);
         }
     }
-    private void ChargeDrift()
+    private void Drift()
     {
         if (isGrounded)
         {
@@ -631,12 +630,12 @@ public class PlayerController : MonoBehaviour
             }
             else if(driftPressed)
             {
-                EnterChargeDrift();
+                EnterDrift();
             }
         }       
         else if (isChargingDrift)
         {
-            ExitChargeDrift();
+            ExitDrift();
         }
 
         if (!isFlying)
@@ -645,52 +644,25 @@ public class PlayerController : MonoBehaviour
             else currentFuel = maxDriftChargeTime;
         }       
     }
-    private void ExitChargeDrift()
-    {
-        //rb.linearVelocity = new Vector3(0, 0, 0);
-        isChargingDrift = false;
-        driftPS.SetActive(false);
-
-
-    }
-    private void EnterDrift()
-    {
-        isDrifting = true;
-        isChargingDrift = false;
-        rb.linearVelocity = new Vector3(0, 0, 0);
-
-        isFlying = true;
-    }
-    private void Drift()
-    {
-        if (isDrifting)
-        {
-            if (currentDriftCharge > 0)
-            {
-                currentDriftCharge -= driftConsumeSpeed * Time.deltaTime;
-                currentMaxSpeed = flySpeed;
-                UIManager.Instance.SetFlyFuelSlderValue(currentDriftCharge);
-            }                
-            else
-            {
-                
-                ExitDrift();
-            }
-                
-        }
-    }
     private void ExitDrift()
     {
-        currentMaxSpeed = maxSpeed;
-        currentDriftCharge = 0;
-        isDrifting = false;
+        StartCoroutine(_ExitDrift());
+        
+    }
+    private IEnumerator _ExitDrift()
+    {
+        currentAccelerationSpeed = maxAccelerationForce;
+        isChargingDrift = false;
+        driftPS.SetActive(false);
+        yield return new WaitForSeconds(0.1f);
+        currentAccelerationSpeed = accelerationSpeed;
     }
     ///////////////////////////////////////////////////////
     private void EnterFly()
     {
         if (currentFuel > 0 && canFly)
         {
-            ExitChargeDrift();
+            ExitDrift();
             isFlying = true;
             currentMaxSpeed = flySpeed;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
