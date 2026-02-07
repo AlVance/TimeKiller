@@ -828,7 +828,7 @@ public class PlayerController : MonoBehaviour
     public void UnblockPlayer()
     {
         canFly = true;
-        currentMaxSpeed = maxSpeed;
+        //currentMaxSpeed = maxSpeed;
         canMove = true;
         canAim = true;
         canDrift = true;
