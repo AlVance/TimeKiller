@@ -574,6 +574,7 @@ public class PlayerController : MonoBehaviour
     private bool canDrift = false;
     [SerializeField] private float stearingFactor;
     [SerializeField] private Vector2 minMaxDriftSpeed;
+    [SerializeField] private AnimationCurve speedModOverStearing;
 
     private void EnterDrift()
     {
@@ -598,24 +599,28 @@ public class PlayerController : MonoBehaviour
                 {
                     currentDriftChargeVel = Vector3.Lerp(currentDriftChargeVel, targetDriftChargeVel, driftRotationForce).normalized;
                 }
+                Debug.Log(speedModOverStearing.Evaluate(Vector3.Distance(transform.forward, rb.linearVelocity.normalized)));
+
+                currentDriftSpeed += speedModOverStearing.Evaluate(Vector3.Distance(transform.forward, rb.linearVelocity.normalized)) * Time.deltaTime;
+                if (currentDriftSpeed > minMaxDriftSpeed.y) currentDriftSpeed = minMaxDriftSpeed.y;
+                if (currentDriftSpeed < minMaxDriftSpeed.x) currentDriftSpeed = minMaxDriftSpeed.x;
+
 
                 if (Vector3.Distance(transform.forward, rb.linearVelocity.normalized) > stearingFactor)
                 {
                     if (currentFuel < maxDriftChargeTime) currentFuel += driftBoostChargeSpeed * Time.deltaTime;
                     else currentFuel = maxDriftChargeTime;
 
-                    if (currentDriftSpeed < minMaxDriftSpeed.y) currentDriftSpeed += 1f * Time.deltaTime;
-                    else currentDriftSpeed = minMaxDriftSpeed.y;
+                    //if (currentDriftSpeed < minMaxDriftSpeed.y) currentDriftSpeed += 1f * Time.deltaTime;
+                    //else currentDriftSpeed = minMaxDriftSpeed.y;
 
                     var main = driftPS.GetComponent<ParticleSystem>().main;
                     main.startColor = Color.red;
-                    Debug.Log("Stearing");
                 }
                 else
                 {
-                    if (currentDriftSpeed > minMaxDriftSpeed.x) currentDriftSpeed -= 1.75f * Time.deltaTime;
-                    else currentDriftSpeed = minMaxDriftSpeed.x;
-                    Debug.Log("NOTStearing");
+                    //if (currentDriftSpeed > minMaxDriftSpeed.x) currentDriftSpeed -= 1.75f * Time.deltaTime;
+                    //else currentDriftSpeed = minMaxDriftSpeed.x;
 
                     var main = driftPS.GetComponent<ParticleSystem>().main;
                     main.startColor = Color.blue;
