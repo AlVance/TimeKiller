@@ -799,13 +799,11 @@ public class PlayerController : MonoBehaviour
         m_GoalVel = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
         ResetCharge();
-        //canFly = false;
-        //canMove = false;
+
         rb.AddForce((this.transform.position - hitPos) * hitForce);
         BlockPlayer();
         yield return new WaitForSeconds(stunnedTime);
-        //canFly = true;
-        //canMove = true;
+
         isHitted = false;
         UnblockPlayer();
         yield return new WaitForSeconds(0.6f);
@@ -814,7 +812,7 @@ public class PlayerController : MonoBehaviour
     public void BlockPlayer(bool blockAim = true)
     {
         canFly = false;
-        //EndFly();
+        EndFly();
         ExitDrift();
         isFlying = false;
         canMove = false;
@@ -828,7 +826,6 @@ public class PlayerController : MonoBehaviour
     public void UnblockPlayer()
     {
         canFly = true;
-        //currentMaxSpeed = maxSpeed;
         canMove = true;
         canAim = true;
         canDrift = true;
