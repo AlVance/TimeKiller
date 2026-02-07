@@ -6964,7 +6964,7 @@ MonoBehaviour:
   m_maxSpeed: 13
   accelerationSpeed: 95
   currentAccelerationSpeed: 0
-  maxAccelerationForce: 100
+  maxAccelerationForce: 1000
   aimDirAidGO: {fileID: 1915003310345504620}
   m_shootChargeTime: 0.4
   moveDirShootInertia: 0.2
@@ -7018,12 +7018,47 @@ MonoBehaviour:
   playerFlyAC: {fileID: 8300000, guid: 1d410517a1e5a4d489f6aca7a0904891, type: 3}
   deathSound: {fileID: 8300000, guid: 2a7faf6b74e24d940af3bc28798db0d1, type: 3}
   onHitFeedback: {fileID: 6126742787853379970}
-  driftSpeed: 16
+  driftSpeed: 13
   driftBoostChargeSpeed: 0.35
   boostChargeSpeed: 0.15
   driftConsumeSpeed: 0.5
   driftRotationForce: 0.05
   driftPS: {fileID: 2241831457859182853}
+  stearingFactor: 0.35
+  minMaxDriftSpeed: {x: 10, y: 32}
+  speedModOverStearing:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: -2
+      inSlope: 0
+      outSlope: 3.3333333
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6
+      value: 0
+      inSlope: 3.3333333
+      outSlope: 1.1666667
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.8
+      value: 1.4
+      inSlope: 1.1666667
+      outSlope: 0
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!54 &2411601841555775349
 Rigidbody:
   m_ObjectHideFlags: 0

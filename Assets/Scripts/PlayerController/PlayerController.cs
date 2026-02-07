@@ -308,7 +308,7 @@ public class PlayerController : MonoBehaviour
         if (GameManager.Instance.playerWork)
         {
             if (!isChargingDrift) Movement();
-            ChargeDrift();
+            Drift();
 
             if (affectedByGravity) AddGravityForce();
             CheckLedgeGrab();
@@ -330,7 +330,7 @@ public class PlayerController : MonoBehaviour
             if (aimDir != Vector2.zero) aimRotationTween = transform.DORotate(Quaternion.LookRotation(aimDirRelativeToCam).eulerAngles, 0f, RotateMode.Fast);
             if (CameraManager.Instance.currentCam.GetComponent<FollowObject>().followPlayer) CameraManager.Instance.currentCam.GetComponent<FollowObject>().targetTr = aimTargetTr;
             aimDirAidGO.SetActive(true);
-            ExitChargeDrift();
+            ExitDrift();
 
             isAiming = true;
             aimPressed = true;
@@ -384,7 +384,7 @@ public class PlayerController : MonoBehaviour
 
     private void DriftStarted()
     {
-        EnterChargeDrift();
+        EnterDrift();
     }
     private void DriftPerformed()
     {
@@ -392,7 +392,7 @@ public class PlayerController : MonoBehaviour
     }
     private void DriftEnded()
     {
-        ExitChargeDrift();
+        ExitDrift();
     }
 
     private void GroundCheck()
@@ -560,30 +560,35 @@ public class PlayerController : MonoBehaviour
     [Header("Drift Variables")]
     float currentDriftCharge = 0;
     [SerializeField] private float driftSpeed;
+    private float currentDriftSpeed;
     [SerializeField] private float driftBoostChargeSpeed = 2;
     [SerializeField] private float boostChargeSpeed = 2;
     [SerializeField] private float driftConsumeSpeed = 2;
     private float maxDriftChargeTime = 1f;
     bool isChargingDrift = false;
-    bool isDrifting = false;
     Vector3 targetDriftChargeVel;
     Vector3 currentDriftChargeVel;
     [SerializeField] private float driftRotationForce;
     [SerializeField] private GameObject driftPS;
     private bool driftPressed = false;
+    private bool canDrift = false;
+    [SerializeField] private float stearingFactor;
+    [SerializeField] private Vector2 minMaxDriftSpeed;
+    [SerializeField] private AnimationCurve speedModOverStearing;
 
-
-    private void EnterChargeDrift()
+    private void EnterDrift()
     {
-        if (isGrounded && !isFlying)
+        if (isGrounded && !isFlying && canDrift)
         {
             targetDriftChargeVel = transform.forward;
             currentDriftChargeVel = targetDriftChargeVel;
             isChargingDrift = true;
+            currentDriftSpeed = driftSpeed;
+
             driftPS.SetActive(true);
         }
     }
-    private void ChargeDrift()
+    private void Drift()
     {
         if (isGrounded)
         {
@@ -594,29 +599,48 @@ public class PlayerController : MonoBehaviour
                 {
                     currentDriftChargeVel = Vector3.Lerp(currentDriftChargeVel, targetDriftChargeVel, driftRotationForce).normalized;
                 }
+                Debug.Log(speedModOverStearing.Evaluate(Vector3.Distance(transform.forward, rb.linearVelocity.normalized)));
 
-                if (Vector3.Distance(currentDriftChargeVel, targetDriftChargeVel) > 0.2f)
+                currentDriftSpeed += speedModOverStearing.Evaluate(Vector3.Distance(transform.forward, rb.linearVelocity.normalized)) * Time.deltaTime;
+                if (currentDriftSpeed > minMaxDriftSpeed.y) currentDriftSpeed = minMaxDriftSpeed.y;
+                if (currentDriftSpeed < minMaxDriftSpeed.x) currentDriftSpeed = minMaxDriftSpeed.x;
+
+
+                if (Vector3.Distance(transform.forward, rb.linearVelocity.normalized) > stearingFactor)
                 {
                     if (currentFuel < maxDriftChargeTime) currentFuel += driftBoostChargeSpeed * Time.deltaTime;
                     else currentFuel = maxDriftChargeTime;
+
+                    //if (currentDriftSpeed < minMaxDriftSpeed.y) currentDriftSpeed += 1f * Time.deltaTime;
+                    //else currentDriftSpeed = minMaxDriftSpeed.y;
+
+                    var main = driftPS.GetComponent<ParticleSystem>().main;
+                    main.startColor = Color.red;
+                }
+                else
+                {
+                    //if (currentDriftSpeed > minMaxDriftSpeed.x) currentDriftSpeed -= 1.75f * Time.deltaTime;
+                    //else currentDriftSpeed = minMaxDriftSpeed.x;
+
+                    var main = driftPS.GetComponent<ParticleSystem>().main;
+                    main.startColor = Color.blue;
                 }
 
                 if (moveDir != Vector2.zero)
                 {
-                    transform.DORotate(Quaternion.LookRotation(moveDirRelativeToCam).eulerAngles, 0.2f, RotateMode.Fast);
-
+                    transform.DORotate(Quaternion.LookRotation(moveDirRelativeToCam).eulerAngles, 0.25f, RotateMode.Fast);
                 }
 
-                rb.linearVelocity = new Vector3(currentDriftChargeVel.x * driftSpeed, rb.linearVelocity.y, currentDriftChargeVel.z * driftSpeed);
+                rb.linearVelocity = new Vector3(currentDriftChargeVel.x * currentDriftSpeed, rb.linearVelocity.y, currentDriftChargeVel.z * currentDriftSpeed);
             }
             else if(driftPressed)
             {
-                EnterChargeDrift();
+                EnterDrift();
             }
         }       
         else if (isChargingDrift)
         {
-            ExitChargeDrift();
+            ExitDrift();
         }
 
         if (!isFlying)
@@ -625,52 +649,25 @@ public class PlayerController : MonoBehaviour
             else currentFuel = maxDriftChargeTime;
         }       
     }
-    private void ExitChargeDrift()
-    {
-        //rb.linearVelocity = new Vector3(0, 0, 0);
-        isChargingDrift = false;
-        driftPS.SetActive(false);
-
-
-    }
-    private void EnterDrift()
-    {
-        isDrifting = true;
-        isChargingDrift = false;
-        rb.linearVelocity = new Vector3(0, 0, 0);
-
-        isFlying = true;
-    }
-    private void Drift()
-    {
-        if (isDrifting)
-        {
-            if (currentDriftCharge > 0)
-            {
-                currentDriftCharge -= driftConsumeSpeed * Time.deltaTime;
-                currentMaxSpeed = flySpeed;
-                UIManager.Instance.SetFlyFuelSlderValue(currentDriftCharge);
-            }                
-            else
-            {
-                
-                ExitDrift();
-            }
-                
-        }
-    }
     private void ExitDrift()
     {
-        currentMaxSpeed = maxSpeed;
-        currentDriftCharge = 0;
-        isDrifting = false;
+        StartCoroutine(_ExitDrift());
+        
+    }
+    private IEnumerator _ExitDrift()
+    {
+        currentAccelerationSpeed = maxAccelerationForce;
+        isChargingDrift = false;
+        driftPS.SetActive(false);
+        yield return new WaitForSeconds(0.1f);
+        currentAccelerationSpeed = accelerationSpeed;
     }
     ///////////////////////////////////////////////////////
     private void EnterFly()
     {
         if (currentFuel > 0 && canFly)
         {
-            ExitChargeDrift();
+            ExitDrift();
             isFlying = true;
             currentMaxSpeed = flySpeed;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
@@ -802,13 +799,11 @@ public class PlayerController : MonoBehaviour
         m_GoalVel = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
         ResetCharge();
-        //canFly = false;
-        //canMove = false;
+
         rb.AddForce((this.transform.position - hitPos) * hitForce);
         BlockPlayer();
         yield return new WaitForSeconds(stunnedTime);
-        //canFly = true;
-        //canMove = true;
+
         isHitted = false;
         UnblockPlayer();
         yield return new WaitForSeconds(0.6f);
@@ -817,10 +812,11 @@ public class PlayerController : MonoBehaviour
     public void BlockPlayer(bool blockAim = true)
     {
         canFly = false;
-        //EndFly();
+        EndFly();
         ExitDrift();
         isFlying = false;
         canMove = false;
+        canDrift = false;
         if (blockAim)
         {
             canAim = false;
@@ -830,9 +826,9 @@ public class PlayerController : MonoBehaviour
     public void UnblockPlayer()
     {
         canFly = true;
-        currentMaxSpeed = maxSpeed;
         canMove = true;
         canAim = true;
+        canDrift = true;
     }
 
     private bool isOffLimits = false;
@@ -860,12 +856,14 @@ public class PlayerController : MonoBehaviour
         this.GetComponentInChildren<PlayerVFX>().DissolvePlayer(0);
        
         yield return new WaitForSeconds(1f);
+        currentFuel = maxFuel;
         this.transform.position = tpPos.position;
         
         yield return new WaitForSeconds(0.5f);
         this.GetComponentInChildren<PlayerVFX>().DissolvePlayer(1);
-       
+
         yield return new WaitForSeconds(1f);
+
         canFly = true;
         currentMaxSpeed = maxSpeed;
         canMove = true;
