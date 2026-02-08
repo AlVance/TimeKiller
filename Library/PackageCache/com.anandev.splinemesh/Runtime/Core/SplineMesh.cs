@@ -277,7 +277,7 @@ namespace SplineMeshTools.Core
             if (spline == null || segmentMesh == null)
                 return;
 
-            if (splineContainer != null && splineContainer.Splines.Contains(spline))
+            if (splineContainer.Splines.Contains(spline))
                 GenerateMeshAlongSpline();
         }
 
