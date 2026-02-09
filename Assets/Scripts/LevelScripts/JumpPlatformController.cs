@@ -24,17 +24,16 @@ public class JumpPlatformController : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            //other.gameObject.GetComponent<Rigidbody>().linearVelocity += Jumpdirection.normalized * Jumpspeed;
+            other.gameObject.GetComponent<PlayerController>().lastPlatformTouched = this;
             Rigidbody _rb = other.gameObject.GetComponent<Rigidbody>();
             _rb.linearVelocity = new Vector3(0, 0, 0);
-            if (forcePlayerToCenter) other.gameObject.transform.position = this.gameObject.transform.position + this.transform.up * 0.75f;
-            //_rb.AddForce(Jumpdirection.normalized * Jumpspeed);
-            //other.gameObject.GetComponent<PlayerController>().BlockPlayer(blockInputTime, false);
             StartCoroutine(_BlockPlayerOnJump(other.gameObject.GetComponent<PlayerController>()));
+            
+            if (forcePlayerToCenter) other.gameObject.transform.position = this.gameObject.transform.position + this.transform.up * 0.75f;
+
             _rb.AddForce(JumpDirectionTr.up.normalized * Jumpspeed);
             platformAnim.SetTrigger("On");
             jumpFeedback.PlayFeedbacks();
-            //particle.Play();
 
             jumpAS.pitch = basePich + Random.Range(-0.2f, 0.2f);
             jumpAS.Play();
@@ -45,7 +44,7 @@ public class JumpPlatformController : MonoBehaviour
     {
         pC.BlockPlayer(false);
         yield return new WaitForSeconds(blockInputTime);
-        pC.UnblockPlayer();
+        if(pC.lastPlatformTouched == this)pC.UnblockPlayer();
     }
    
 }
