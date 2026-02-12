@@ -6981,22 +6981,22 @@ MonoBehaviour:
   driftBoostChargeSpeed: 0.35
   boostChargeSpeed: 0.15
   driftConsumeSpeed: 0.5
-  driftRotationForce: 0.06
+  driftRotationForce: 0.055
   driftPS: {fileID: 2241831457859182853}
   stearingFactor: 0.35
-  minMaxDriftSpeed: {x: 10, y: 32}
+  minMaxDriftSpeed: {x: 10, y: 36}
   speedModOverStearing:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: -1.2
+      value: -1
       inSlope: 0
-      outSlope: 4.429943
+      outSlope: 4.972815
       tangentMode: 1
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.12724306
+      outWeight: 0.12535
     - serializedVersion: 3
       time: 0.6
       value: 0
@@ -7008,12 +7008,12 @@ MonoBehaviour:
       outWeight: 0.077927016
     - serializedVersion: 3
       time: 1.8
-      value: 1.8
-      inSlope: 0.4109764
-      outSlope: 0.4109764
+      value: 2
+      inSlope: 0.05865066
+      outSlope: 0.05865066
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.1399395
+      inWeight: 0.1425177
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
