@@ -171,6 +171,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    [Header("Drift Variables")]
+    [SerializeField] private float driftSpeed;
+    float currentDriftCharge = 0;
+    private float currentDriftSpeed;
+    [SerializeField] private float driftBoostChargeSpeed = 2;
+    [SerializeField] private float boostChargeSpeed = 2;
+    [SerializeField] private float driftConsumeSpeed = 2;
+    private float maxDriftChargeTime = 1f;
+    bool isChargingDrift = false;
+    Vector3 targetDriftChargeVel;
+    Vector3 currentDriftChargeVel;
+    [SerializeField] private float driftRotationForce;
+    [SerializeField] private GameObject driftPS;
+    private bool driftPressed = false;
+    private bool canDrift = false;
+    [SerializeField] private float stearingFactor;
+    [SerializeField] private Vector2 minMaxDriftSpeed;
+    [SerializeField] private AnimationCurve speedModOverStearing;
+
+
     [Header("Fly Variables")]
     [SerializeField] private float m_maxFuel;
     public float maxFuel
@@ -557,25 +577,6 @@ public class PlayerController : MonoBehaviour
    
 
     ////////////////////////////////////////////////
-    [Header("Drift Variables")]
-    float currentDriftCharge = 0;
-    [SerializeField] private float driftSpeed;
-    private float currentDriftSpeed;
-    [SerializeField] private float driftBoostChargeSpeed = 2;
-    [SerializeField] private float boostChargeSpeed = 2;
-    [SerializeField] private float driftConsumeSpeed = 2;
-    private float maxDriftChargeTime = 1f;
-    bool isChargingDrift = false;
-    Vector3 targetDriftChargeVel;
-    Vector3 currentDriftChargeVel;
-    [SerializeField] private float driftRotationForce;
-    [SerializeField] private GameObject driftPS;
-    private bool driftPressed = false;
-    private bool canDrift = false;
-    [SerializeField] private float stearingFactor;
-    [SerializeField] private Vector2 minMaxDriftSpeed;
-    [SerializeField] private AnimationCurve speedModOverStearing;
-
     private void EnterDrift()
     {
         if (isGrounded && !isFlying && canDrift)
@@ -611,17 +612,11 @@ public class PlayerController : MonoBehaviour
                     if (currentFuel < maxDriftChargeTime) currentFuel += driftBoostChargeSpeed * Time.deltaTime;
                     else currentFuel = maxDriftChargeTime;
 
-                    //if (currentDriftSpeed < minMaxDriftSpeed.y) currentDriftSpeed += 1f * Time.deltaTime;
-                    //else currentDriftSpeed = minMaxDriftSpeed.y;
-
                     var main = driftPS.GetComponent<ParticleSystem>().main;
                     main.startColor = Color.red;
                 }
                 else
                 {
-                    //if (currentDriftSpeed > minMaxDriftSpeed.x) currentDriftSpeed -= 1.75f * Time.deltaTime;
-                    //else currentDriftSpeed = minMaxDriftSpeed.x;
-
                     var main = driftPS.GetComponent<ParticleSystem>().main;
                     main.startColor = Color.blue;
                 }
@@ -809,8 +804,11 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.6f);
         canGetHitted = true;
     }
+    private bool isBlocked = false;
+    public JumpPlatformController lastPlatformTouched;
     public void BlockPlayer(bool blockAim = true)
     {
+        isBlocked = true;
         canFly = false;
         EndFly();
         ExitDrift();
@@ -829,6 +827,7 @@ public class PlayerController : MonoBehaviour
         canMove = true;
         canAim = true;
         canDrift = true;
+        isBlocked = false;
     }
 
     private bool isOffLimits = false;
