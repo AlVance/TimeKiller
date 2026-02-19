@@ -15,18 +15,18 @@ public class WorldSelector : MonoBehaviour
         };
         playerInput.UI.Left.performed += ctx =>
         {
-            NavigateWorlds(-1);
+            if (lM.isInWorldSelect) NavigateWorlds(-1);
 
         };
         playerInput.UI.Right.performed += ctx =>
         {
-            NavigateWorlds(1);
+            if (lM.isInWorldSelect) NavigateWorlds(1);
 
         };
     }
     private void Start()
     {
-        UIManager.Instance.SetCurrentWorldText(lM.currentWorld.ToString() + "/" + (lM.worlds.Length -1).ToString());
+        UIManager.Instance.SetCurrentWorldText((lM.currentWorld + 1).ToString() + "/" + (lM.worlds.Length).ToString());
     }
 
     private void NavigateWorlds(int navigationIndex)
@@ -34,9 +34,9 @@ public class WorldSelector : MonoBehaviour
         if (lM.currentWorld + navigationIndex < lM.worlds.Length && lM.currentWorld + navigationIndex >= 0) 
         {
             lM.currentWorld = lM.currentWorld + navigationIndex;
-            UIManager.Instance.SetCurrentWorldText(lM.currentWorld.ToString() + "/" + (lM.worlds.Length - 1).ToString());
+            UIManager.Instance.SetCurrentWorldText((lM.currentWorld + 1).ToString() + "/" + (lM.worlds.Length).ToString());
         }
-            
+
     }
 
 

@@ -7,7 +7,8 @@ using TMPro;
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] public World[] worlds;
-    [HideInInspector]public int currentWorld = 0;
+    public int currentWorld = 0;
+    private WorldSelector worldSelector;
     //[SerializeField] private GameObject[] levelsGO;
     [HideInInspector] public GameObject currentLevelGO;
 
@@ -39,6 +40,8 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetInlevelUIActive(false);
         GoToStartLevel();
         leaderboardManager = GetComponent<LeaderboardManager>();
+        worldSelector = this.gameObject.GetComponent<WorldSelector>();
+        worldSelector.enabled = false;
     }
 
     private void SetNextLevel()
@@ -190,8 +193,8 @@ public class LevelManager : MonoBehaviour
             GameManager.Instance.isInLobby = false;
             UIManager.Instance.SetInitialSceneUIActive(false);
         }
+        worldSelector.enabled = true;
         UIManager.Instance.SetSelectWorldScreenGOActive(true);
-
         UIManager.Instance.SetFade(false);
         canGoToWorldSelect = true;
     }
@@ -207,6 +210,7 @@ public class LevelManager : MonoBehaviour
     {
         canGoToLevelTrans = false;
         isInWorldSelect = false;
+        worldSelector.enabled = false;
         inLevelTrans = true;
         UIManager.Instance.SetSelectWorldScreenGOActive(false);
         UIManager.Instance.SetGoToInBetweenBTNActive(false);
@@ -231,8 +235,7 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetPuntuationScreenActive(false);
 
 
-        if ((GameManager.Instance.currentLevel < worlds[currentWorld].worldLevelsGO.Length && !GameManager.Instance.explorationMode)
-            || (GameManager.Instance.currentLevel < worlds[currentWorld].worldLevelsGO.Length - 1 && GameManager.Instance.explorationMode))
+        if ((GameManager.Instance.currentLevel < worlds[currentWorld].worldLevelsGO.Length))
         {
             SetNextLevel();
             UIManager.Instance.SetLevelCountText(GameManager.Instance.currentLevel + 1, worlds[currentWorld].worldLevelsGO.Length);
