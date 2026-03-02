@@ -344,7 +344,7 @@ public class PlayerController : MonoBehaviour
 
     private void AimStarted()
     {
-        if(canAim && currentBullets > 0 && !isChargingDrift)
+        if(canAim && currentBullets > 0)
         {
             if (moveRotationTween.IsActive() && moveRotationTween.IsPlaying()) moveRotationTween.Kill();
             if (aimDir != Vector2.zero) aimRotationTween = transform.DORotate(Quaternion.LookRotation(aimDirRelativeToCam).eulerAngles, 0f, RotateMode.Fast);
@@ -1013,20 +1013,24 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isGrounded", isGrounded);
         anim.SetBool("isDashing", isFlying);
         anim.SetBool("isChargingDrift", isChargingDrift);
+        anim.SetBool("IsAiming", isAiming);
         anim.SetBool("isMoving", canMove && m_GoalVel.magnitude > 0 && moveDir != Vector2.zero);
-        if (!isAiming)
-        {
-            anim.SetLayerWeight(1, 0f);
-            backGunGO.SetActive(true);
-        }
-        else 
-        {
-            anim.SetLayerWeight(1, 100f);
-            backGunGO.SetActive(false);
-        }
+        //if (!isAiming)
+        //{
+        //    anim.SetLayerWeight(1, 0f);
+        //    backGunGO.SetActive(true);
+        //}
+        //else 
+        //{
+        //    anim.SetLayerWeight(1, 100f);
+        //    backGunGO.SetActive(false);
+        //}
         anim.SetBool("IsHit", isHitted);
+        //anim.SetFloat("DriftFactor", Vector3.Distance(transform.forward, rb.linearVelocity.normalized));
         anim.SetFloat("DriftFactor", Vector3.Distance(transform.forward, rb.linearVelocity.normalized) * 
             -(Quaternion.FromToRotation(transform.forward, rb.linearVelocity.normalized).eulerAngles - new Vector3(0, 180, 0)).normalized.y);
+        Debug.Log(Vector3.Distance(transform.forward, rb.linearVelocity.normalized) *
+            (Quaternion.FromToRotation(transform.forward, rb.linearVelocity.normalized).eulerAngles - new Vector3(0, 180, 0)).normalized.y);
     }
 
     private void OnTriggerEnter(Collider other)
