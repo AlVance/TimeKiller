@@ -344,7 +344,7 @@ public class PlayerController : MonoBehaviour
 
     private void AimStarted()
     {
-        if(canAim && currentBullets > 0)
+        if(canAim && currentBullets > 0 && !isChargingDrift)
         {
             if (moveRotationTween.IsActive() && moveRotationTween.IsPlaying()) moveRotationTween.Kill();
             if (aimDir != Vector2.zero) aimRotationTween = transform.DORotate(Quaternion.LookRotation(aimDirRelativeToCam).eulerAngles, 0f, RotateMode.Fast);
@@ -1025,11 +1025,8 @@ public class PlayerController : MonoBehaviour
             backGunGO.SetActive(false);
         }
         anim.SetBool("IsHit", isHitted);
-        //anim.SetFloat("DriftFactor", Vector3.Distance(transform.forward, rb.linearVelocity.normalized));
         anim.SetFloat("DriftFactor", Vector3.Distance(transform.forward, rb.linearVelocity.normalized) * 
             -(Quaternion.FromToRotation(transform.forward, rb.linearVelocity.normalized).eulerAngles - new Vector3(0, 180, 0)).normalized.y);
-        Debug.Log(Vector3.Distance(transform.forward, rb.linearVelocity.normalized) *
-            (Quaternion.FromToRotation(transform.forward, rb.linearVelocity.normalized).eulerAngles - new Vector3(0, 180, 0)).normalized.y);
     }
 
     private void OnTriggerEnter(Collider other)
