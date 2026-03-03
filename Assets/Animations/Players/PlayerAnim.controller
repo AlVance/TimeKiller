@@ -36,6 +36,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: IsAiming
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: DidShoot
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8847442436146070802}
   m_Solo: 0
@@ -813,7 +816,7 @@ AnimatorStateMachine:
     m_Position: {x: 360, y: 20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6099035697399046705}
-    m_Position: {x: 530, y: 140, z: 0}
+    m_Position: {x: 540, y: 140, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
