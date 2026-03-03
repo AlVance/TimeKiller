@@ -600,7 +600,8 @@ public class PlayerController : MonoBehaviour
                 {
                     currentDriftChargeVel = Vector3.Lerp(currentDriftChargeVel, targetDriftChargeVel, driftRotationForce).normalized;
                 }
-                Debug.Log(speedModOverStearing.Evaluate(Vector3.Distance(transform.forward, rb.linearVelocity.normalized)));
+                //Debug.Log(speedModOverStearing.Evaluate(Vector3.Distance(transform.forward, rb.linearVelocity.normalized)));
+                Debug.Log(Vector3.Distance(transform.forward, rb.linearVelocity.normalized));
 
                 currentDriftSpeed += speedModOverStearing.Evaluate(Vector3.Distance(transform.forward, rb.linearVelocity.normalized)) * Time.deltaTime;
                 if (currentDriftSpeed > minMaxDriftSpeed.y) currentDriftSpeed = minMaxDriftSpeed.y;
@@ -852,14 +853,14 @@ public class PlayerController : MonoBehaviour
         canAim = false;
         ResetCharge();
         EndAim();
-        this.GetComponentInChildren<PlayerVFX>().DissolvePlayer(0);
+        //this.GetComponentInChildren<PlayerVFX>().DissolvePlayer(0);
        
         yield return new WaitForSeconds(1f);
         currentFuel = maxFuel;
         this.transform.position = tpPos.position;
         
         yield return new WaitForSeconds(0.5f);
-        this.GetComponentInChildren<PlayerVFX>().DissolvePlayer(1);
+        //this.GetComponentInChildren<PlayerVFX>().DissolvePlayer(1);
 
         yield return new WaitForSeconds(1f);
 
@@ -868,7 +869,7 @@ public class PlayerController : MonoBehaviour
         canMove = true;
         affectedByGravity = true;
         canAim = true;
-        this.GetComponentInChildren<PlayerVFX>().ChangeMaterialProperties(2, 0, 1);
+        //this.GetComponentInChildren<PlayerVFX>().ChangeMaterialProperties(2, 0, 1);
         TimeManager.Instance.timerStarted = true;
         isOffLimits = false;
         yield return new WaitForSeconds(1f);
@@ -1012,18 +1013,24 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isGrounded", isGrounded);
         anim.SetBool("isDashing", isFlying);
         anim.SetBool("isChargingDrift", isChargingDrift);
+        anim.SetBool("IsAiming", isAiming);
         anim.SetBool("isMoving", canMove && m_GoalVel.magnitude > 0 && moveDir != Vector2.zero);
-        if (!isAiming)
-        {
-            anim.SetLayerWeight(1, 0f);
-            backGunGO.SetActive(true);
-        }
-        else 
-        {
-            anim.SetLayerWeight(1, 100f);
-            backGunGO.SetActive(false);
-        }
+        //if (!isAiming)
+        //{
+        //    anim.SetLayerWeight(1, 0f);
+        //    backGunGO.SetActive(true);
+        //}
+        //else 
+        //{
+        //    anim.SetLayerWeight(1, 100f);
+        //    backGunGO.SetActive(false);
+        //}
         anim.SetBool("IsHit", isHitted);
+        //anim.SetFloat("DriftFactor", Vector3.Distance(transform.forward, rb.linearVelocity.normalized));
+        anim.SetFloat("DriftFactor", Vector3.Distance(transform.forward, rb.linearVelocity.normalized) * 
+            -(Quaternion.FromToRotation(transform.forward, rb.linearVelocity.normalized).eulerAngles - new Vector3(0, 180, 0)).normalized.y);
+        Debug.Log(Vector3.Distance(transform.forward, rb.linearVelocity.normalized) *
+            (Quaternion.FromToRotation(transform.forward, rb.linearVelocity.normalized).eulerAngles - new Vector3(0, 180, 0)).normalized.y);
     }
 
     private void OnTriggerEnter(Collider other)

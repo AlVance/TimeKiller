@@ -21,10 +21,10 @@ MonoBehaviour:
     m_Value: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 0.2
+    m_Value: 3
   scatter:
     m_OverrideState: 1
-    m_Value: 0.52
+    m_Value: 0.3
   clamp:
     m_OverrideState: 0
     m_Value: 65472
@@ -33,7 +33,7 @@ MonoBehaviour:
     m_Value: {r: 0.043137256, g: 0, b: 0.3019608, a: 1}
   highQualityFiltering:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   downscale:
     m_OverrideState: 0
     m_Value: 0
@@ -62,7 +62,7 @@ MonoBehaviour:
   active: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 0.1
+    m_Value: 0
 --- !u!114 &-5809045179762773872
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -78,7 +78,7 @@ MonoBehaviour:
   active: 1
   intensity:
     m_OverrideState: 1
-    m_Value: -0.129
+    m_Value: 0
   xMultiplier:
     m_OverrideState: 1
     m_Value: 1
@@ -191,16 +191,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5485954d14dfb9a4c8ead8edb0ded5b1, type: 3}
   m_Name: LiftGammaGain
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   lift:
     m_OverrideState: 1
     m_Value: {x: 1, y: 0.95412964, z: 0.9250053, w: -0.029282575}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 0.8539093, y: 0.82581687, z: 1, w: 0.038080733}
+    m_Value: {x: 1, y: 0.99121207, z: 0.99370724, w: 0.038080733}
   gain:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.5870937, z: 0.87964094, w: 0.5255022}
+    m_Value: {x: 1, y: 0.96562076, z: 0.9984559, w: 0.5255022}
 --- !u!114 &7382022760517842841
 MonoBehaviour:
   m_ObjectHideFlags: 3
