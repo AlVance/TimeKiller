@@ -89,6 +89,7 @@ public class PlayerController : MonoBehaviour
     private bool shootCD = false;
     [SerializeField] private float shootCDTime;
     [SerializeField] private float onShootTpMoveSpeed;
+    private bool didShoot = false;
 
 
     [Header("Projectile Variables")]
@@ -542,6 +543,7 @@ public class PlayerController : MonoBehaviour
     {
         if(currentChargeTime >= shootChargeTime)
         {
+            didShoot = true;
             currentProjectileGO.transform.parent = null;
             currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(shootDirRelativeToCam + moveDirRelativeToCam * moveDirShootInertia, projectileSpeed);
             currentProjectileGO = null;
@@ -570,6 +572,7 @@ public class PlayerController : MonoBehaviour
         shootCD = true;
         yield return new WaitForSeconds(shootCDTime);
         shootCD = false;
+        didShoot = false;
     }
 
 
@@ -579,7 +582,7 @@ public class PlayerController : MonoBehaviour
     ////////////////////////////////////////////////
     private void EnterDrift()
     {
-        if (isGrounded && !isFlying && canDrift)
+        if (isGrounded && canDrift && !isFlying)
         {
             targetDriftChargeVel = transform.forward;
             currentDriftChargeVel = targetDriftChargeVel;
@@ -587,6 +590,8 @@ public class PlayerController : MonoBehaviour
             currentDriftSpeed = driftSpeed;
 
             driftPS.SetActive(true);
+
+            if (isAiming) EndAim();
         }
     }
     private void Drift()
@@ -600,8 +605,6 @@ public class PlayerController : MonoBehaviour
                 {
                     currentDriftChargeVel = Vector3.Lerp(currentDriftChargeVel, targetDriftChargeVel, driftRotationForce).normalized;
                 }
-                //Debug.Log(speedModOverStearing.Evaluate(Vector3.Distance(transform.forward, rb.linearVelocity.normalized)));
-                Debug.Log(Vector3.Distance(transform.forward, rb.linearVelocity.normalized));
 
                 currentDriftSpeed += speedModOverStearing.Evaluate(Vector3.Distance(transform.forward, rb.linearVelocity.normalized)) * Time.deltaTime;
                 if (currentDriftSpeed > minMaxDriftSpeed.y) currentDriftSpeed = minMaxDriftSpeed.y;
@@ -1015,22 +1018,12 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isChargingDrift", isChargingDrift);
         anim.SetBool("IsAiming", isAiming);
         anim.SetBool("isMoving", canMove && m_GoalVel.magnitude > 0 && moveDir != Vector2.zero);
-        //if (!isAiming)
-        //{
-        //    anim.SetLayerWeight(1, 0f);
-        //    backGunGO.SetActive(true);
-        //}
-        //else 
-        //{
-        //    anim.SetLayerWeight(1, 100f);
-        //    backGunGO.SetActive(false);
-        //}
         anim.SetBool("IsHit", isHitted);
-        //anim.SetFloat("DriftFactor", Vector3.Distance(transform.forward, rb.linearVelocity.normalized));
+        anim.SetBool("DidShoot", didShoot);
         anim.SetFloat("DriftFactor", Vector3.Distance(transform.forward, rb.linearVelocity.normalized) * 
             -(Quaternion.FromToRotation(transform.forward, rb.linearVelocity.normalized).eulerAngles - new Vector3(0, 180, 0)).normalized.y);
-        Debug.Log(Vector3.Distance(transform.forward, rb.linearVelocity.normalized) *
-            (Quaternion.FromToRotation(transform.forward, rb.linearVelocity.normalized).eulerAngles - new Vector3(0, 180, 0)).normalized.y);
+
+        UIManager.Instance.speedMeterText.text = (rb.linearVelocity.magnitude * 5).ToString("0");
     }
 
     private void OnTriggerEnter(Collider other)
