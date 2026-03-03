@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject InitialScenelUI;
     [SerializeField] private GameObject TimersGO;
     [SerializeField] private GameObject ExplorationModeTagGO;
+    [SerializeField] public TMP_Text speedMeterText;
 
     [Header("UI Transitions")]
     [SerializeField] private GameObject endLevelScreenUI;
