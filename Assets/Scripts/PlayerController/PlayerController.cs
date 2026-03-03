@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private Rigidbody rb;
 
-    [SerializeField] private Collider playerPhisicalCollider;
+    [SerializeField] private Collider playerPhysicalCollider;
+    [SerializeField] private Collider playerDriftPhysicalCollider;
 
     [Header("Camera Variables")]
     [SerializeField] private Transform aimTargetTr;
@@ -295,6 +296,9 @@ public class PlayerController : MonoBehaviour
         currentGravityForce = gravityForce;
         currentAccelerationSpeed = accelerationSpeed;
         ProjectilePooling();
+
+        playerPhysicalCollider.enabled = false;
+        playerDriftPhysicalCollider.enabled = true;
 
         initialPitchAS = playerAS.pitch;
     }
@@ -584,6 +588,9 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounded && canDrift && !isFlying)
         {
+            playerPhysicalCollider.enabled = false;
+            playerDriftPhysicalCollider.enabled = true;
+
             targetDriftChargeVel = transform.forward;
             currentDriftChargeVel = targetDriftChargeVel;
             isChargingDrift = true;
@@ -655,6 +662,8 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator _ExitDrift()
     {
+        playerPhysicalCollider.enabled = true;
+        playerDriftPhysicalCollider.enabled = false;
         currentAccelerationSpeed = maxAccelerationForce;
         isChargingDrift = false;
         driftPS.SetActive(false);
@@ -760,14 +769,14 @@ public class PlayerController : MonoBehaviour
     {
         BlockPlayer();
         currentMaxSpeed = 0;
-        playerPhisicalCollider.enabled = false;
+        playerPhysicalCollider.enabled = false;
         while (Vector3.Distance(this.transform.position, _targetPos) > 1f)
         {
             rb.linearVelocity = (_targetPos - this.transform.position).normalized * onShootTpMoveSpeed;
             yield return null;
         }
         rb.linearVelocity = Vector3.zero;
-        playerPhisicalCollider.enabled = true;
+        playerPhysicalCollider.enabled = true;
         UnblockPlayer();
     }
 

@@ -6893,6 +6893,7 @@ GameObject:
   - component: {fileID: 6905120389310956165}
   - component: {fileID: 2411601841555775349}
   - component: {fileID: 4709698155667123392}
+  - component: {fileID: 4246488619153699154}
   - component: {fileID: 8548522797890374881}
   - component: {fileID: 1692504682927899489}
   - component: {fileID: 7678551199976857478}
@@ -6945,7 +6946,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 062b106fb60b6354fb36167ac21bdb1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPhisicalCollider: {fileID: 4709698155667123392}
+  playerPhysicalCollider: {fileID: 4709698155667123392}
+  playerDriftPhysicalCollider: {fileID: 4246488619153699154}
   aimTargetTr: {fileID: 6076535337570582238}
   flyTargetTr: {fileID: 695246848793546589}
   groundRayDistance: 2.3
@@ -7098,6 +7100,29 @@ CapsuleCollider:
   m_Height: 1.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &4246488619153699154
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2389697036688943303}
+  m_Material: {fileID: 13400000, guid: d244fc20962be3e4fa03963bbd87ab65, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.25
+  m_Height: 0.8
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.35, z: 0}
 --- !u!114 &8548522797890374881
 MonoBehaviour:
   m_ObjectHideFlags: 0
