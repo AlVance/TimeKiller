@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     private PlayerInput playerInput;
     private Rigidbody rb;
 
-    [SerializeField] private Collider playerPhisicalCollider;
+    [SerializeField] private Collider playerPhysicalCollider;
+    [SerializeField] private Collider playerDriftPhysicalCollider;
 
     [Header("Camera Variables")]
     [SerializeField] private Transform aimTargetTr;
@@ -89,6 +90,7 @@ public class PlayerController : MonoBehaviour
     private bool shootCD = false;
     [SerializeField] private float shootCDTime;
     [SerializeField] private float onShootTpMoveSpeed;
+    private bool didShoot = false;
 
 
     [Header("Projectile Variables")]
@@ -295,6 +297,9 @@ public class PlayerController : MonoBehaviour
         currentAccelerationSpeed = accelerationSpeed;
         ProjectilePooling();
 
+        playerPhysicalCollider.enabled = false;
+        playerDriftPhysicalCollider.enabled = true;
+
         initialPitchAS = playerAS.pitch;
     }
 
@@ -344,7 +349,7 @@ public class PlayerController : MonoBehaviour
 
     private void AimStarted()
     {
-        if(canAim && currentBullets > 0 && !isChargingDrift)
+        if(canAim && currentBullets > 0)
         {
             if (moveRotationTween.IsActive() && moveRotationTween.IsPlaying()) moveRotationTween.Kill();
             if (aimDir != Vector2.zero) aimRotationTween = transform.DORotate(Quaternion.LookRotation(aimDirRelativeToCam).eulerAngles, 0f, RotateMode.Fast);
@@ -542,6 +547,7 @@ public class PlayerController : MonoBehaviour
     {
         if(currentChargeTime >= shootChargeTime)
         {
+            didShoot = true;
             currentProjectileGO.transform.parent = null;
             currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(shootDirRelativeToCam + moveDirRelativeToCam * moveDirShootInertia, projectileSpeed);
             currentProjectileGO = null;
@@ -570,6 +576,7 @@ public class PlayerController : MonoBehaviour
         shootCD = true;
         yield return new WaitForSeconds(shootCDTime);
         shootCD = false;
+        didShoot = false;
     }
 
 
@@ -579,14 +586,19 @@ public class PlayerController : MonoBehaviour
     ////////////////////////////////////////////////
     private void EnterDrift()
     {
-        if (isGrounded && !isFlying && canDrift)
+        if (isGrounded && canDrift && !isFlying)
         {
+            playerPhysicalCollider.enabled = false;
+            playerDriftPhysicalCollider.enabled = true;
+
             targetDriftChargeVel = transform.forward;
             currentDriftChargeVel = targetDriftChargeVel;
             isChargingDrift = true;
             currentDriftSpeed = driftSpeed;
 
             driftPS.SetActive(true);
+
+            if (isAiming) EndAim();
         }
     }
     private void Drift()
@@ -600,8 +612,6 @@ public class PlayerController : MonoBehaviour
                 {
                     currentDriftChargeVel = Vector3.Lerp(currentDriftChargeVel, targetDriftChargeVel, driftRotationForce).normalized;
                 }
-                //Debug.Log(speedModOverStearing.Evaluate(Vector3.Distance(transform.forward, rb.linearVelocity.normalized)));
-                Debug.Log(Vector3.Distance(transform.forward, rb.linearVelocity.normalized));
 
                 currentDriftSpeed += speedModOverStearing.Evaluate(Vector3.Distance(transform.forward, rb.linearVelocity.normalized)) * Time.deltaTime;
                 if (currentDriftSpeed > minMaxDriftSpeed.y) currentDriftSpeed = minMaxDriftSpeed.y;
@@ -652,6 +662,8 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator _ExitDrift()
     {
+        playerPhysicalCollider.enabled = true;
+        playerDriftPhysicalCollider.enabled = false;
         currentAccelerationSpeed = maxAccelerationForce;
         isChargingDrift = false;
         driftPS.SetActive(false);
@@ -757,14 +769,14 @@ public class PlayerController : MonoBehaviour
     {
         BlockPlayer();
         currentMaxSpeed = 0;
-        playerPhisicalCollider.enabled = false;
+        playerPhysicalCollider.enabled = false;
         while (Vector3.Distance(this.transform.position, _targetPos) > 1f)
         {
             rb.linearVelocity = (_targetPos - this.transform.position).normalized * onShootTpMoveSpeed;
             yield return null;
         }
         rb.linearVelocity = Vector3.zero;
-        playerPhisicalCollider.enabled = true;
+        playerPhysicalCollider.enabled = true;
         UnblockPlayer();
     }
 
@@ -1013,20 +1025,14 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isGrounded", isGrounded);
         anim.SetBool("isDashing", isFlying);
         anim.SetBool("isChargingDrift", isChargingDrift);
+        anim.SetBool("IsAiming", isAiming);
         anim.SetBool("isMoving", canMove && m_GoalVel.magnitude > 0 && moveDir != Vector2.zero);
-        if (!isAiming)
-        {
-            anim.SetLayerWeight(1, 0f);
-            backGunGO.SetActive(true);
-        }
-        else 
-        {
-            anim.SetLayerWeight(1, 100f);
-            backGunGO.SetActive(false);
-        }
         anim.SetBool("IsHit", isHitted);
+        anim.SetBool("DidShoot", didShoot);
         anim.SetFloat("DriftFactor", Vector3.Distance(transform.forward, rb.linearVelocity.normalized) * 
             -(Quaternion.FromToRotation(transform.forward, rb.linearVelocity.normalized).eulerAngles - new Vector3(0, 180, 0)).normalized.y);
+
+        UIManager.Instance.speedMeterText.text = (rb.linearVelocity.magnitude * 5).ToString("0");
     }
 
     private void OnTriggerEnter(Collider other)
