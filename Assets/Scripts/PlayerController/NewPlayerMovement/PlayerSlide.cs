@@ -11,6 +11,9 @@ public class PlayerSlide : MonoBehaviour
     [Header("Slide Variables")]
     [SerializeField] private float slideForce;
     [SerializeField] private float slideTimer;
+    private float currentSlideTimer;
+
+    [SerializeField] private GameObject playerModel;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -23,18 +26,44 @@ public class PlayerSlide : MonoBehaviour
     void Update()
     {
         moveDirection = pInputs.moveDirRelativeToCam;
+        if (pInputs.driftPressed && !pMovement.isSliding && pMovement.state != PlayerMovement.MovementStates.Air)
+        {
+            StartSlide();
+        }
+        else if(!pInputs.driftPressed && pMovement.isSliding || pMovement.state == PlayerMovement.MovementStates.Air)
+        {
+            EndSlide();
+        }
     }
 
     private void FixedUpdate()
     {
-        if (pMovement.CheckOnSlope() && rb.linearVelocity.y < 0.1f)
+        Slide();
+    }
+
+    private void StartSlide()
+    {
+        pMovement.isSliding = true;
+        currentSlideTimer = slideTimer;
+
+        playerModel.transform.localScale = new Vector3(playerModel.transform.localScale.x, 0.5f, playerModel.transform.localScale.z);
+    }
+
+    private void Slide()
+    {
+        Debug.Log(pMovement.CheckOnSlope());
+        if(pMovement.isSliding)
         {
-            rb.AddForce(pMovement.GetSlopeMoveDir(moveDirection) * slideForce, ForceMode.Force);
-            pMovement.isSliding = true;
+            if (pMovement.CheckOnSlope() && rb.linearVelocity.y < -0.1f)
+            {
+                rb.AddForce(pMovement.GetSlopeMoveDir(moveDirection) * slideForce, ForceMode.Force);
+            }
         }
-        else
-        {
-            pMovement.isSliding = false;
-        }
+    }
+
+    private void EndSlide()
+    {
+        pMovement.isSliding = false;
+        playerModel.transform.localScale = new Vector3(playerModel.transform.localScale.x, 1f, playerModel.transform.localScale.z);
     }
 }

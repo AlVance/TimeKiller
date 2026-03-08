@@ -1,25 +1,45 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using DG.Tweening;
 
 public class PlayerMovement : MonoBehaviour
 {
     private PlayerInputs pInputs;
 
+    [SerializeField] private GameObject playerModel;
+
     [Header("Movement variables")]
     [SerializeField] private float standardMoveSpeed;
+    [SerializeField] private float startMoveSpeed;
+    [SerializeField] private float flySpeed;
     [SerializeField] private float slideSpeed;
     [SerializeField] private float groundedDamp;
+    [SerializeField] private float slideDamp;
+    [SerializeField] private float flyingDamp;
     [SerializeField] private float airMovementMultiplier;
     [SerializeField] private float speedDiffToLerp;
     private float desiredMoveSpeed;
     private float lastDesiredMoveSpeed;
-    private float currentMoveSpeed;
+    private float m_currentmoveSpeed;
+    public float currentMoveSpeed
+    {
+        get { return m_currentmoveSpeed; }
+        set
+        {
+            m_currentmoveSpeed = value;
+            
+        }
+    }
     public bool isSliding = false;
     private Vector3 moveDirection;
     private Rigidbody rb;
     [SerializeField] private float speedIncreaseMultiplier;
     [SerializeField] private float slopeIncreaseMultiplier;
+
+    [Header("Fly variables")]
+    private bool isFlying = false;
 
     [Header("Ground Check")]
     [SerializeField] private float playerHeight;
@@ -47,66 +67,92 @@ public class PlayerMovement : MonoBehaviour
 
 
     public enum MovementStates { Idle, Walking, Air, Flying, Sliding}
-    private MovementStates state;
+    public MovementStates state;
+
+    [SerializeField] private TMP_Text speedText;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         pInputs = GetComponent<PlayerInputs>();
 
         rb.freezeRotation = true;
+
+        currentGravityForce = gravityForce;
     }
 
     private void Update()
     {
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, groundLayer);
 
+        SpeedControl();
         StateHandler();
 
-        SpeedControl();
-
-        if (isGrounded)
+        if (state == MovementStates.Flying)
+        {
+            rb.linearDamping = flyingDamp;
+        }
+        else if (state == MovementStates.Walking)
         {
             rb.linearDamping = groundedDamp;
         }
-        else
+        else if(state == MovementStates.Sliding)
+        {
+            rb.linearDamping = slideDamp;
+        }
+        else if(state == MovementStates.Air)
         {
             rb.linearDamping = 0;
         }
+
+        speedText.text = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).sqrMagnitude.ToString("00.0") + "\n" + state;
+
+        if(moveDirection != Vector3.zero) playerModel.transform.DORotate(Quaternion.LookRotation(moveDirection).eulerAngles, 0.2f, RotateMode.Fast);
     }
     private void FixedUpdate()
     {
         MovePlayer();
         FloatOnGround();
         ApplyGravity();
+        Fly();
     }
 
     private void StateHandler()
     {
-         if(isGrounded && rb.linearVelocity != Vector3.zero)
+        if (isFlying)
         {
-            if (!isSliding) 
-            {
-                state = MovementStates.Walking;
-                desiredMoveSpeed = standardMoveSpeed;
-            } 
-            else
+            state = MovementStates.Flying;
+            desiredMoveSpeed = flySpeed;
+            if (currentMoveSpeed < flySpeed) currentMoveSpeed = flySpeed;
+        }
+        else if(isGrounded && rb.linearVelocity.magnitude > 0.1f)
+        {
+            if (isSliding && CheckOnSlope() && rb.linearVelocity.y < -0.1f) 
             {
                 state = MovementStates.Sliding;
                 desiredMoveSpeed = slideSpeed;
+                
+            } 
+            else
+            {
+                state = MovementStates.Walking;
+                desiredMoveSpeed = standardMoveSpeed;
             }
         }
-         else if(isGrounded && rb.linearVelocity == Vector3.zero)
+        else if(isGrounded && moveDirection == Vector3.zero)
         {
             state = MovementStates.Idle;
-            desiredMoveSpeed = 0;
+            currentMoveSpeed = startMoveSpeed;
+            desiredMoveSpeed = startMoveSpeed;
+            
         }
         else if (!isGrounded)
         {
             state = MovementStates.Air;
         }
-        
-         if(Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > speedDiffToLerp && currentMoveSpeed != 0)
-        {
+
+        float speedDifference = Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed);
+        if (speedDifference > speedDiffToLerp && currentMoveSpeed != 0)
+        {   
             StopAllCoroutines();
             StartCoroutine(SmoothLerpMoveSpeed());
         }
@@ -152,16 +198,47 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(GetSlopeMoveDir(moveDirection) * currentMoveSpeed * 10, ForceMode.Force);
         }
-
         else if(isGrounded)rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10, ForceMode.Force);
         else rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10 * airMovementMultiplier, ForceMode.Force);
     }
 
+    private void Fly()
+    {
+        if(!isFlying && pInputs.flyPressed)
+        {
+            currentGravityForce = 0;
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+            isFlying = true;
+        }
+        else if(isFlying && !pInputs.flyPressed)
+        {
+            currentGravityForce = gravityForce;
+            isFlying = false;
+        }
+
+        if (isFlying)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+        }
+    }
+
     private void SpeedControl()
     {
-        if(rb.linearVelocity.magnitude > desiredMoveSpeed)
+        Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+
+        if (CheckOnSlope())
         {
-            rb.linearVelocity = rb.linearVelocity.normalized * desiredMoveSpeed;
+            if (rb.linearVelocity.magnitude > currentMoveSpeed)
+                rb.linearVelocity = rb.linearVelocity.normalized * currentMoveSpeed;
+        }
+
+        else
+        {           
+            if (flatVel.magnitude > currentMoveSpeed)
+            {
+                Vector3 limitedVel = flatVel.normalized * currentMoveSpeed;
+                rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
+            }
         }
     }
 
@@ -184,7 +261,7 @@ public class PlayerMovement : MonoBehaviour
     private void ApplyGravity()
     {
 
-        if (rb.linearVelocity.y > maxFallSpeed) rb.AddForce(Vector3.down * gravityForce, ForceMode.Force);
+        if (rb.linearVelocity.y > maxFallSpeed) rb.AddForce(Vector3.down * currentGravityForce, ForceMode.Force);
         else rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
     }
 

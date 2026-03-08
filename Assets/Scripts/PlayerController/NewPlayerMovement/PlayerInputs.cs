@@ -11,6 +11,9 @@ public class PlayerInputs : MonoBehaviour
 
     public Vector2 moveDir;
     public Vector3 moveDirRelativeToCam;
+
+    public bool flyPressed = false;
+    public bool driftPressed = false;
     private void Awake()
     {
         playerInput = new PlayerInput();
@@ -35,6 +38,36 @@ public class PlayerInputs : MonoBehaviour
         {
             moveDir = Vector2.zero;
             moveDirRelativeToCam = GetV3RelativeToCamera(moveDir);
+        };
+
+        playerInput.PlayerControls.Reload.started += ctx =>
+        {
+            flyPressed = true;
+        };
+
+        playerInput.PlayerControls.Reload.performed += ctx =>
+        {
+
+        };
+
+        playerInput.PlayerControls.Reload.canceled += ctx =>
+        {
+            flyPressed = false;
+        };
+
+        playerInput.PlayerControls.Drift.started += ctx =>
+        {
+            driftPressed = true;
+        };
+
+        playerInput.PlayerControls.Drift.performed += ctx =>
+        {
+
+        };
+
+        playerInput.PlayerControls.Drift.canceled += ctx =>
+        {
+            driftPressed = false;
         };
     }
 
