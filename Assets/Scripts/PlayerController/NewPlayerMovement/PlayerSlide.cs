@@ -11,9 +11,9 @@ public class PlayerSlide : MonoBehaviour
     [Header("Slide Variables")]
     [SerializeField] private float slideForce;
     [SerializeField] private float slideTimer;
-    private float currentSlideTimer;
 
     [SerializeField] private GameObject playerModel;
+    [SerializeField] private Transform slideDesiredDir;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -44,7 +44,6 @@ public class PlayerSlide : MonoBehaviour
     private void StartSlide()
     {
         pMovement.isSliding = true;
-        currentSlideTimer = slideTimer;
 
         playerModel.transform.localScale = new Vector3(playerModel.transform.localScale.x, 0.5f, playerModel.transform.localScale.z);
     }

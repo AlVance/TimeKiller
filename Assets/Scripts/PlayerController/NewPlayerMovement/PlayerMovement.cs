@@ -172,32 +172,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private IEnumerator SmoothLerpMoveSpeed()
-    {
-        float time = 0;
-        float difference = Mathf.Abs(desiredMoveSpeed - currentMoveSpeed);
-        float startValue = currentMoveSpeed;
-
-        while (time < difference)
-        {
-            currentMoveSpeed = Mathf.Lerp(startValue, desiredMoveSpeed, time / difference);
-
-            if (CheckOnSlope())
-            {
-                float slopeAngle = Vector3.Angle(Vector3.up, slopeHit.normal);
-                float slopeAngleIncrease = 1 + (slopeAngle / 90f);
-
-                time += Time.deltaTime * speedIncreaseMultiplier * slopeIncreaseMultiplier * slopeAngleIncrease;
-            }
-            else
-                time += Time.deltaTime * speedIncreaseMultiplier;
-
-            yield return null;
-        }
-
-        currentMoveSpeed = desiredMoveSpeed;
-    }
-
     private void SmoothSpeed()
     {
         if (CheckOnSlope())
@@ -264,11 +238,13 @@ public class PlayerMovement : MonoBehaviour
         if (CheckOnSlope())
         {
             rb.AddForce(GetSlopeMoveDir(moveDirection) * currentMoveSpeed * 10, ForceMode.Force);
-            if(moveDirection.sqrMagnitude > 0.1f) rb.AddForce(-slopeHit.normal * 50, ForceMode.Force);
+            if (moveDirection.sqrMagnitude > 0.1f) rb.AddForce(-slopeHit.normal * 50, ForceMode.Force);
         }
-        else if(isGrounded)rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10, ForceMode.Force);
+        else if (isGrounded) rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10, ForceMode.Force);
         else rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10 * airMovementMultiplier, ForceMode.Force);
     }
+
+    
 
     private void Fly()
     {

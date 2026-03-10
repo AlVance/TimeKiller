@@ -128,7 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 30391241}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SlideDir
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2226,7 +2226,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 232710284}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerModelParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2800,9 +2800,10 @@ GameObject:
   - component: {fileID: 555788270}
   - component: {fileID: 555788274}
   - component: {fileID: 555788273}
-  m_Layer: 0
+  - component: {fileID: 555788275}
+  m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2838,7 +2839,7 @@ MonoBehaviour:
   slideDamp: 1
   flyingDamp: 4
   airMovementMultiplier: 1
-  speedDiffToLerp: 6
+  speedDiffToLerp: 5
   isSliding: 0
   speedIncreaseMultiplier: 1.5
   slopeIncreaseMultiplier: 2.5
@@ -2938,6 +2939,20 @@ MonoBehaviour:
   slideForce: 70
   slideTimer: 1
   playerModel: {fileID: 1504354494}
+  slideDesiredDir: {fileID: 0}
+--- !u!114 &555788275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555788269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413c42cdb7977fd418d61377c5bef7a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerAnim: {fileID: 0}
 --- !u!1 &556578025
 GameObject:
   m_ObjectHideFlags: 0
@@ -4253,7 +4268,7 @@ GameObject:
   - component: {fileID: 642917986}
   - component: {fileID: 642917988}
   - component: {fileID: 642917987}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5537,7 +5552,7 @@ GameObject:
   - component: {fileID: 884093212}
   - component: {fileID: 884093214}
   - component: {fileID: 884093213}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5830,13 +5845,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 411009fe5648b96419e02a10f0adceae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  accelerationSpeed: 150
-  maxAccelerationForce: 125
-  maxSpeed: 12
-  rayDistance: 3
-  rideHeight: 2.5
-  rideSpringStength: 100
-  rideSpringDamper: 8
 --- !u!4 &918384905
 Transform:
   m_ObjectHideFlags: 0
@@ -7099,7 +7107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1183409850}
   - component: {fileID: 1183409851}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerCol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73768,7 +73776,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1407898072}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Orientation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77074,7 +77082,7 @@ GameObject:
   - component: {fileID: 1504354495}
   - component: {fileID: 1504354498}
   - component: {fileID: 1504354497}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PlayerModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
