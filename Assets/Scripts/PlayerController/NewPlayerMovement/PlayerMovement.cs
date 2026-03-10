@@ -9,12 +9,25 @@ public class PlayerMovement : MonoBehaviour
     private PlayerInputs pInputs;
 
     [SerializeField] private GameObject playerModel;
+    [SerializeField] private GameObject playerParentModel;
 
     [Header("Movement variables")]
     [SerializeField] private float standardMoveSpeed;
     [SerializeField] private float startMoveSpeed;
     [SerializeField] private float flySpeed;
     [SerializeField] private float slideSpeed;
+    [SerializeField] private float slideDownSpeed;
+    [SerializeField] private float walkAcceleration;
+    [SerializeField] private float walkDeceleration;
+    [SerializeField] private float slideAcceleration;
+    [SerializeField] private float slideDeceleration;
+    [SerializeField] private float slideDownAcceleration;
+    [SerializeField] private float slideDownDeceleration;
+    private float currentAcceleration;
+    private float currentDeceleration;
+    [SerializeField] private float slopeUpDecelerationMult;
+    [SerializeField] private float slopeDownAccelerationMult;
+    private float currentSlopeAccMult;
     [SerializeField] private float groundedDamp;
     [SerializeField] private float slideDamp;
     [SerializeField] private float flyingDamp;
@@ -66,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform orientation;
 
 
-    public enum MovementStates { Idle, Walking, Air, Flying, Sliding}
+    public enum MovementStates { Idle, Walking, Air, Flying, Sliding, SlidingDown}
     public MovementStates state;
 
     [SerializeField] private TMP_Text speedText;
@@ -86,27 +99,21 @@ public class PlayerMovement : MonoBehaviour
 
         SpeedControl();
         StateHandler();
+        DampControl();
 
-        if (state == MovementStates.Flying)
-        {
-            rb.linearDamping = flyingDamp;
-        }
-        else if (state == MovementStates.Walking)
-        {
-            rb.linearDamping = groundedDamp;
-        }
-        else if(state == MovementStates.Sliding)
-        {
-            rb.linearDamping = slideDamp;
-        }
-        else if(state == MovementStates.Air)
-        {
-            rb.linearDamping = 0;
-        }
+        SmoothSpeed();
 
         speedText.text = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).sqrMagnitude.ToString("00.0") + "\n" + state;
 
-        if(moveDirection != Vector3.zero) playerModel.transform.DORotate(Quaternion.LookRotation(moveDirection).eulerAngles, 0.2f, RotateMode.Fast);
+        if (moveDirection != Vector3.zero) 
+        {
+            transform.rotation = Quaternion.Euler(0, Quaternion.LookRotation(moveDirection).eulerAngles.y, 0);
+            playerModel.transform.localRotation = Quaternion.Euler(0, Quaternion.LookRotation(moveDirection).eulerAngles.y, 0);
+        } 
+        
+        Vector3 groundHitAngle = Quaternion.FromToRotation(Vector3.up, groundHit.normal).eulerAngles;
+        if (moveDirection != Vector3.zero && isGrounded) playerParentModel.transform.rotation = Quaternion.Euler(new Vector3(groundHitAngle.x, 0 ,groundHitAngle.z));
+        else if(!isGrounded) playerParentModel.transform.rotation = Quaternion.Euler(Vector3.zero);
     }
     private void FixedUpdate()
     {
@@ -126,16 +133,29 @@ public class PlayerMovement : MonoBehaviour
         }
         else if(isGrounded && rb.linearVelocity.magnitude > 0.1f)
         {
-            if (isSliding && CheckOnSlope() && rb.linearVelocity.y < -0.1f) 
+            if (isSliding) 
             {
-                state = MovementStates.Sliding;
-                desiredMoveSpeed = slideSpeed;
-                
+                if(CheckOnSlope() && rb.linearVelocity.y < -0.1f)
+                {
+                    state = MovementStates.SlidingDown;
+                    desiredMoveSpeed = slideDownSpeed;
+                    currentAcceleration = slideDownAcceleration;
+                    currentDeceleration = slideDownDeceleration;
+                }
+                else
+                {
+                    state = MovementStates.Sliding;
+                    desiredMoveSpeed = slideSpeed;
+                    currentAcceleration = slideAcceleration;
+                    currentDeceleration = slideDeceleration;
+                }   
             } 
             else
             {
                 state = MovementStates.Walking;
                 desiredMoveSpeed = standardMoveSpeed;
+                currentAcceleration = walkAcceleration;
+                currentDeceleration = walkDeceleration;
             }
         }
         else if(isGrounded && moveDirection == Vector3.zero)
@@ -148,20 +168,8 @@ public class PlayerMovement : MonoBehaviour
         else if (!isGrounded)
         {
             state = MovementStates.Air;
+            desiredMoveSpeed = standardMoveSpeed;
         }
-
-        float speedDifference = Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed);
-        if (speedDifference > speedDiffToLerp && currentMoveSpeed != 0)
-        {   
-            StopAllCoroutines();
-            StartCoroutine(SmoothLerpMoveSpeed());
-        }
-        else
-        {
-            currentMoveSpeed = desiredMoveSpeed;
-        }
-
-        lastDesiredMoveSpeed = desiredMoveSpeed;
     }
 
     private IEnumerator SmoothLerpMoveSpeed()
@@ -190,6 +198,62 @@ public class PlayerMovement : MonoBehaviour
         currentMoveSpeed = desiredMoveSpeed;
     }
 
+    private void SmoothSpeed()
+    {
+        if (CheckOnSlope())
+        {
+            if(rb.linearVelocity.y > 0.1f && currentMoveSpeed < desiredMoveSpeed)
+            {
+                currentSlopeAccMult = slopeUpDecelerationMult;
+            }
+            else if(rb.linearVelocity.y < -0.1f)
+            {
+                currentSlopeAccMult = slopeDownAccelerationMult;
+            }
+            else
+            {
+                currentSlopeAccMult = 1f;
+            }
+        }
+
+        float diff = Mathf.Abs(desiredMoveSpeed - currentMoveSpeed);
+        if(diff > speedDiffToLerp && currentMoveSpeed != 0)
+        {
+            if(currentMoveSpeed < desiredMoveSpeed)
+            {
+                currentMoveSpeed += currentAcceleration * currentSlopeAccMult * Time.deltaTime;
+            }
+            else
+            {
+                currentMoveSpeed -= currentDeceleration * currentSlopeAccMult * Time.deltaTime;
+            }
+        }
+        else
+        {
+            currentMoveSpeed = desiredMoveSpeed;
+        }
+    }
+
+    private void DampControl()
+    {
+        if (state == MovementStates.Flying)
+        {
+            rb.linearDamping = flyingDamp;
+        }
+        else if (state == MovementStates.Walking)
+        {
+            rb.linearDamping = groundedDamp;
+        }
+        else if (state == MovementStates.Sliding || state == MovementStates.SlidingDown)
+        {
+            rb.linearDamping = slideDamp;
+        }
+        else if (state == MovementStates.Air)
+        {
+            rb.linearDamping = 0;
+        }
+    }
+    public float forceSlope;
     private void MovePlayer()
     {
         moveDirection = pInputs.moveDirRelativeToCam;
@@ -197,6 +261,7 @@ public class PlayerMovement : MonoBehaviour
         if (CheckOnSlope())
         {
             rb.AddForce(GetSlopeMoveDir(moveDirection) * currentMoveSpeed * 10, ForceMode.Force);
+            rb.AddForce(-slopeHit.normal * forceSlope, ForceMode.Force);
         }
         else if(isGrounded)rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10, ForceMode.Force);
         else rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10 * airMovementMultiplier, ForceMode.Force);

@@ -51,7 +51,6 @@ public class PlayerSlide : MonoBehaviour
 
     private void Slide()
     {
-        Debug.Log(pMovement.CheckOnSlope());
         if(pMovement.isSliding)
         {
             if (pMovement.CheckOnSlope() && rb.linearVelocity.y < -0.1f)
