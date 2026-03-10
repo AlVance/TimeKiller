@@ -78,6 +78,8 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private Transform orientation;
 
+    [Header("Shoot variables")]
+    public bool isAiming = false; 
 
     public enum MovementStates { Idle, Walking, Air, Flying, Sliding, SlidingDown}
     public MovementStates state;
@@ -105,15 +107,20 @@ public class PlayerMovement : MonoBehaviour
 
         speedText.text = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).sqrMagnitude.ToString("00.0") + "\n" + state;
 
-        if (moveDirection != Vector3.zero) 
+
+        //MoveRotationStuff
+        if(!isAiming)
         {
-            transform.rotation = Quaternion.Euler(0, Quaternion.LookRotation(moveDirection).eulerAngles.y, 0);
-            playerModel.transform.localRotation = Quaternion.Euler(0, Quaternion.LookRotation(moveDirection).eulerAngles.y, 0);
-        } 
-        
-        Vector3 groundHitAngle = Quaternion.FromToRotation(Vector3.up, groundHit.normal).eulerAngles;
-        if (moveDirection != Vector3.zero && isGrounded) playerParentModel.transform.rotation = Quaternion.Euler(new Vector3(groundHitAngle.x, 0 ,groundHitAngle.z));
-        else if(!isGrounded) playerParentModel.transform.rotation = Quaternion.Euler(Vector3.zero);
+            if (moveDirection != Vector3.zero)
+            {
+                transform.rotation = Quaternion.Euler(0, Quaternion.LookRotation(moveDirection).eulerAngles.y, 0);
+                playerModel.transform.localRotation = Quaternion.Euler(0, Quaternion.LookRotation(moveDirection).eulerAngles.y, 0);
+            }
+
+            Vector3 groundHitAngle = Quaternion.FromToRotation(Vector3.up, groundHit.normal).eulerAngles;
+            if (moveDirection != Vector3.zero && isGrounded) playerParentModel.transform.rotation = Quaternion.Euler(new Vector3(groundHitAngle.x, 0, groundHitAngle.z));
+            else if (!isGrounded) playerParentModel.transform.rotation = Quaternion.Euler(Vector3.zero);
+        }
     }
     private void FixedUpdate()
     {
@@ -178,7 +185,6 @@ public class PlayerMovement : MonoBehaviour
         {
             float slopeAngle = Vector3.Angle(Vector3.up, slopeHit.normal);
             float slopeAngleIncrease = 1 + (slopeAngle / 90f);
-            Debug.Log(slopeAngleIncrease);
             if (rb.linearVelocity.y > 0.1f && currentMoveSpeed < desiredMoveSpeed)
             {
                 currentSlopeAccMult = slopeUpDecelerationMult * slopeAngleIncrease;

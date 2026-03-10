@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInputs : MonoBehaviour
 {
-    private PlayerInput playerInput;
+    private PlayerInput1 playerInput;
 
     public float horizontalAxis;
     public float camBasedHorizontalAxis;
@@ -12,16 +13,25 @@ public class PlayerInputs : MonoBehaviour
     public Vector2 moveDir;
     public Vector3 moveDirRelativeToCam;
 
+    public Vector2 aimDir;
+    public Vector3 aimDirRelativeToCam;
+
+    public Vector2 shootDir;
+    public Vector3 shootDirRelativeToCam;
+
     public bool flyPressed = false;
     public bool driftPressed = false;
+    public bool aimPressed = false;
+    public bool shootPressed = false;
     private void Awake()
     {
-        playerInput = new PlayerInput();
+        playerInput = new PlayerInput1();
         HandleInput();
     }
 
     private void HandleInput()
     {
+        //Move Input
         playerInput.PlayerControls.Move.started += ctx =>
         {
             
@@ -40,6 +50,7 @@ public class PlayerInputs : MonoBehaviour
             moveDirRelativeToCam = GetV3RelativeToCamera(moveDir);
         };
 
+        //Fly Input
         playerInput.PlayerControls.Reload.started += ctx =>
         {
             flyPressed = true;
@@ -55,6 +66,7 @@ public class PlayerInputs : MonoBehaviour
             flyPressed = false;
         };
 
+        //Drift Input
         playerInput.PlayerControls.Drift.started += ctx =>
         {
             driftPressed = true;
@@ -68,6 +80,65 @@ public class PlayerInputs : MonoBehaviour
         playerInput.PlayerControls.Drift.canceled += ctx =>
         {
             driftPressed = false;
+        };
+
+        //Aim Input
+        playerInput.PlayerControls.Aim.started += ctx =>
+        {
+            if (Mouse.current.leftButton.isPressed)
+            {
+                Vector2 tempAimDir = ctx.ReadValue<Vector2>();
+                Vector3 PlayerScreenPos = Camera.main.WorldToScreenPoint(this.transform.position);
+                tempAimDir.x -= PlayerScreenPos.x;
+                tempAimDir.y -= PlayerScreenPos.y;
+                aimDir = tempAimDir.normalized;
+                aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
+            }
+            aimPressed = true;
+        };
+
+        playerInput.PlayerControls.Aim.performed += ctx =>
+        {
+
+            if (Mouse.current.leftButton.isPressed)
+            {
+                Vector2 tempAimDir = ctx.ReadValue<Vector2>();
+                Vector3 PlayerScreenPos = Camera.main.WorldToScreenPoint(this.transform.position);
+                tempAimDir.x -= PlayerScreenPos.x;
+                tempAimDir.y -= PlayerScreenPos.y;
+                aimDir = tempAimDir.normalized;
+            }
+            else
+            {
+                Vector2 tempAimDir = ctx.ReadValue<Vector2>();
+                if (tempAimDir.x > 0.1f || tempAimDir.x < -0.1f || tempAimDir.y > 0.1f || tempAimDir.y < -0.1f)
+                {
+                    aimDir = tempAimDir;
+                }
+
+            }
+            aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
+        };
+
+        playerInput.PlayerControls.Aim.canceled += ctx =>
+        {
+            aimPressed = false;
+            aimDir = Vector2.zero;
+            aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
+        };
+
+
+        playerInput.PlayerControls.Shoot.started += ctx =>
+        {
+            shootPressed = true;
+        };
+        playerInput.PlayerControls.Shoot.performed += ctx =>
+        {
+
+        };
+        playerInput.PlayerControls.Shoot.canceled += ctx =>
+        {
+            shootPressed = false;
         };
     }
 
