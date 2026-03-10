@@ -202,13 +202,16 @@ public class PlayerMovement : MonoBehaviour
     {
         if (CheckOnSlope())
         {
-            if(rb.linearVelocity.y > 0.1f && currentMoveSpeed < desiredMoveSpeed)
+            float slopeAngle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            float slopeAngleIncrease = 1 + (slopeAngle / 90f);
+            Debug.Log(slopeAngleIncrease);
+            if (rb.linearVelocity.y > 0.1f && currentMoveSpeed < desiredMoveSpeed)
             {
-                currentSlopeAccMult = slopeUpDecelerationMult;
+                currentSlopeAccMult = slopeUpDecelerationMult * slopeAngleIncrease;
             }
             else if(rb.linearVelocity.y < -0.1f)
             {
-                currentSlopeAccMult = slopeDownAccelerationMult;
+                currentSlopeAccMult = slopeDownAccelerationMult * slopeAngleIncrease;
             }
             else
             {
@@ -253,7 +256,7 @@ public class PlayerMovement : MonoBehaviour
             rb.linearDamping = 0;
         }
     }
-    public float forceSlope;
+
     private void MovePlayer()
     {
         moveDirection = pInputs.moveDirRelativeToCam;
@@ -261,7 +264,7 @@ public class PlayerMovement : MonoBehaviour
         if (CheckOnSlope())
         {
             rb.AddForce(GetSlopeMoveDir(moveDirection) * currentMoveSpeed * 10, ForceMode.Force);
-            rb.AddForce(-slopeHit.normal * forceSlope, ForceMode.Force);
+            if(moveDirection.sqrMagnitude > 0.1f) rb.AddForce(-slopeHit.normal * 50, ForceMode.Force);
         }
         else if(isGrounded)rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10, ForceMode.Force);
         else rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10 * airMovementMultiplier, ForceMode.Force);
@@ -272,7 +275,7 @@ public class PlayerMovement : MonoBehaviour
         if(!isFlying && pInputs.flyPressed)
         {
             currentGravityForce = 0;
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+            if(rb.linearVelocity.y < 0) rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
             isFlying = true;
         }
         else if(isFlying && !pInputs.flyPressed)
@@ -283,7 +286,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (isFlying)
         {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+            if (rb.linearVelocity.y < 0) rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         }
     }
 
