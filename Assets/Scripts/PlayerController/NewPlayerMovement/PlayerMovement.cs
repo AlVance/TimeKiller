@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float flySpeed;
     [SerializeField] private float slideSpeed;
     [SerializeField] private float slideDownSpeed;
+    [SerializeField] private float wallRunSpeed;
     [SerializeField] private float walkAcceleration;
     [SerializeField] private float walkDeceleration;
     [SerializeField] private float slideAcceleration;
@@ -45,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
             
         }
     }
-    public bool isSliding = false;
+    
     private Vector3 moveDirection;
     private Rigidbody rb;
     [SerializeField] private float speedIncreaseMultiplier;
@@ -59,11 +60,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float groundRayDistance;
     private RaycastHit groundHit;
-    private bool isGrounded;
+    public bool isGrounded;
 
     [Header("Slope variables")]
     [SerializeField] private float maxSlopeAngle;
     private RaycastHit slopeHit;
+    public bool isSliding = false;
 
     [Header("Float on ground")]
     [SerializeField] private float floatRayDistance;
@@ -72,16 +74,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float rideSpringDamper;
 
     [Header("Gravity variables")]
-    [SerializeField] private float gravityForce;
-    private float currentGravityForce = 0;
+    [SerializeField] public float gravityForce;
+    public float currentGravityForce = 0;
     [SerializeField] private float maxFallSpeed;
 
     [SerializeField] private Transform orientation;
 
     [Header("Shoot variables")]
-    public bool isAiming = false; 
+    public bool isAiming = false;
 
-    public enum MovementStates { Idle, Walking, Air, Flying, Sliding, SlidingDown}
+    [Header("WallRun variables")]
+    public bool isWallRunning = false;
+
+    public enum MovementStates { Idle, Walking, Air, Flying, Sliding, SlidingDown, WallRunning}
     public MovementStates state;
 
     [SerializeField] private TMP_Text speedText;
@@ -132,7 +137,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void StateHandler()
     {
-        if (isFlying)
+        if (isWallRunning)
+        {
+            state = MovementStates.WallRunning;
+            desiredMoveSpeed = wallRunSpeed;
+        }
+        else if (isFlying)
         {
             state = MovementStates.Flying;
             desiredMoveSpeed = flySpeed;
