@@ -36,7 +36,7 @@ public class PlayerWallRun : MonoBehaviour
     private void Update()
     {
         CheckWallHit();
-        Debug.Log(groundHit.distance);
+
         if(wallRight || wallLeft && pInputs.moveDirRelativeToCam.sqrMagnitude > 0.1f && !exitWall)
         {
             if(!pMovement.isWallRunning)StartWallRun();
