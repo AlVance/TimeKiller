@@ -37,9 +37,9 @@ public partial class @PlayerInput1: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Aim"",
+                    ""name"": ""Aim1"",
                     ""type"": ""Value"",
-                    ""id"": ""4f59696e-b4b7-443d-8741-03610a3e1113"",
+                    ""id"": ""252d540c-ac97-4f47-ba2f-9d127c1dd05c"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -142,25 +142,47 @@ public partial class @PlayerInput1: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""77dc9daa-7769-4219-a720-fb89aa35f55a"",
+                    ""id"": ""1702597f-f852-4a8a-821d-a9b61b22edc4"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": ""StickDeadzone"",
                     ""groups"": """",
-                    ""action"": ""Aim"",
+                    ""action"": ""Aim1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""41c5f7ec-34a9-4a64-9171-30efa04cc054"",
+                    ""name"": ""One Modifier"",
+                    ""id"": ""de30de45-23ed-4235-a419-4d4b6601e0d0"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim1"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""f9a584fe-6c7e-46f1-aff9-029ee04e0224"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""3f83cadd-d2a7-4742-94e3-ab0c5c690097"",
                     ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Aim"",
+                    ""action"": ""Aim1"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -498,7 +520,7 @@ public partial class @PlayerInput1: IInputActionCollection2, IDisposable
         // PlayerControls
         m_PlayerControls = asset.FindActionMap("PlayerControls", throwIfNotFound: true);
         m_PlayerControls_Move = m_PlayerControls.FindAction("Move", throwIfNotFound: true);
-        m_PlayerControls_Aim = m_PlayerControls.FindAction("Aim", throwIfNotFound: true);
+        m_PlayerControls_Aim1 = m_PlayerControls.FindAction("Aim1", throwIfNotFound: true);
         m_PlayerControls_Reload = m_PlayerControls.FindAction("Reload", throwIfNotFound: true);
         m_PlayerControls_Shoot = m_PlayerControls.FindAction("Shoot", throwIfNotFound: true);
         m_PlayerControls_Drift = m_PlayerControls.FindAction("Drift", throwIfNotFound: true);
@@ -577,7 +599,7 @@ public partial class @PlayerInput1: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PlayerControls;
     private List<IPlayerControlsActions> m_PlayerControlsActionsCallbackInterfaces = new List<IPlayerControlsActions>();
     private readonly InputAction m_PlayerControls_Move;
-    private readonly InputAction m_PlayerControls_Aim;
+    private readonly InputAction m_PlayerControls_Aim1;
     private readonly InputAction m_PlayerControls_Reload;
     private readonly InputAction m_PlayerControls_Shoot;
     private readonly InputAction m_PlayerControls_Drift;
@@ -586,7 +608,7 @@ public partial class @PlayerInput1: IInputActionCollection2, IDisposable
         private @PlayerInput1 m_Wrapper;
         public PlayerControlsActions(@PlayerInput1 wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_PlayerControls_Move;
-        public InputAction @Aim => m_Wrapper.m_PlayerControls_Aim;
+        public InputAction @Aim1 => m_Wrapper.m_PlayerControls_Aim1;
         public InputAction @Reload => m_Wrapper.m_PlayerControls_Reload;
         public InputAction @Shoot => m_Wrapper.m_PlayerControls_Shoot;
         public InputAction @Drift => m_Wrapper.m_PlayerControls_Drift;
@@ -602,9 +624,9 @@ public partial class @PlayerInput1: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @Aim.started += instance.OnAim;
-            @Aim.performed += instance.OnAim;
-            @Aim.canceled += instance.OnAim;
+            @Aim1.started += instance.OnAim1;
+            @Aim1.performed += instance.OnAim1;
+            @Aim1.canceled += instance.OnAim1;
             @Reload.started += instance.OnReload;
             @Reload.performed += instance.OnReload;
             @Reload.canceled += instance.OnReload;
@@ -621,9 +643,9 @@ public partial class @PlayerInput1: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @Aim.started -= instance.OnAim;
-            @Aim.performed -= instance.OnAim;
-            @Aim.canceled -= instance.OnAim;
+            @Aim1.started -= instance.OnAim1;
+            @Aim1.performed -= instance.OnAim1;
+            @Aim1.canceled -= instance.OnAim1;
             @Reload.started -= instance.OnReload;
             @Reload.performed -= instance.OnReload;
             @Reload.canceled -= instance.OnReload;
@@ -749,7 +771,7 @@ public partial class @PlayerInput1: IInputActionCollection2, IDisposable
     public interface IPlayerControlsActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnAim(InputAction.CallbackContext context);
+        void OnAim1(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
         void OnDrift(InputAction.CallbackContext context);

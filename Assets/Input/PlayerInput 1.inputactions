@@ -15,9 +15,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Aim",
+                    "name": "Aim1",
                     "type": "Value",
-                    "id": "4f59696e-b4b7-443d-8741-03610a3e1113",
+                    "id": "252d540c-ac97-4f47-ba2f-9d127c1dd05c",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -120,25 +120,47 @@
                 },
                 {
                     "name": "",
-                    "id": "77dc9daa-7769-4219-a720-fb89aa35f55a",
+                    "id": "1702597f-f852-4a8a-821d-a9b61b22edc4",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "StickDeadzone",
                     "groups": "",
-                    "action": "Aim",
+                    "action": "Aim1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "41c5f7ec-34a9-4a64-9171-30efa04cc054",
+                    "name": "One Modifier",
+                    "id": "de30de45-23ed-4235-a419-4d4b6601e0d0",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aim1",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "f9a584fe-6c7e-46f1-aff9-029ee04e0224",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aim1",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "3f83cadd-d2a7-4742-94e3-ab0c5c690097",
                     "path": "<Mouse>/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Aim",
+                    "action": "Aim1",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "",

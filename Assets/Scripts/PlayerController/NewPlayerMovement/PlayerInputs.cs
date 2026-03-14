@@ -25,8 +25,7 @@ public class PlayerInputs : MonoBehaviour
     public bool shootPressed = false;
     private void Awake()
     {
-        playerInput = new PlayerInput1();
-        HandleInput();
+        
     }
 
     private void HandleInput()
@@ -83,7 +82,7 @@ public class PlayerInputs : MonoBehaviour
         };
 
         //Aim Input
-        playerInput.PlayerControls.Aim.started += ctx =>
+        playerInput.PlayerControls.Aim1.started += ctx =>
         {
             if (Mouse.current.leftButton.isPressed)
             {
@@ -92,14 +91,15 @@ public class PlayerInputs : MonoBehaviour
                 tempAimDir.x -= PlayerScreenPos.x;
                 tempAimDir.y -= PlayerScreenPos.y;
                 aimDir = tempAimDir.normalized;
-                aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
+                
             }
+            aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
             aimPressed = true;
         };
 
-        playerInput.PlayerControls.Aim.performed += ctx =>
+        playerInput.PlayerControls.Aim1.performed += ctx =>
         {
-
+            Debug.Log(ctx.ReadValue<Vector2>());
             if (Mouse.current.leftButton.isPressed)
             {
                 Vector2 tempAimDir = ctx.ReadValue<Vector2>();
@@ -115,12 +115,12 @@ public class PlayerInputs : MonoBehaviour
                 {
                     aimDir = tempAimDir;
                 }
-
+                aimDir = tempAimDir;
             }
             aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
         };
 
-        playerInput.PlayerControls.Aim.canceled += ctx =>
+        playerInput.PlayerControls.Aim1.canceled += ctx =>
         {
             aimPressed = false;
             aimDir = Vector2.zero;
@@ -171,7 +171,11 @@ public class PlayerInputs : MonoBehaviour
 
     private void OnEnable()
     {
+        playerInput = new PlayerInput1();
+        
         playerInput.PlayerControls.Enable();
+
+        HandleInput();
     }
 
     private void OnDisable()
