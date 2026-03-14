@@ -1,6 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections;
 
 public class PlayerShoot : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class PlayerShoot : MonoBehaviour
 
     private bool canAim = true;
 
+    [SerializeField] private GameObject playerProjectileGO;
+    [SerializeField] private Transform projectileSpawnPos;
     [SerializeField] private GameObject playerModel;
     [SerializeField] private GameObject weaponModel;
     [SerializeField] private Transform backSocket;
@@ -19,6 +22,14 @@ public class PlayerShoot : MonoBehaviour
     public bool shootOnCD = false;
     public bool didShoot = false;
 
+    [SerializeField] private float projectileSpeed;
+    private GameObject currentProjectileGO;
+
+    [SerializeField] private float projectileRange;
+    [SerializeField] private int projectileDamage;
+    [SerializeField] private float moveDirShootInertia;
+
+
     private void Start()
     {
         pInputs = GetComponent<PlayerInputs>();
@@ -27,6 +38,8 @@ public class PlayerShoot : MonoBehaviour
         weaponModel.transform.parent = backSocket;
         weaponModel.transform.localPosition = Vector3.zero;
         weaponModel.transform.localRotation = Quaternion.Euler(Vector3.zero);
+
+        ProjectilePooling();
     }
 
     private void Update()
@@ -66,6 +79,18 @@ public class PlayerShoot : MonoBehaviour
         if (!shootOnCD)
         {
             Debug.Log("SHOOT!");
+
+            currentProjectileGO = projectilePool[currentProjectilePooled];
+            if (currentProjectilePooled < projectilePool.Count - 1) ++currentProjectilePooled;
+            else currentProjectilePooled = 0;
+
+            currentProjectileGO.GetComponent<PlayerProjectile>().ProjectileSetUp(projectileDamage, projectileRange, projectileSpawnPos);
+            currentProjectileGO.GetComponent<PlayerProjectile>().SetCharged();
+
+            currentProjectileGO.transform.parent = null;
+            currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(pInputs.lastAimDirRelativeToCam + pInputs.moveDirRelativeToCam * moveDirShootInertia, projectileSpeed);
+            currentProjectileGO = null;
+
             StartCoroutine(_ShootCD());
         }
     }
@@ -80,5 +105,18 @@ public class PlayerShoot : MonoBehaviour
         yield return new WaitForSeconds(shootCDTime);
         weaponModel.SetActive(true);
         shootOnCD = false;
+    }
+
+    private List<GameObject> projectilePool = new List<GameObject>();
+    private int currentProjectilePooled = 0;
+    private void ProjectilePooling()
+    {
+        for (int i = 0; i < (projectileRange / shootCDTime) + 1; i++)
+        {
+            GameObject newProj = Instantiate(playerProjectileGO, projectileSpawnPos.position, Quaternion.identity, projectileSpawnPos);
+            projectilePool.Add(newProj);
+            newProj.GetComponent<Projectile>().spawnPos = projectileSpawnPos;
+            newProj.GetComponent<Projectile>().SetProjectileInactive();
+        }
     }
 }

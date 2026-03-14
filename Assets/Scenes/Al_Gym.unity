@@ -890,12 +890,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133690110}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.395, y: 0.824, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.395, y: 1.824, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 555788272}
+  m_Father: {fileID: 4703541926041995601}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &150960018
 GameObject:
@@ -3006,7 +3006,6 @@ Transform:
   - {fileID: 232710284}
   - {fileID: 1183409850}
   - {fileID: 2126634567}
-  - {fileID: 133690111}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &555788273
@@ -3029,6 +3028,7 @@ MonoBehaviour:
   moveDirRelativeToCam: {x: 0, y: 0, z: 0}
   aimDir: {x: 0, y: 0}
   aimDirRelativeToCam: {x: 0, y: 0, z: 0}
+  lastAimDirRelativeToCam: {x: 0, y: 0, z: 0}
   shootDir: {x: 0, y: 0}
   shootDirRelativeToCam: {x: 0, y: 0, z: 0}
   flyPressed: 0
@@ -3076,6 +3076,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee05681feace99f4db01f1b8b8c38ad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerProjectileGO: {fileID: 7151585630043099556, guid: 245438c43b2898f499fb31acbf069fc2, type: 3}
+  projectileSpawnPos: {fileID: 133690111}
   playerModel: {fileID: 5336069406735963115}
   weaponModel: {fileID: 2126634566}
   backSocket: {fileID: 554205312}
@@ -3083,6 +3085,10 @@ MonoBehaviour:
   shootCDTime: 1
   shootOnCD: 0
   didShoot: 0
+  projectileSpeed: 65
+  projectileRange: 1.5
+  projectileDamage: 1
+  moveDirShootInertia: 0.2
 --- !u!114 &555788277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159576,6 +159582,7 @@ Transform:
   - {fileID: 6725819385232116909}
   - {fileID: 613820401116922691}
   - {fileID: 118660635}
+  - {fileID: 133690111}
   m_Father: {fileID: 232710284}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4713669699605588762
@@ -160563,7 +160570,7 @@ GameObject:
   - component: {fileID: 4703541926041995601}
   - component: {fileID: 5336069406735963116}
   m_Layer: 0
-  m_Name: CD_NewPlayerModel_0103
+  m_Name: PlayerModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

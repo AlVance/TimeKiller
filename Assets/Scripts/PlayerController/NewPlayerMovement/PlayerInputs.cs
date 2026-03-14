@@ -15,6 +15,7 @@ public class PlayerInputs : MonoBehaviour
 
     public Vector2 aimDir;
     public Vector3 aimDirRelativeToCam;
+    public Vector3 lastAimDirRelativeToCam;
 
     public Vector2 shootDir;
     public Vector3 shootDirRelativeToCam;
@@ -118,10 +119,12 @@ public class PlayerInputs : MonoBehaviour
                 aimDir = tempAimDir;
             }
             aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
+            lastAimDirRelativeToCam = aimDirRelativeToCam;
         };
 
         playerInput.PlayerControls.Aim1.canceled += ctx =>
         {
+            lastAimDirRelativeToCam = aimDirRelativeToCam;
             aimPressed = false;
             aimDir = Vector2.zero;
             aimDirRelativeToCam = GetV3RelativeToCamera(aimDir);
