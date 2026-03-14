@@ -64,4 +64,9 @@ public class PlayerSlide : MonoBehaviour
         pMovement.isSliding = false;
         playerModel.transform.localScale = new Vector3(playerModel.transform.localScale.x, 1f, playerModel.transform.localScale.z);
     }
+
+    private void OnDisable()
+    {
+        EndSlide();
+    }
 }

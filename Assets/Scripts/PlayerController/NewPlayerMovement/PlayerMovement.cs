@@ -79,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("WallRun variables")]
     public bool isWallRunning = false;
 
-    public enum MovementStates { Idle, Walking, Air, Flying, Sliding, SlidingDown, WallRunning}
+    public enum MovementStates { Idle, Walking, Air, Flying, Sliding, SlidingDown, WallRunning, Hitted}
     public MovementStates state;
 
     [SerializeField] private TMP_Text speedText;
@@ -353,5 +353,11 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
+    }
+
+    private void OnDisable()
+    {
+        state = MovementStates.Hitted;
+        rb.linearVelocity = Vector3.zero;
     }
 }

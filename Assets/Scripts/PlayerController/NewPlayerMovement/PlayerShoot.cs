@@ -119,4 +119,9 @@ public class PlayerShoot : MonoBehaviour
             newProj.GetComponent<Projectile>().SetProjectileInactive();
         }
     }
+
+    private void OnDisable()
+    {
+        EndAim();
+    }
 }
