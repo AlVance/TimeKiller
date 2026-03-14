@@ -152,7 +152,7 @@ public partial class @PlayerInput1: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""One Modifier"",
+                    ""name"": ""LClick + MousePos"",
                     ""id"": ""de30de45-23ed-4235-a419-4d4b6601e0d0"",
                     ""path"": ""OneModifier"",
                     ""interactions"": """",

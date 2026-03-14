@@ -2897,6 +2897,7 @@ GameObject:
   - component: {fileID: 555788277}
   - component: {fileID: 555788276}
   - component: {fileID: 555788278}
+  - component: {fileID: 555788279}
   - component: {fileID: 555788273}
   - component: {fileID: 555788275}
   m_Layer: 6
@@ -2928,8 +2929,10 @@ MonoBehaviour:
   wallRunSpeed: 16
   walkAcceleration: 4
   walkDeceleration: 30
+  flyAcceleration: 6
+  flyDeceleration: 8
   slideAcceleration: 4
-  slideDeceleration: 6
+  slideDeceleration: 5
   slideDownAcceleration: 8
   slideDownDeceleration: 1
   slopeUpDecelerationMult: 2.5
@@ -2939,6 +2942,7 @@ MonoBehaviour:
   flyingDamp: 3.5
   airMovementMultiplier: 1
   speedDiffToLerp: 5
+  currentMoveSpeed: 0
   speedIncreaseMultiplier: 1.5
   slopeIncreaseMultiplier: 2.5
   playerHeight: 2.2
@@ -3131,6 +3135,24 @@ MonoBehaviour:
   upRayTr: {fileID: 118660635}
   parentModel: {fileID: 232710284}
   offset: {x: 0, y: 0, z: 0}
+--- !u!114 &555788279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555788269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 217c73a6a92844b4c85bd55903f49dbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxFlyFuel: 1
+  fuelBurnSpeed: 1
+  currentFuel: 0
+  fuelRecoverSpeed: 0.5
+  recoverCDTime: 0.1
+  minFuelToFly: 0.2
 --- !u!1 &556578025
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ using DG.Tweening;
 public class PlayerMovement : MonoBehaviour
 {
     private PlayerInputs pInputs;
+    private PlayerFlyStamina pFlyStamina;
 
     [SerializeField] private GameObject playerModel;
     [SerializeField] private GameObject playerParentModel;
@@ -20,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float wallRunSpeed;
     [SerializeField] private float walkAcceleration;
     [SerializeField] private float walkDeceleration;
+    [SerializeField] private float flyAcceleration;
+    [SerializeField] private float flyDeceleration;
     [SerializeField] private float slideAcceleration;
     [SerializeField] private float slideDeceleration;
     [SerializeField] private float slideDownAcceleration;
@@ -28,24 +31,14 @@ public class PlayerMovement : MonoBehaviour
     private float currentDeceleration;
     [SerializeField] private float slopeUpDecelerationMult;
     [SerializeField] private float slopeDownAccelerationMult;
-    private float currentSlopeAccMult;
+    private float currentSlopeAccMult = 1;
     [SerializeField] private float groundedDamp;
     [SerializeField] private float slideDamp;
     [SerializeField] private float flyingDamp;
     [SerializeField] private float airMovementMultiplier;
     [SerializeField] private float speedDiffToLerp;
     private float desiredMoveSpeed;
-    private float lastDesiredMoveSpeed;
-    private float m_currentmoveSpeed;
-    public float currentMoveSpeed
-    {
-        get { return m_currentmoveSpeed; }
-        set
-        {
-            m_currentmoveSpeed = value;
-            
-        }
-    }
+    public float currentMoveSpeed;
     
     private Vector3 moveDirection;
     private Rigidbody rb;
@@ -94,10 +87,14 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         pInputs = GetComponent<PlayerInputs>();
+        pFlyStamina = GetComponent<PlayerFlyStamina>();
 
         rb.freezeRotation = true;
 
         currentGravityForce = gravityForce;
+
+        desiredMoveSpeed = startMoveSpeed;
+        state = MovementStates.Idle;
     }
 
     private void Update()
@@ -146,7 +143,8 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementStates.Flying;
             desiredMoveSpeed = flySpeed;
-            if (currentMoveSpeed < flySpeed) currentMoveSpeed = flySpeed;
+            currentAcceleration = flyAcceleration;
+            currentDeceleration = flyDeceleration;
         }
         else if(isGrounded && rb.linearVelocity.magnitude > 0.1f)
         {
@@ -264,13 +262,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void Fly()
     {
-        if(!isFlying && pInputs.flyPressed)
+        if(!isFlying && pInputs.flyPressed && pFlyStamina.currentFuel > pFlyStamina.minFuelToFly)
         {
             currentGravityForce = 0;
             if(rb.linearVelocity.y < 0) rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
             isFlying = true;
         }
-        else if(isFlying && !pInputs.flyPressed)
+        else if(isFlying && (!pInputs.flyPressed || pFlyStamina.currentFuel <= 0))
         {
             currentGravityForce = gravityForce;
             isFlying = false;
