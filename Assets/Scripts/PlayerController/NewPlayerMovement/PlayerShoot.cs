@@ -122,6 +122,10 @@ public class PlayerShoot : MonoBehaviour
 
     private void OnDisable()
     {
-        EndAim();
+        pMovement.isAiming = false;
+        weaponModel.transform.parent = backSocket;
+        weaponModel.transform.localPosition = Vector3.zero;
+        weaponModel.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        //EndAim();
     }
 }
