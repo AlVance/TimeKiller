@@ -10,7 +10,7 @@ public class EnemyProjectile : Projectile
         {   
             if (other.gameObject.tag == "Player")
             {
-                other.gameObject.GetComponent<PlayerController>().GetHit(this.transform.position, hitForce);
+                other.gameObject.GetComponentInParent<PlayerGetHit>().GetHit(this.transform.position, hitForce);
             }
             
             SetProjectileInactive();

@@ -100,7 +100,6 @@ public class PlayerInputs : MonoBehaviour
 
         playerInput.PlayerControls.Aim1.performed += ctx =>
         {
-            Debug.Log(ctx.ReadValue<Vector2>());
             if (Mouse.current.leftButton.isPressed)
             {
                 Vector2 tempAimDir = ctx.ReadValue<Vector2>();

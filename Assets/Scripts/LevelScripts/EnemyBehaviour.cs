@@ -96,7 +96,7 @@ public class EnemyBehaviour : MonoBehaviour
     private void Update()
     {
         if(enemyGunGO != null) enemyGunGO.transform.localPosition = gunTr;
-        if ((GameManager.Instance.levelStarted || forceEnemyToWork) && isAlive)
+        if (((GameManager.Instance != null && GameManager.Instance.levelStarted) || forceEnemyToWork) && isAlive)
         {
             MoveAlongSpline();
             Shoot();
