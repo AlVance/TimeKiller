@@ -4,10 +4,27 @@ using System.Collections;
 public class PlayerFlyStamina : MonoBehaviour
 {
     private PlayerMovement pMovement;
-
-    [SerializeField] public float maxFlyFuel;
+    [SerializeField] private float m_maxFlyFuel;
+    public float maxFlyFuel
+    {
+        get { return m_maxFlyFuel; }
+        set
+        {
+            m_maxFlyFuel = value;
+            UIManager.Instance.SetFlyFuelSliderMaxValue(m_maxFlyFuel);
+        }
+    }
     [SerializeField] private float fuelBurnSpeed;
-    public float currentFuel;
+    [SerializeField] public float m_currentFuel;
+    public float currentFuel
+    {
+        get { return m_currentFuel; }
+        set
+        {
+            m_currentFuel = value;
+            UIManager.Instance.SetFlyFuelSlderValue(m_currentFuel);
+        }
+    }
     [SerializeField] private float fuelRecoverSpeed;
     [SerializeField] private float recoverCDTime;
     private bool canRecover = true;

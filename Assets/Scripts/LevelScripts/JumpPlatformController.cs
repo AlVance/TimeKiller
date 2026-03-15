@@ -23,28 +23,26 @@ public class JumpPlatformController : MonoBehaviour
     [SerializeField] private MMF_Player jumpFeedback;
 
     private PlayerInputs pInputs;
+    private PlayerMovement pMovement;
     private Vector3 lastDir;
     private void Start()
     {
         basePich = jumpAS.pitch;
     }
 
-    private void Update()
-    {
-        if (playerBlocked && pInputs != null) pInputs.moveDirRelativeToCam = Vector3.zero;
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
             Rigidbody _rb = other.gameObject.GetComponent<Rigidbody>();
             pInputs = other.gameObject.GetComponent<PlayerInputs>();
+            pMovement = other.gameObject.GetComponent<PlayerMovement>();
+
             if(killMomentum) _rb.linearVelocity = new Vector3(0, 0, 0);
             else _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
 
             if (blockPlayer)
             {
-
                 if (other.gameObject.GetComponent<PlayerMovement>().lastJumpPlatform == this)
                 {
                     StopCoroutine(_BlockPlayerOnJump(other.gameObject.GetComponent<PlayerBlock>(), other.gameObject.GetComponent<PlayerMovement>()));
@@ -54,7 +52,8 @@ public class JumpPlatformController : MonoBehaviour
 
             if (forcePlayerToCenter) other.gameObject.transform.position = this.gameObject.transform.position + this.transform.up * 0.75f;
 
-            _rb.AddForce(JumpDirectionTr.up.normalized * Jumpspeed, ForceMode.Force);
+            _rb.AddForce(JumpDirectionTr.up.normalized * Jumpspeed, ForceMode.Impulse);
+
             platformAnim.SetTrigger("On");
             jumpFeedback.PlayFeedbacks();
 
@@ -67,15 +66,15 @@ public class JumpPlatformController : MonoBehaviour
 
     private IEnumerator _BlockPlayerOnJump(PlayerBlock pB, PlayerMovement pM)
     {
-        lastDir = pInputs.moveDirRelativeToCam;
-        playerBlocked = true;
+        pMovement.movementBlocked = true;
         //pB.BlockPlayer();
         yield return new WaitForSeconds(blockInputTime);
         //if(pM.lastJumpPlatform == this)pB.UnblockPlayer();
-        if(pM.lastJumpPlatform == this)
+        
+        if (pM.lastJumpPlatform == this && pMovement.movementBlocked)
         {
-            playerBlocked = false;
-            if (pInputs.moveDirRelativeToCam == Vector3.zero) pInputs.moveDirRelativeToCam = lastDir;
+            pMovement.movementBlocked = false;
+            //if (pInputs.moveDirRelativeToCam == Vector3.zero) pInputs.moveDirRelativeToCam = lastDir;
         }
             
 

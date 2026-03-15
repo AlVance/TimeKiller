@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundedDamp;
     [SerializeField] private float slideDamp;
     [SerializeField] private float flyingDamp;
+    [SerializeField] private float airDamp;
     [SerializeField] private float airMovementMultiplier;
     [SerializeField] private float speedDiffToLerp;
     private float desiredMoveSpeed;
@@ -45,6 +46,8 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     [SerializeField] private float speedIncreaseMultiplier;
     [SerializeField] private float slopeIncreaseMultiplier;
+
+    public bool movementBlocked = false;
 
     [Header("Fly variables")]
     private bool isFlying = false;
@@ -112,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
 
         SmoothSpeed();
 
-        speedText.text = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).sqrMagnitude.ToString("00.0") + "\n" + state;
+        if(speedText != null)speedText.text = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).sqrMagnitude.ToString("00.0") + "\n" + state;
 
 
         //MoveRotationStuff
@@ -131,10 +134,14 @@ public class PlayerMovement : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        MovePlayer();
+        if (!movementBlocked)
+        {
+            MovePlayer();            
+        }
+        Fly();
         FloatOnGround();
         ApplyGravity();
-        Fly();
+        
     }
 
     private void StateHandler()
@@ -246,7 +253,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (state == MovementStates.Air)
         {
-            rb.linearDamping = 0;
+            rb.linearDamping = airDamp;
         }
     }
 
@@ -267,7 +274,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Fly()
     {
-        if(!isFlying && pInputs.flyPressed && pFlyStamina.currentFuel > pFlyStamina.minFuelToFly)
+        if(!isFlying && pInputs.flyPressed && pFlyStamina.currentFuel > pFlyStamina.minFuelToFly && !movementBlocked)
         {
             currentGravityForce = 0;
             if(rb.linearVelocity.y < 0) rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
@@ -275,7 +282,7 @@ public class PlayerMovement : MonoBehaviour
 
             OnStartFlyEvent.Invoke();
         }
-        else if(isFlying && (!pInputs.flyPressed || pFlyStamina.currentFuel <= 0))
+        else if(isFlying && (!pInputs.flyPressed || pFlyStamina.currentFuel <= 0 || movementBlocked))
         {
             currentGravityForce = gravityForce;
             isFlying = false;
