@@ -3,6 +3,7 @@ using UnityEngine;
 public class BlobShadow : MonoBehaviour
 {
     [SerializeField] private GameObject shadow;
+    [SerializeField] private GameObject shadowParent;
     [SerializeField] private RaycastHit hit;
     [SerializeField] private float rayOffset;
     [SerializeField] private float hitOffset;
@@ -13,13 +14,19 @@ public class BlobShadow : MonoBehaviour
     [SerializeField] private Vector2 minMaxDistance;
     private void Start()
     {
-        shadow.transform.SetParent(null);
+        shadowParent.transform.SetParent(null);
     }
-
+    float a = 1;
     private void Update()
     {
-        shadow.transform.position = new Vector3(this.transform.position.x, hitPosition.y + hitOffset, this.transform.position.z);
-        shadow.transform.Rotate(new Vector3(0, 1, 0) * rotateSpeed * Time.deltaTime);
+        shadowParent.transform.position = new Vector3(this.transform.position.x, hitPosition.y + hitOffset, this.transform.position.z);
+        
+        Vector3 groundHitAngle = Quaternion.FromToRotation(Vector3.up, hit.normal).eulerAngles;
+        a += rotateSpeed * Time.deltaTime;
+        shadowParent.transform.rotation = Quaternion.Euler(new Vector3(groundHitAngle.x, 0, groundHitAngle.z));
+        shadow.transform.rotation = Quaternion.Euler(0, a, 0);
+        //shadow.transform.rotation = Quaternion.Euler(new Vector3(shadow.transform.rotation.eulerAngles.x, shadow.transform.rotation.eulerAngles.y + 1 * rotateSpeed * Time.deltaTime, shadow.transform.rotation.eulerAngles.z));
+
     }
     private void FixedUpdate()
     {
@@ -27,7 +34,6 @@ public class BlobShadow : MonoBehaviour
        
         if (Physics.Raycast(downRay, out hit))
         {
-            //print(hit.transform);
             hitPosition = hit.point;
             SetBlobShadowSize();
         }
@@ -36,13 +42,13 @@ public class BlobShadow : MonoBehaviour
     private void SetBlobShadowSize()
     {
         float distance = Vector3.Distance(this.transform.position, hitPosition);
-        if (distance < minMaxDistance.x) shadow.transform.localScale = new Vector3(minMaxSize.x, 0, minMaxSize.x);
-        else if (distance > minMaxDistance.y) shadow.transform.localScale = new Vector3(minMaxSize.y, 0, minMaxSize.y);
+        if (distance < minMaxDistance.x) shadowParent.transform.localScale = new Vector3(minMaxSize.x, 0, minMaxSize.x);
+        else if (distance > minMaxDistance.y) shadowParent.transform.localScale = new Vector3(minMaxSize.y, 0, minMaxSize.y);
         else
         {
             float cDis = distance / minMaxDistance.y;
             float scaleValue = minMaxSize.x + (cDis * (minMaxSize.y - minMaxSize.x));
-            shadow.transform.localScale = new Vector3(scaleValue, 0, scaleValue);
+            shadowParent.transform.localScale = new Vector3(scaleValue, 0, scaleValue);
         }
     }
 }
