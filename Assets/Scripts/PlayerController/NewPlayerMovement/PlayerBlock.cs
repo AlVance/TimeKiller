@@ -5,12 +5,14 @@ public class PlayerBlock : MonoBehaviour
     private PlayerMovement pMovement;
     private PlayerSlide pSlide;
     private PlayerShoot pShoot;
+    private PlayerGetHit pGetHit;
 
     private void Start()
     {
         pMovement = GetComponent<PlayerMovement>();
         pSlide = GetComponent<PlayerSlide>();
         pShoot = GetComponent<PlayerShoot>();
+        pGetHit = GetComponent<PlayerGetHit>();
     }
 
     /*
@@ -28,6 +30,7 @@ public class PlayerBlock : MonoBehaviour
         pShoot.enabled = false;
         pSlide.enabled = false;
         pMovement.enabled = false;
+        pGetHit.enabled = false;
     }
 
     public void UnblockPlayer()
@@ -35,5 +38,7 @@ public class PlayerBlock : MonoBehaviour
         pShoot.enabled = true;
         pSlide.enabled = true;
         pMovement.enabled = true;
+        pGetHit.enabled = true;
     }
+
 }

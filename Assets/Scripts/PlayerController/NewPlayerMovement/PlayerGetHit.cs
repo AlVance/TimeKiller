@@ -40,4 +40,14 @@ public class PlayerGetHit : MonoBehaviour
         yield return new WaitForSeconds(invulneravilityTime);
         isInvulnerable = false;
     }
+
+    private void OnDisable()
+    {
+        isInvulnerable = true;
+    }
+
+    private void OnEnable()
+    {
+        isInvulnerable = false;
+    }
 }

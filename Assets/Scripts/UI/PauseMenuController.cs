@@ -96,7 +96,11 @@ public class PauseMenuController : MonoBehaviour
         canAutodestroy = false;
         OpenClosePauseMenu();
         yield return new WaitForEndOfFrame();
-        GameManager.Instance.currentPlayer.PlayerOffLimits(GameManager.Instance.currentLevelGO.GetComponent<Level>().playerStartTr);
+        GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().BlockPlayer();
+        yield return new WaitForSeconds(0.2f);
+        GameManager.Instance.currentPlayer.transform.position = GameManager.Instance.currentLevelGO.GetComponent<Level>().playerStartTr.position;
+        yield return new WaitForSeconds(0.2f);
+        GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().UnblockPlayer();
         canAutodestroy = true;
     }
 

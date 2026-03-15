@@ -5,7 +5,7 @@ public class PlayerFlyStamina : MonoBehaviour
 {
     private PlayerMovement pMovement;
 
-    [SerializeField] private float maxFlyFuel;
+    [SerializeField] public float maxFlyFuel;
     [SerializeField] private float fuelBurnSpeed;
     public float currentFuel;
     [SerializeField] private float fuelRecoverSpeed;

@@ -12,6 +12,7 @@ public class BlobShadow : MonoBehaviour
 
     [SerializeField] private Vector2 minMaxSize;
     [SerializeField] private Vector2 minMaxDistance;
+    [SerializeField] private LayerMask groundLayer;
     private void Start()
     {
         shadowParent.transform.SetParent(null);
@@ -32,7 +33,7 @@ public class BlobShadow : MonoBehaviour
     {
         Ray downRay = new Ray(new Vector3(this.transform.position.x, this.transform.position.y + rayOffset, this.transform.position.z), -Vector3.up * 10000f);
        
-        if (Physics.Raycast(downRay, out hit))
+        if (Physics.Raycast(downRay, out hit, 1000000f, groundLayer))
         {
             hitPosition = hit.point;
             SetBlobShadowSize();

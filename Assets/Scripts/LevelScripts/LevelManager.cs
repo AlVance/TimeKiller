@@ -70,7 +70,7 @@ public class LevelManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         GameManager.Instance.currentPlayer.gameObject.transform.position = currentLevelGO.GetComponent<Level>().playerStartTr.position;
-        GameManager.Instance.currentPlayer.ResetPlayer();
+        //GameManager.Instance.currentPlayer.ResetPlayer();
         TimeManager.Instance.levelTime = currentLevelGO.GetComponent<Level>().levelTime;
         UIManager.Instance.SetLevelTimerSliderMaxValue(currentLevelGO.GetComponent<Level>().levelTime);
         UIManager.Instance.SetLevelTimeText(currentLevelGO.GetComponent<Level>().levelTime);
@@ -115,7 +115,7 @@ public class LevelManager : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
         }
-        GameManager.Instance.currentPlayer.UnblockPlayer();
+        GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().UnblockPlayer();
         GameManager.Instance.levelStarted = true;
         SoundManager.Instance.PlayOneShootAudio(CountdownEnd);
         UIManager.Instance.SetStartLevelTimerText("GO!");
@@ -130,8 +130,8 @@ public class LevelManager : MonoBehaviour
     public void OnLevelEnded()
     {
         GameManager.Instance.levelStarted = false;
-        GameManager.Instance.currentPlayer.BlockPlayer();
-        GameManager.Instance.currentPlayer.ResetPlayer();
+        GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().BlockPlayer();
+        //GameManager.Instance.currentPlayer.ResetPlayer();
         SetLevelPuntuationScreen();
     }
 
@@ -147,7 +147,7 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetPuntuationScreenActive(true);
         CameraManager.Instance.ChangeCam(CameraManager.Instance.winCam);
         GameManager.Instance.currentPlayer.gameObject.transform.eulerAngles = new Vector3(0,-180,0);
-        GameManager.Instance.currentPlayer.anim.SetBool("IsWin", true);
+        //GameManager.Instance.currentPlayer.anim.SetBool("IsWin", true);
         SoundManager.Instance.PlayOneShootAudio(VictorySound);
         yield return new WaitForSeconds(0.1f);
         UIManager.Instance.SetTimerUIToWinScreen();
@@ -228,8 +228,8 @@ public class LevelManager : MonoBehaviour
         levelTransSceneGO.SetActive(true);
         SoundManager.Instance.MusicOnOff(false);
         yield return new WaitForSeconds(1f);
-        GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
-        GameManager.Instance.currentPlayer.anim.SetBool("IsWin", false);
+        //GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
+        //GameManager.Instance.currentPlayer.anim.SetBool("IsWin", false);
         UIManager.Instance.SetTimerUIToIdle();
         UIManager.Instance.SetInlevelUIActive(false);
         UIManager.Instance.SetPuntuationScreenActive(false);
@@ -452,9 +452,9 @@ public class LevelManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         GameManager.Instance.currentPlayer.gameObject.transform.position = startLevelGO.GetComponent<Level>().playerStartTr.position;
-        GameManager.Instance.currentPlayer.ResetPlayer();
+        //GameManager.Instance.currentPlayer.ResetPlayer();
         CameraManager.Instance.ChangeCam(CameraManager.Instance.basePlayerCam);
-        GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
+        //GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
         UIManager.Instance.SetTimerUIToIdle();
         UIManager.Instance.SetInlevelUIActive(false);
 
@@ -471,7 +471,7 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         UIManager.Instance.SetFade(false);
         GameManager.Instance.playerWork = true;
-        GameManager.Instance.currentPlayer.UnblockPlayer();
+        GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().UnblockPlayer();
         canGoToStartLevel = true;
     }
     private IEnumerator DestroyGOWithDelay(GameObject GO)

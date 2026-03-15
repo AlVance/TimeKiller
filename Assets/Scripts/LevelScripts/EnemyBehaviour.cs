@@ -105,7 +105,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void SetHealth(int healthModfier)
     {
-        if (!isInvulnerable && (GameManager.Instance.levelStarted || forceEnemyToWork))
+        if (!isInvulnerable && ((GameManager.Instance != null && GameManager.Instance.levelStarted) || forceEnemyToWork))
         { 
             currentEnemyHealth += healthModfier;
             if (currentEnemyHealth <= 0)
@@ -134,9 +134,27 @@ public class EnemyBehaviour : MonoBehaviour
 
         if(enemyBehaviourType == enemyOnHitTypes.TpOnKill)
         {
-            GameManager.Instance.currentPlayer.ForcedMovement(this.transform.position);
+            StartCoroutine(_PlayerTPMovement());
             enemyAS.PlayOneShot(tpPlayerAC);
         }  
+    }
+
+    
+    private IEnumerator _PlayerTPMovement()
+    {
+        GameObject player = GameManager.Instance.currentPlayer;
+        Rigidbody rb = player.GetComponent<Rigidbody>();
+        player.GetComponent<PlayerBlock>().BlockPlayer();
+        rb.linearVelocity = Vector3.zero;
+        //playerPhysicalCollider.enabled = false;
+        while (Vector3.Distance(this.transform.position, player.transform.position) > 1f)
+        {
+            rb.linearVelocity = (this.transform.position - player.transform.position).normalized * 100;
+            yield return null;
+        }
+        rb.linearVelocity = Vector3.zero;
+        //playerPhysicalCollider.enabled = true;
+        player.GetComponent<PlayerBlock>().UnblockPlayer();
     }
 
     private void MoveAlongSpline()

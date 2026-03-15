@@ -287,7 +287,7 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (GameManager.Instance != null) GameManager.Instance.currentPlayer = this;
+        //if (GameManager.Instance != null) GameManager.Instance.currentPlayer = this;
         maxBullets = m_maxBullets;
         currentBullets = maxBullets;
         maxFuel = m_maxFuel;

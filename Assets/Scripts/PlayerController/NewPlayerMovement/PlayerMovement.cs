@@ -1,8 +1,9 @@
-using UnityEngine;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using DG.Tweening;
+using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -79,10 +80,14 @@ public class PlayerMovement : MonoBehaviour
     [Header("WallRun variables")]
     public bool isWallRunning = false;
 
+    [Header("Player Events")]
+    public UnityEvent OnStartFlyEvent;
+
     public enum MovementStates { Idle, Walking, Air, Flying, Sliding, SlidingDown, WallRunning, Hitted}
     public MovementStates state;
 
     [SerializeField] private TMP_Text speedText;
+    public JumpPlatformController lastJumpPlatform;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -267,6 +272,8 @@ public class PlayerMovement : MonoBehaviour
             currentGravityForce = 0;
             if(rb.linearVelocity.y < 0) rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
             isFlying = true;
+
+            OnStartFlyEvent.Invoke();
         }
         else if(isFlying && (!pInputs.flyPressed || pFlyStamina.currentFuel <= 0))
         {
@@ -302,7 +309,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool CheckOnSlope()
     {
-        if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, groundRayDistance))
+        if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, groundRayDistance) && !slopeHit.collider.isTrigger)
         {
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
             return angle < maxSlopeAngle && angle != 0;

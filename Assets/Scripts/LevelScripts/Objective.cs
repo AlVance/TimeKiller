@@ -21,7 +21,7 @@ public class Objective : MonoBehaviour
     }
     public void SetCompletedObjective()
     {
-        if (GameManager.Instance.levelStarted && objectivePoints > 0)
+        if ((GameManager.Instance != null && GameManager.Instance.levelStarted) && objectivePoints > 0)
         {
             GameManager.Instance.currentLevelGO.GetComponent<Level>().SetCurrentObjectivesInt(objectivePoints);
             GameObject GO = Instantiate(acquiredPS, this.transform.position, this.transform.rotation);

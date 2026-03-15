@@ -456,12 +456,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   JumpDirectionTr: {fileID: 5804761965303155730}
   Jumpspeed: 2500
-  particle: {fileID: 1007327427283542789}
-  jumpFeedback: {fileID: 5310648332328191496}
-  blockInputTime: 0.1
+  blockPlayer: 1
+  blockInputTime: 0.05
   platformAnim: {fileID: 9075231059686460764}
   forcePlayerToCenter: 0
+  killMomentum: 1
   jumpAS: {fileID: 662718595727722694}
+  particle: {fileID: 1007327427283542789}
+  jumpFeedback: {fileID: 5310648332328191496}
 --- !u!65 &5509516445451792062
 BoxCollider:
   m_ObjectHideFlags: 0
