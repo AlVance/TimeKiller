@@ -32,51 +32,55 @@ public class JumpPlatformController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<PlayerMovement>().lastJumpPlatform = this;
+            PlayerMovement pMovement = other.GetComponent<PlayerMovement>();
+            Rigidbody _rb = other.GetComponent<Rigidbody>();
 
-            Rigidbody _rb = other.gameObject.GetComponent<Rigidbody>();
-            pInputs = other.gameObject.GetComponent<PlayerInputs>();
-            pMovement = other.gameObject.GetComponent<PlayerMovement>();
+            if (pMovement == null || _rb == null) return;
 
+            pMovement.lastJumpPlatform = this;
 
-            pMovement.currentMoveSpeed = pMovement.desiredMoveSpeed;
+            if (killMomentum)
+                _rb.linearVelocity = Vector3.zero;
+            else
+                _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
+
+            if (forcePlayerToCenter)
+                other.transform.position = transform.position + transform.up * 0.75f;
+
+            Vector3 jumpForce = JumpDirectionTr.up.normalized * (Jumpspeed * 0.03f);
+            _rb.AddForce(jumpForce, ForceMode.Impulse);
+
+            pMovement.ApplyBoost(jumpForce.magnitude, pMovement.standardMoveSpeed);
+
             if (blockPlayer)
             {
-                
-                if (other.gameObject.GetComponent<PlayerMovement>().lastJumpPlatform == this)
-                {
-                    StopCoroutine(_BlockPlayerOnJump(other.gameObject.GetComponent<PlayerMovement>()));
-                }
-                StartCoroutine(_BlockPlayerOnJump(other.gameObject.GetComponent<PlayerMovement>()));
+                StopAllCoroutines();
+                StartCoroutine(_BlockPlayerOnJump(pMovement));
             }
-            if (killMomentum) _rb.linearVelocity = new Vector3(0, 0, 0);
-            else _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
-            if (forcePlayerToCenter) other.gameObject.transform.position = this.gameObject.transform.position + this.transform.up * 0.75f;
 
-            _rb.AddForce(JumpDirectionTr.up.normalized * Jumpspeed, ForceMode.Acceleration);
+            if (platformAnim != null) platformAnim.SetTrigger("On");
+            if (jumpFeedback != null) jumpFeedback.PlayFeedbacks();
+            if (particle != null) particle.Play();
 
-            platformAnim.SetTrigger("On");
-            jumpFeedback.PlayFeedbacks();
-
-            jumpAS.pitch = basePich + Random.Range(-0.2f, 0.2f);
-            jumpAS.Play();
-
+            if (jumpAS != null)
+            {
+                jumpAS.pitch = basePich + Random.Range(-0.2f, 0.2f);
+                jumpAS.Play();
+            }
         }
     }
 
     private IEnumerator _BlockPlayerOnJump(PlayerMovement pM)
     {
-        pMovement.movementBlocked = true;
+        pM.movementBlocked = true;
         yield return new WaitForSeconds(blockInputTime);
-        
-        if (pM.lastJumpPlatform == this && pMovement.movementBlocked)
-        {
-            pMovement.movementBlocked = false;
-        }
-            
 
+        if (pM.lastJumpPlatform == this)
+        {
+            pM.movementBlocked = false;
+        }
     }
-   
+
 }

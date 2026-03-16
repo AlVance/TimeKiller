@@ -146,14 +146,14 @@ public class EnemyBehaviour : MonoBehaviour
         Rigidbody rb = player.GetComponent<Rigidbody>();
         player.GetComponent<PlayerBlock>().BlockPlayer();
         rb.linearVelocity = Vector3.zero;
-        //playerPhysicalCollider.enabled = false;
+        player.GetComponent<PlayerMovement>().playerCollider.enabled = false;
         while (Vector3.Distance(this.transform.position, player.transform.position) > 1f)
         {
             rb.linearVelocity = (this.transform.position - player.transform.position).normalized * 100;
             yield return null;
         }
         rb.linearVelocity = Vector3.zero;
-        //playerPhysicalCollider.enabled = true;
+        player.GetComponent<PlayerMovement>().playerCollider.enabled = true;
         player.GetComponent<PlayerBlock>().UnblockPlayer();
     }
 

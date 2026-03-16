@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject playerParentModel;
 
     [Header("Movement variables")]
-    [SerializeField] private float standardMoveSpeed;
+    [SerializeField] public float standardMoveSpeed;
     [SerializeField] private float startMoveSpeed;
     [SerializeField] private float flySpeed;
     [SerializeField] private float slideSpeed;
@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     public float desiredMoveSpeed;
     public float currentMoveSpeed;
     
-    private Vector3 moveDirection;
+    public Vector3 moveDirection;
     private Rigidbody rb;
     [SerializeField] private float speedIncreaseMultiplier;
     [SerializeField] private float slopeIncreaseMultiplier;
@@ -89,6 +89,8 @@ public class PlayerMovement : MonoBehaviour
     public enum MovementStates { Idle, Walking, Air, Flying, Sliding, SlidingDown, WallRunning, Hitted}
     public MovementStates state;
 
+    [SerializeField] public Collider playerCollider;
+
     [SerializeField] private TMP_Text speedText;
     public JumpPlatformController lastJumpPlatform;
     private void Start()
@@ -109,14 +111,12 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, groundLayer);
 
-        SpeedControl();
+        //if (!movementBlocked) SpeedControl();
         StateHandler();
         DampControl();
-
         SmoothSpeed();
 
-        if(speedText != null)speedText.text = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).sqrMagnitude.ToString("00.0") + "\n" + state;
-
+        if(speedText != null)speedText.text = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude.ToString("00.0") + "\n" + state;
 
         //MoveRotationStuff
         if(!isAiming)
@@ -141,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
         Fly();
         FloatOnGround();
         ApplyGravity();
-        
+        SpeedControl();
     }
 
     private void StateHandler()
@@ -196,6 +196,8 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementStates.Air;
             desiredMoveSpeed = standardMoveSpeed;
+            currentAcceleration = walkAcceleration;
+            currentDeceleration = 0.5f;
         }
     }
 
@@ -303,7 +305,6 @@ public class PlayerMovement : MonoBehaviour
             if (rb.linearVelocity.magnitude > currentMoveSpeed)
                 rb.linearVelocity = rb.linearVelocity.normalized * currentMoveSpeed;
         }
-
         else
         {           
             if (flatVel.magnitude > currentMoveSpeed)
@@ -367,6 +368,12 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
+    }
+
+    public void ApplyBoost(float boostVelocity, float desiredSpeedDuringBoost)
+    {
+        currentMoveSpeed = boostVelocity;
+        desiredMoveSpeed = desiredSpeedDuringBoost;
     }
 
     private void OnDisable()

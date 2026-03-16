@@ -1294,6 +1294,7 @@ MonoBehaviour:
   airDamp: 1
   airMovementMultiplier: 0.75
   speedDiffToLerp: 5
+  desiredMoveSpeed: 0
   currentMoveSpeed: 0
   speedIncreaseMultiplier: 1.5
   slopeIncreaseMultiplier: 2.5
@@ -1320,6 +1321,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   state: 0
+  playerCollider: {fileID: 609303182627563592}
   speedText: {fileID: 0}
   lastJumpPlatform: {fileID: 0}
 --- !u!114 &8109961244505477292
