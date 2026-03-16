@@ -1280,7 +1280,7 @@ MonoBehaviour:
   wallRunSpeed: 16
   walkAcceleration: 4
   walkDeceleration: 30
-  flyAcceleration: 6
+  flyAcceleration: 8
   flyDeceleration: 3
   slideAcceleration: 4
   slideDeceleration: 5
@@ -1297,6 +1297,7 @@ MonoBehaviour:
   currentMoveSpeed: 0
   speedIncreaseMultiplier: 1.5
   slopeIncreaseMultiplier: 2.5
+  movementBlocked: 0
   playerHeight: 2.2
   groundLayer:
     serializedVersion: 2
@@ -1418,7 +1419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_maxFlyFuel: 1
   fuelBurnSpeed: 1
-  currentFuel: 0
+  m_currentFuel: 0
   fuelRecoverSpeed: 0.5
   recoverCDTime: 0.1
   minFuelToFly: 0.2

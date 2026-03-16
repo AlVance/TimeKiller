@@ -188,6 +188,7 @@ public class LevelManager : MonoBehaviour
         if (isStart)
         {
             GameManager.Instance.playerWork = false;
+            GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().BlockPlayer();
             startLevelGO.SetActive(false);
             isStart = false;
             GameManager.Instance.isInLobby = false;
@@ -220,6 +221,7 @@ public class LevelManager : MonoBehaviour
         if (isStart)
         {
             GameManager.Instance.playerWork = false;
+            GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().BlockPlayer();
             startLevelGO.SetActive(false);      
             isStart = false;
             GameManager.Instance.isInLobby = false;
