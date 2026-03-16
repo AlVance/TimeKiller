@@ -41,7 +41,7 @@ public class JumpPlatformController : MonoBehaviour
             pMovement = other.gameObject.GetComponent<PlayerMovement>();
 
 
-            pMovement.currentMoveSpeed = 0f;
+            pMovement.currentMoveSpeed = pMovement.desiredMoveSpeed;
             if (blockPlayer)
             {
                 

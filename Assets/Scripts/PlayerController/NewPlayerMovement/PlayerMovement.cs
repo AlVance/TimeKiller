@@ -39,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float airDamp;
     [SerializeField] private float airMovementMultiplier;
     [SerializeField] private float speedDiffToLerp;
-    private float desiredMoveSpeed;
+    public float desiredMoveSpeed;
     public float currentMoveSpeed;
     
     private Vector3 moveDirection;
