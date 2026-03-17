@@ -332,7 +332,13 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            float maxSpeed = (state == MovementStates.Air) ? Mathf.Max(currentMoveSpeed, airSpeedLimit) : currentMoveSpeed + extraForce;
+            //float maxSpeed = (state == MovementStates.Air) ? Mathf.Max(currentMoveSpeed, airSpeedLimit) : currentMoveSpeed + extraForce;
+            //if (flatVel.magnitude > maxSpeed)
+            //{
+            //    Vector3 limitedVel = flatVel.normalized * maxSpeed;
+            //    rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
+            //}
+            float maxSpeed = Mathf.Max(currentMoveSpeed + extraForce, airSpeedLimit);
             if (flatVel.magnitude > maxSpeed)
             {
                 Vector3 limitedVel = flatVel.normalized * maxSpeed;
@@ -353,7 +359,7 @@ public class PlayerMovement : MonoBehaviour
             airSpeedLimit = currentMoveSpeed;
         }
 
-        if (flatVel.magnitude <= currentMoveSpeed) extraForce = 0;
+        if (flatVel.magnitude <= desiredMoveSpeed) extraForce = 0;
     }
 
     public bool CheckOnSlope()
@@ -415,6 +421,18 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
+    }
+
+    public void ApplyExternalImpulse(Vector3 direction, float force)
+    {
+        Vector3 combDir = direction * force;
+        Vector3 combDirFlat = new Vector3(combDir.x, 0, combDir.z);
+
+        extraForce = combDirFlat.magnitude;
+
+        Vector3 currentFlatVel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+        airSpeedLimit = currentFlatVel.magnitude + combDirFlat.magnitude;
+        rb.AddForce(combDir, ForceMode.Impulse);
     }
 
     private void OnDisable()

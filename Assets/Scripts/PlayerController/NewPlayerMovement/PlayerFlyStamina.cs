@@ -11,7 +11,7 @@ public class PlayerFlyStamina : MonoBehaviour
         set
         {
             m_maxFlyFuel = value;
-            UIManager.Instance.SetFlyFuelSliderMaxValue(m_maxFlyFuel);
+            if(UIManager.Instance != null) UIManager.Instance.SetFlyFuelSliderMaxValue(m_maxFlyFuel);
         }
     }
     [SerializeField] private float fuelBurnSpeed;
@@ -22,7 +22,7 @@ public class PlayerFlyStamina : MonoBehaviour
         set
         {
             m_currentFuel = value;
-            UIManager.Instance.SetFlyFuelSlderValue(m_currentFuel);
+            if (UIManager.Instance != null) UIManager.Instance.SetFlyFuelSlderValue(m_currentFuel);
         }
     }
     [SerializeField] private float fuelRecoverSpeed;

@@ -1282,8 +1282,8 @@ MonoBehaviour:
   walkDeceleration: 30
   flyAcceleration: 15
   flyDeceleration: 3
-  slideAcceleration: 4
-  slideDeceleration: 5
+  slideAcceleration: 6
+  slideDeceleration: 3
   slideDownAcceleration: 8
   slideDownDeceleration: 1
   slopeUpDecelerationMult: 2.5
@@ -1326,7 +1326,7 @@ MonoBehaviour:
   speedText: {fileID: 0}
   lastJumpPlatform: {fileID: 0}
   airSpeedLimit: 0
-  airSpeedDecayRate: 15
+  airSpeedDecayRate: 50
   extraForce: 0
 --- !u!114 &8109961244505477292
 MonoBehaviour:
