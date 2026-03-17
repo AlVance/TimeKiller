@@ -18,8 +18,9 @@ public class SpeedBoostPlatformScript : MonoBehaviour
             Vector3 boostDir = pMovement.moveDirection == Vector3.zero ? transform.forward : pMovement.moveDirection;
             playerRb.AddForce(boostDir * speedBoostForce, ForceMode.Impulse);
 
+            
             float newVel = playerRb.linearVelocity.magnitude + speedBoostForce;
-            pMovement.ApplyBoost(newVel, pMovement.desiredMoveSpeed);
+            //pMovement.ApplyBoost(newVel, pMovement.desiredMoveSpeed);
         }
     }
 }

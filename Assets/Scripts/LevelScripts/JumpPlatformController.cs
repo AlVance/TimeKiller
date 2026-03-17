@@ -42,17 +42,21 @@ public class JumpPlatformController : MonoBehaviour
             pMovement.lastJumpPlatform = this;
 
             if (killMomentum)
+            {
                 _rb.linearVelocity = Vector3.zero;
+            }
+                
             else
                 _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
 
             if (forcePlayerToCenter)
                 other.transform.position = transform.position + transform.up * 0.75f;
 
-            Vector3 jumpForce = JumpDirectionTr.up.normalized * (Jumpspeed * 0.03f);
+            Vector3 jumpForce = JumpDirectionTr.up.normalized * (Jumpspeed * 0.02f);
+            Vector3 jumpForceFlat = new Vector3(jumpForce.x, 0, jumpForce.z);
+            pMovement.extraForce = jumpForceFlat.magnitude;  // Solo componente horizontal
             _rb.AddForce(jumpForce, ForceMode.Impulse);
 
-            pMovement.ApplyBoost(jumpForce.magnitude, pMovement.standardMoveSpeed);
 
             if (blockPlayer)
             {

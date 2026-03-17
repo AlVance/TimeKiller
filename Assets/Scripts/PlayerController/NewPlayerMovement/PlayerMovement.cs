@@ -136,7 +136,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!movementBlocked)
         {
-            MovePlayer();            
+            MovePlayer();
+            
         }
         Fly();
         FloatOnGround();
@@ -196,8 +197,6 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementStates.Air;
             desiredMoveSpeed = standardMoveSpeed;
-            currentAcceleration = walkAcceleration;
-            currentDeceleration = 0.5f;
         }
     }
 
@@ -262,6 +261,7 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         moveDirection = pInputs.moveDirRelativeToCam;
+        Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
         if (CheckOnSlope())
         {
@@ -270,6 +270,28 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (isGrounded) rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10, ForceMode.Force);
         else rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10 * airMovementMultiplier, ForceMode.Force);
+        //else if (isFlying) rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10 * airMovementMultiplier, ForceMode.Force);
+        //else
+        //{
+        //    // En el aire: aplicar fuerza independientemente en cada eje
+        //    if (moveDirection.x != 0)
+        //    {
+        //        if (Mathf.Abs(rb.linearVelocity.x) < currentMoveSpeed ||
+        //            Mathf.Sign(moveDirection.x) != Mathf.Sign(rb.linearVelocity.x))
+        //        {
+        //            rb.AddForce(new Vector3(moveDirection.x * currentMoveSpeed * 10 * airMovementMultiplier, 0, 0), ForceMode.Force);
+        //        }
+        //    }
+
+        //    if (moveDirection.z != 0)
+        //    {
+        //        if (Mathf.Abs(rb.linearVelocity.z) < currentMoveSpeed ||
+        //            Mathf.Sign(moveDirection.z) != Mathf.Sign(rb.linearVelocity.z))
+        //        {
+        //            rb.AddForce(new Vector3(0, 0, moveDirection.z * currentMoveSpeed * 10 * airMovementMultiplier), ForceMode.Force);
+        //        }
+        //    }
+        //}
     }
 
     
@@ -295,19 +317,19 @@ public class PlayerMovement : MonoBehaviour
             if (rb.linearVelocity.y < 0) rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         }
     }
-
+    public float extraForce = 0;
     private void SpeedControl()
     {
         Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
         if (CheckOnSlope())
         {
-            if (rb.linearVelocity.magnitude > currentMoveSpeed)
+            if (rb.linearVelocity.magnitude > currentMoveSpeed + extraForce)
                 rb.linearVelocity = rb.linearVelocity.normalized * currentMoveSpeed;
         }
         else
         {           
-            if (flatVel.magnitude > currentMoveSpeed)
+            if (flatVel.magnitude > currentMoveSpeed + extraForce)
             {
                 Vector3 limitedVel = flatVel.normalized * currentMoveSpeed;
                 rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
@@ -334,8 +356,14 @@ public class PlayerMovement : MonoBehaviour
     private void ApplyGravity()
     {
 
-        if (rb.linearVelocity.y > maxFallSpeed) rb.AddForce(Vector3.down * currentGravityForce, ForceMode.Force);
-        else rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
+        if (rb.linearVelocity.y < maxFallSpeed)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxFallSpeed, rb.linearVelocity.z);
+        }
+        else
+        {
+            rb.AddForce(Vector3.down * currentGravityForce, ForceMode.Force);
+        }
     }
 
     private void FloatOnGround()
@@ -368,12 +396,6 @@ public class PlayerMovement : MonoBehaviour
             }
 
         }
-    }
-
-    public void ApplyBoost(float boostVelocity, float desiredSpeedDuringBoost)
-    {
-        currentMoveSpeed = boostVelocity;
-        desiredMoveSpeed = desiredSpeedDuringBoost;
     }
 
     private void OnDisable()
