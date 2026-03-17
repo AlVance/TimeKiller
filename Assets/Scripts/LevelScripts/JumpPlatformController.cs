@@ -54,7 +54,12 @@ public class JumpPlatformController : MonoBehaviour
 
             Vector3 jumpForce = JumpDirectionTr.up.normalized * (Jumpspeed * 0.02f);
             Vector3 jumpForceFlat = new Vector3(jumpForce.x, 0, jumpForce.z);
-            pMovement.extraForce = jumpForceFlat.magnitude;  // Solo componente horizontal
+            pMovement.extraForce = jumpForceFlat.magnitude;
+
+            // Nuevo: Calcula la velocidad horizontal actual + el impulso
+            Vector3 currentFlatVel = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
+            pMovement.airSpeedLimit = currentFlatVel.magnitude + jumpForceFlat.magnitude;
+
             _rb.AddForce(jumpForce, ForceMode.Impulse);
 
 

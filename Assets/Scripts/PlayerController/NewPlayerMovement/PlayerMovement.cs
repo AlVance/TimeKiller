@@ -93,6 +93,9 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private TMP_Text speedText;
     public JumpPlatformController lastJumpPlatform;
+
+    public float airSpeedLimit = 0f;  // Límite temporal de velocidad en el aire
+    [SerializeField] private float airSpeedDecayRate = 5f;  // Velocidad de decaimiento (ajusta según necesites)
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -328,13 +331,29 @@ public class PlayerMovement : MonoBehaviour
                 rb.linearVelocity = rb.linearVelocity.normalized * currentMoveSpeed;
         }
         else
-        {           
-            if (flatVel.magnitude > currentMoveSpeed + extraForce)
+        {
+            float maxSpeed = (state == MovementStates.Air) ? Mathf.Max(currentMoveSpeed, airSpeedLimit) : currentMoveSpeed + extraForce;
+            if (flatVel.magnitude > maxSpeed)
             {
-                Vector3 limitedVel = flatVel.normalized * currentMoveSpeed;
+                Vector3 limitedVel = flatVel.normalized * maxSpeed;
                 rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
             }
         }
+
+        if (airSpeedLimit > currentMoveSpeed)
+        {
+            float groundedDecrease = 1;
+            if (isGrounded) groundedDecrease = 2f;
+            airSpeedLimit -= airSpeedDecayRate * groundedDecrease * Time.deltaTime;
+
+            if(state == MovementStates.Flying) airSpeedLimit = currentMoveSpeed;
+        }
+        else
+        {
+            airSpeedLimit = currentMoveSpeed;
+        }
+
+        if (flatVel.magnitude <= currentMoveSpeed) extraForce = 0;
     }
 
     public bool CheckOnSlope()

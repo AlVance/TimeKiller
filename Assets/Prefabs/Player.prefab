@@ -1278,9 +1278,9 @@ MonoBehaviour:
   slideSpeed: 4
   slideDownSpeed: 40
   wallRunSpeed: 16
-  walkAcceleration: 4
+  walkAcceleration: 5
   walkDeceleration: 30
-  flyAcceleration: 8
+  flyAcceleration: 15
   flyDeceleration: 3
   slideAcceleration: 4
   slideDeceleration: 5
@@ -1293,9 +1293,10 @@ MonoBehaviour:
   flyingDamp: 4
   airDamp: 1
   airMovementMultiplier: 0.75
-  speedDiffToLerp: 5
+  speedDiffToLerp: 3
   desiredMoveSpeed: 0
   currentMoveSpeed: 0
+  moveDirection: {x: 0, y: 0, z: 0}
   speedIncreaseMultiplier: 1.5
   slopeIncreaseMultiplier: 2.5
   movementBlocked: 0
@@ -1324,6 +1325,9 @@ MonoBehaviour:
   playerCollider: {fileID: 609303182627563592}
   speedText: {fileID: 0}
   lastJumpPlatform: {fileID: 0}
+  airSpeedLimit: 0
+  airSpeedDecayRate: 15
+  extraForce: 0
 --- !u!114 &8109961244505477292
 MonoBehaviour:
   m_ObjectHideFlags: 0
