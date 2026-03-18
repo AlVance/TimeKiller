@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using MoreMountains.Feedbacks;
+
 
 public class PlayerGetHit : MonoBehaviour
 {
@@ -10,6 +12,8 @@ public class PlayerGetHit : MonoBehaviour
     private bool isInvulnerable = false;
     [SerializeField] private float stunnedTime;
     public bool isHitted;
+
+    [SerializeField] private MMF_Player onHitFeedback;
 
     private void Start()
     {
@@ -23,6 +27,7 @@ public class PlayerGetHit : MonoBehaviour
         {
             StartCoroutine(_HitBlock(hitPos, hitForce));
             StartCoroutine(_InvTime());
+            onHitFeedback.PlayFeedbacks();
         }
     }
 

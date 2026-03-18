@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using MoreMountains.Feedbacks;
+
 
 public class PlayerShoot : MonoBehaviour
 {
@@ -29,6 +31,11 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] private int projectileDamage;
     [SerializeField] private float moveDirShootInertia;
 
+    [SerializeField] private GameObject aimGuideGO;
+
+    [SerializeField] private MMF_Player enterAimFeedBack;
+    [SerializeField] private MMF_Player endAimFeedBack;
+
 
     private void Start()
     {
@@ -40,6 +47,8 @@ public class PlayerShoot : MonoBehaviour
         weaponModel.transform.localRotation = Quaternion.Euler(Vector3.zero);
 
         ProjectilePooling();
+
+        aimGuideGO.SetActive(false);
     }
 
     private void Update()
@@ -57,12 +66,22 @@ public class PlayerShoot : MonoBehaviour
         weaponModel.transform.parent = handSocket;
         weaponModel.transform.localPosition = Vector3.zero;
         weaponModel.transform.localRotation = Quaternion.Euler(Vector3.zero);
+
+        aimGuideGO.SetActive(true);
+
+        enterAimFeedBack.PlayFeedbacks();
     }
 
     private void Aim()
     {
         Vector3 aimDir = pInputs.aimDirRelativeToCam;
         if(aimDir != Vector3.zero) playerModel.transform.rotation = Quaternion.LookRotation(aimDir);
+        //else if(pInputs.moveDirRelativeToCam != Vector3.zero)
+        //{
+        //    playerModel.transform.rotation = Quaternion.LookRotation(transform.forward);
+        //    transform.localRotation = Quaternion.LookRotation(pInputs.moveDirRelativeToCam);
+        //    pInputs.lastAimDirRelativeToCam = Vector3.zero;
+        //}
     }
 
     private void EndAim()
@@ -72,6 +91,10 @@ public class PlayerShoot : MonoBehaviour
         weaponModel.transform.parent = backSocket;
         weaponModel.transform.localPosition = Vector3.zero;
         weaponModel.transform.localRotation = Quaternion.Euler(Vector3.zero);
+
+        aimGuideGO.SetActive(false);
+
+        endAimFeedBack.PlayFeedbacks();
     }
 
     private void Shoot()
@@ -88,7 +111,10 @@ public class PlayerShoot : MonoBehaviour
             currentProjectileGO.GetComponent<PlayerProjectile>().SetCharged();
 
             currentProjectileGO.transform.parent = null;
-            currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(pInputs.lastAimDirRelativeToCam + pInputs.moveDirRelativeToCam * moveDirShootInertia, projectileSpeed);
+            Vector3 shootDir;
+            if (pInputs.lastAimDirRelativeToCam == Vector3.zero) shootDir = this.transform.forward;
+            else shootDir = pInputs.lastAimDirRelativeToCam;
+            currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(shootDir + pInputs.moveDirRelativeToCam * moveDirShootInertia, projectileSpeed);
             currentProjectileGO = null;
 
             StartCoroutine(_ShootCD());
@@ -102,8 +128,10 @@ public class PlayerShoot : MonoBehaviour
         didShoot = false;
         shootOnCD = true;
         weaponModel.SetActive(false);
+        aimGuideGO.transform.parent.gameObject.SetActive(false);
         yield return new WaitForSeconds(shootCDTime);
         weaponModel.SetActive(true);
+        aimGuideGO.transform.parent.gameObject.SetActive(true);
         shootOnCD = false;
     }
 
