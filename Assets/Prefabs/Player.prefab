@@ -1293,7 +1293,7 @@ MonoBehaviour:
   slideDamp: 1
   flyingDamp: 4
   airDamp: 1
-  airMovementMultiplier: 0.75
+  airMovementMultiplier: 0.65
   speedDiffToLerp: 3
   desiredMoveSpeed: 0
   currentMoveSpeed: 0
@@ -1364,7 +1364,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   wallRunForce: 200
-  maxWallRunTime: 1
+  maxWallRunTime: 3
   wallCheckDistance: 0.75
   exitWallTime: 0.3
 --- !u!114 &994293271550130963
@@ -1408,7 +1408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upForce: 300
-  upRayDistance: 1
+  upRayDistance: 1.5
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -1460,7 +1460,7 @@ MonoBehaviour:
   invulneravilityTime: 1
   stunnedTime: 0.3
   isHitted: 0
-  onHitFeedback: {fileID: 0}
+  onHitFeedback: {fileID: 8241169656388054297}
 --- !u!114 &6916854155176743190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15223,8 +15223,8 @@ MonoBehaviour:
   DebugActive: 0
   InScriptDrivenPause: 0
   FeedbacksList:
-  - rid: 4623162029147947995
-  - rid: 4623162029147947996
+  - rid: 4623162052125917266
+  - rid: 4623162052125917267
   KeepPlayModeChanges: 0
   PerformanceMode: 0
   RestoreInitialValuesOnDisable: 0
@@ -15233,11 +15233,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 4623162029147947995
+    - rid: 4623162052125917266
       type: {class: MMF_TimescaleModifier, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
       data:
         Active: 1
-        UniqueID: 1368071111
+        UniqueID: 724902672
         Label: Timescale Modifier
         OriginalLabel: Timescale Modifier
         ChannelMode: 0
@@ -15254,7 +15254,7 @@ MonoBehaviour:
           NumberOfRepeats: 0
           RepeatForever: 0
           DelayBetweenRepeats: 1
-          PlayCount: 24
+          PlayCount: 45
           LimitPlayCount: 0
           MaxPlayCount: 3
           SetPlayCountToZeroOnReset: 0
@@ -15380,11 +15380,11 @@ MonoBehaviour:
           EnumConditionPropertyName: TimescaleLerpMode
           EnumConditions: 0001000000000000000000000000000000000000000000000000000000000000
         TimescaleLerpDurationOnUnfreeze: 0.3
-    - rid: 4623162029147947996
+    - rid: 4623162052125917267
       type: {class: MMF_Vignette_URP, ns: MoreMountains.FeedbacksForThirdParty, asm: MoreMountains.Tools}
       data:
         Active: 1
-        UniqueID: 885956473
+        UniqueID: 299645107
         Label: Vignette URP
         OriginalLabel: Vignette URP
         ChannelMode: 0
@@ -15401,7 +15401,7 @@ MonoBehaviour:
           NumberOfRepeats: 0
           RepeatForever: 0
           DelayBetweenRepeats: 1
-          PlayCount: 24
+          PlayCount: 45
           LimitPlayCount: 0
           MaxPlayCount: 3
           SetPlayCountToZeroOnReset: 0
@@ -15481,7 +15481,7 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        RemapIntensityZero: 0.5
+        RemapIntensityZero: 0.45
         RemapIntensityOne: 0
         RelativeIntensity: 0
         InterpolateColor: 0
@@ -15761,8 +15761,8 @@ MonoBehaviour:
   DebugActive: 0
   InScriptDrivenPause: 0
   FeedbacksList:
-  - rid: 4623162029147947990
-  - rid: 4623162029147947991
+  - rid: 4623162052125917268
+  - rid: 4623162052125917269
   KeepPlayModeChanges: 0
   PerformanceMode: 0
   RestoreInitialValuesOnDisable: 0
@@ -15771,11 +15771,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 4623162029147947990
+    - rid: 4623162052125917268
       type: {class: MMF_TimescaleModifier, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
       data:
         Active: 1
-        UniqueID: 512177886
+        UniqueID: -318213181
         Label: Timescale Modifier
         OriginalLabel: Timescale Modifier
         ChannelMode: 0
@@ -15792,7 +15792,7 @@ MonoBehaviour:
           NumberOfRepeats: 0
           RepeatForever: 0
           DelayBetweenRepeats: 1
-          PlayCount: 17
+          PlayCount: 49
           LimitPlayCount: 0
           MaxPlayCount: 3
           SetPlayCountToZeroOnReset: 0
@@ -15918,11 +15918,11 @@ MonoBehaviour:
           EnumConditionPropertyName: TimescaleLerpMode
           EnumConditions: 0001000000000000000000000000000000000000000000000000000000000000
         TimescaleLerpDurationOnUnfreeze: 0.3
-    - rid: 4623162029147947991
+    - rid: 4623162052125917269
       type: {class: MMF_Vignette_URP, ns: MoreMountains.FeedbacksForThirdParty, asm: MoreMountains.Tools}
       data:
         Active: 1
-        UniqueID: -2107211583
+        UniqueID: 1365987967
         Label: Vignette URP
         OriginalLabel: Vignette URP
         ChannelMode: 0
@@ -15939,7 +15939,7 @@ MonoBehaviour:
           NumberOfRepeats: 0
           RepeatForever: 0
           DelayBetweenRepeats: 1
-          PlayCount: 17
+          PlayCount: 53
           LimitPlayCount: 0
           MaxPlayCount: 3
           SetPlayCountToZeroOnReset: 0
@@ -16020,7 +16020,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         RemapIntensityZero: 0
-        RemapIntensityOne: 0.5
+        RemapIntensityOne: 0.45
         RelativeIntensity: 0
         InterpolateColor: 0
         ColorCurve:
@@ -16126,7 +16126,7 @@ Transform:
   m_GameObject: {fileID: 6349518579450024619}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0.3}
+  m_LocalPosition: {x: 0, y: 1.75, z: 0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

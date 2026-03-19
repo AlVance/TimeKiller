@@ -222,6 +222,10 @@ public class PlayerMovement : MonoBehaviour
                 currentSlopeAccMult = 1f;
             }
         }
+        else
+        {
+            currentSlopeAccMult = 1f;
+        }
 
         float diff = Mathf.Abs(desiredMoveSpeed - currentMoveSpeed);
         if(diff > speedDiffToLerp && currentMoveSpeed != 0)
