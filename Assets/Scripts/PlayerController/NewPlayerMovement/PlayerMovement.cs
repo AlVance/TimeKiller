@@ -44,8 +44,6 @@ public class PlayerMovement : MonoBehaviour
     
     public Vector3 moveDirection;
     private Rigidbody rb;
-    [SerializeField] private float speedIncreaseMultiplier;
-    [SerializeField] private float slopeIncreaseMultiplier;
 
     public bool movementBlocked = false;
 
@@ -112,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.3f, groundLayer);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.5f, groundLayer);
 
         //if (!movementBlocked) SpeedControl();
         StateHandler();
@@ -209,17 +207,13 @@ public class PlayerMovement : MonoBehaviour
         {
             float slopeAngle = Vector3.Angle(Vector3.up, slopeHit.normal);
             float slopeAngleIncrease = 1 + (slopeAngle / 90f);
-            if (rb.linearVelocity.y > 0.1f && currentMoveSpeed < desiredMoveSpeed)
+            if (rb.linearVelocity.y > 0.1f)
             {
                 currentSlopeAccMult = slopeUpDecelerationMult * slopeAngleIncrease;
             }
             else if(rb.linearVelocity.y < -0.1f)
             {
                 currentSlopeAccMult = slopeDownAccelerationMult * slopeAngleIncrease;
-            }
-            else
-            {
-                currentSlopeAccMult = 1f;
             }
         }
         else
@@ -264,18 +258,23 @@ public class PlayerMovement : MonoBehaviour
             rb.linearDamping = airDamp;
         }
     }
-
+    public float force = 10;
     private void MovePlayer()
     {
         moveDirection = pInputs.moveDirRelativeToCam;
         Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
+        
         if (CheckOnSlope())
         {
             rb.AddForce(GetSlopeMoveDir(moveDirection) * currentMoveSpeed * 10, ForceMode.Force);
-            if (moveDirection.sqrMagnitude > 0.1f) rb.AddForce(-slopeHit.normal * 50, ForceMode.Force);
+            if (moveDirection.sqrMagnitude > 0.1f) rb.AddForce(-slopeHit.normal * (force * rb.linearVelocity.sqrMagnitude), ForceMode.Force);
         }
-        else if (isGrounded) rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10, ForceMode.Force);
+        else if (isGrounded)
+        {
+            rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10, ForceMode.Force);
+            rb.AddForce(-slopeHit.normal * (force * rb.linearVelocity.sqrMagnitude / 2), ForceMode.Force);
+        } 
         else rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10 * airMovementMultiplier, ForceMode.Force);
         //else if (isFlying) rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10 * airMovementMultiplier, ForceMode.Force);
         //else
@@ -442,6 +441,9 @@ public class PlayerMovement : MonoBehaviour
     private void OnDisable()
     {
         state = MovementStates.Hitted;
+        desiredMoveSpeed = standardMoveSpeed;
+        currentMoveSpeed = standardMoveSpeed;
+        extraForce = 0;
         rb.linearVelocity = Vector3.zero;
     }
 }

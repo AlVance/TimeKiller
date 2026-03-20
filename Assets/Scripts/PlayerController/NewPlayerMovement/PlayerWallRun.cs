@@ -10,7 +10,7 @@ public class PlayerWallRun : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private LayerMask wallMask;
     [SerializeField] private float wallRunForce;
-    [SerializeField] private float maxWallRunTime;
+    //[SerializeField] private float maxWallRunTime;
     //[SerializeField] private float minDistanceToGround;
     private float currentWallRunTimer;
 
@@ -41,13 +41,13 @@ public class PlayerWallRun : MonoBehaviour
         {
             if(!pMovement.isWallRunning)StartWallRun();
 
-            currentWallRunTimer += Time.deltaTime;
-            if(currentWallRunTimer >= maxWallRunTime)
-            {
-                currentWallRunTimer = 0;
-                if (pMovement.isWallRunning) StopWallRun();
-                exitWall = true;
-            }
+            //currentWallRunTimer += Time.deltaTime;
+            //if(currentWallRunTimer >= maxWallRunTime)
+            //{
+            //    currentWallRunTimer = 0;
+            //    if (pMovement.isWallRunning) StopWallRun();
+            //    exitWall = true;
+            //}
         }
         else
         {

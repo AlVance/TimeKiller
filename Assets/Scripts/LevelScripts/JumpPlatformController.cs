@@ -43,7 +43,10 @@ public class JumpPlatformController : MonoBehaviour
 
             if (killMomentum)
             {
-                pMovement.currentMoveSpeed = 0f;
+                pMovement.desiredMoveSpeed = pMovement.standardMoveSpeed;
+                pMovement.currentMoveSpeed = pMovement.standardMoveSpeed;
+                pMovement.extraForce = 0;
+                _rb.linearVelocity = Vector3.zero;
                 _rb.linearVelocity = Vector3.zero;
             }                
             else

@@ -1287,7 +1287,7 @@ MonoBehaviour:
   slideDeceleration: 3
   slideDownAcceleration: 8
   slideDownDeceleration: 1
-  slopeUpDecelerationMult: 2.5
+  slopeUpDecelerationMult: 3
   slopeDownAccelerationMult: 1.5
   groundedDamp: 8
   slideDamp: 1
@@ -1298,8 +1298,6 @@ MonoBehaviour:
   desiredMoveSpeed: 0
   currentMoveSpeed: 0
   moveDirection: {x: 0, y: 0, z: 0}
-  speedIncreaseMultiplier: 1.5
-  slopeIncreaseMultiplier: 2.5
   movementBlocked: 0
   playerHeight: 2.2
   groundLayer:
@@ -1364,7 +1362,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   wallRunForce: 200
-  maxWallRunTime: 3
   wallCheckDistance: 0.75
   exitWallTime: 0.3
 --- !u!114 &994293271550130963
@@ -1391,7 +1388,7 @@ MonoBehaviour:
   projectileSpeed: 65
   projectileRange: 1.5
   projectileDamage: 1
-  moveDirShootInertia: 0.2
+  moveDirShootInertia: 0
   aimGuideGO: {fileID: 5605491237643223174}
   enterAimFeedBack: {fileID: 2940198204133715914}
   endAimFeedBack: {fileID: 3598631208471116455}
