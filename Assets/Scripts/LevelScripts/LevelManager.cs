@@ -88,6 +88,7 @@ public class LevelManager : MonoBehaviour
         {
             CameraManager.Instance.ChangeCam(CameraManager.Instance.basePlayerCam);
         }
+        CameraManager.Instance.gameObject.GetComponent<CamerasFOVController>().GetLevelCams();
 
         GameManager.Instance.UnloadMemory();
         
