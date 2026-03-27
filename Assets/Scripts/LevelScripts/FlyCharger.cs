@@ -7,29 +7,29 @@ public class FlyCharger : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
-            if(other.gameObject.GetComponent<PlayerController>().currentFuel < other.gameObject.GetComponent<PlayerController>().maxFuel)
+            if(other.gameObject.GetComponent<PlayerFlyStamina>().currentFuel < other.gameObject.GetComponent<PlayerFlyStamina>().maxFlyFuel)
             {
-                other.gameObject.GetComponent<PlayerController>().currentFuel += fuelRegenerationSpeed * Time.deltaTime;
+                other.gameObject.GetComponent<PlayerFlyStamina>().currentFuel += fuelRegenerationSpeed * Time.deltaTime;
             }
             else
             {
-                other.gameObject.GetComponent<PlayerController>().currentFuel = other.gameObject.GetComponent<PlayerController>().maxFuel;
+                other.gameObject.GetComponent<PlayerFlyStamina>().currentFuel = other.gameObject.GetComponent<PlayerFlyStamina>().maxFlyFuel;
             }
         }
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            UIManager.Instance.SetFlyFuelSliderColor(Color.cyan);
-        }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.tag == "Player")
+    //    {
+    //        UIManager.Instance.SetFlyFuelSliderColor(Color.cyan);
+    //    }
 
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            UIManager.Instance.SetFlyFuelSliderColor(Color.white);
-        }
-    }
+    //}
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.gameObject.tag == "Player")
+    //    {
+    //        UIManager.Instance.SetFlyFuelSliderColor(Color.white);
+    //    }
+    //}
 }

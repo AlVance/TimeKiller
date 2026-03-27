@@ -19,7 +19,7 @@ public class SwitchingPlatform : MonoBehaviour
         {
             switchingPlatformAnimator.SetBool("SwitchingPlatformState", switchPlatformState);
         }
-        GameManager.Instance.currentPlayer.OnStartFlyEvent.AddListener(ChangePlatformState);
+        GameManager.Instance.currentPlayer.GetComponent<PlayerMovement>().OnStartFlyEvent.AddListener(ChangePlatformState);
     }
 
     private void ChangePlatformState()

@@ -274,7 +274,7 @@ namespace SplineMeshTools.Core
         public void OnSplineModified(Spline spline, int knotIndex, SplineModification modification)
         {
 
-            if (spline == null || segmentMesh == null)
+            if (spline == null || segmentMesh == null || splineContainer == null)
                 return;
 
             if (splineContainer.Splines.Contains(spline))

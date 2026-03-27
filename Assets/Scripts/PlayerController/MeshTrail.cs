@@ -67,12 +67,12 @@ public class MeshTrail : MonoBehaviour
     {
         yield return new WaitForSeconds(meshResfreshRate);
 
-        if (GameManager.Instance.currentPlayer.isFlying) _ActivateSandevistan();
-        else
-        {
-            smoke_VFX[0].Stop();
-            smoke_VFX[1].Stop();
-        }
+        //if (GameManager.Instance.currentPlayer.isFlying) _ActivateSandevistan();
+        //else
+        //{
+        //    smoke_VFX[0].Stop();
+        //    smoke_VFX[1].Stop();
+        //}
     }
 
     IEnumerator SetActiveFalse(GameObject go)

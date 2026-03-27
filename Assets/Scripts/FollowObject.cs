@@ -9,6 +9,7 @@ public class FollowObject : MonoBehaviour
     [SerializeField] private bool followSmooth;
     [SerializeField] private float followSpeed;
     [SerializeField] public bool followPlayer;
+    [SerializeField] private bool followRotation = false;
 
     private IEnumerator Start()
     {
@@ -22,6 +23,7 @@ public class FollowObject : MonoBehaviour
         if (!followSmooth && targetTr != null)
         {
             this.transform.position = targetTr.position + followOffset;
+            if (followRotation) this.transform.rotation = targetTr.rotation;
         }
     }
     // Update is called once per frame
@@ -31,6 +33,7 @@ public class FollowObject : MonoBehaviour
         if(followSmooth && targetTr != null)
         {
             this.transform.position += ((targetTr.position + followOffset) - this.transform.position) * followSpeed * Time.deltaTime;
+            if (followRotation) this.transform.rotation = targetTr.rotation;
         }
     }
 }

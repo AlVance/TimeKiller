@@ -1,11 +1,10 @@
 using UnityEngine;
-//using UnityEditor;
 using System.Collections;
 using System;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    public PlayerController currentPlayer;
+    public GameObject currentPlayer;
     public GameObject currentLevelGO;
     public int currentLevel = 0;
     private bool m_levelStarted = false;
