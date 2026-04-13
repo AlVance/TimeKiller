@@ -1,16 +1,21 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] public World[] worlds;
-    private int currentWorld = 0;
+    public int currentWorld = 0;
+    private WorldSelector worldSelector;
     //[SerializeField] private GameObject[] levelsGO;
     [HideInInspector] public GameObject currentLevelGO;
 
     [SerializeField] private float startLevelTime = 3f;
+    [SerializeField] private AudioClip VictorySound;
+    [SerializeField] private AudioClip Countdown;
+    [SerializeField] private AudioClip CountdownEnd;
 
 
     [Header("LevelTransition variables")]
@@ -26,13 +31,17 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private TMP_Text mostCompletedLevelsText;
 
     private LeaderboardManager leaderboardManager;
+
     
+
     private void Start()
     {
         isStart = true;
         UIManager.Instance.SetInlevelUIActive(false);
         GoToStartLevel();
         leaderboardManager = GetComponent<LeaderboardManager>();
+        worldSelector = this.gameObject.GetComponent<WorldSelector>();
+        worldSelector.enabled = false;
     }
 
     private void SetNextLevel()
@@ -61,7 +70,7 @@ public class LevelManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         GameManager.Instance.currentPlayer.gameObject.transform.position = currentLevelGO.GetComponent<Level>().playerStartTr.position;
-        GameManager.Instance.currentPlayer.ResetPlayer();
+        //GameManager.Instance.currentPlayer.ResetPlayer();
         TimeManager.Instance.levelTime = currentLevelGO.GetComponent<Level>().levelTime;
         UIManager.Instance.SetLevelTimerSliderMaxValue(currentLevelGO.GetComponent<Level>().levelTime);
         UIManager.Instance.SetLevelTimeText(currentLevelGO.GetComponent<Level>().levelTime);
@@ -79,6 +88,7 @@ public class LevelManager : MonoBehaviour
         {
             CameraManager.Instance.ChangeCam(CameraManager.Instance.basePlayerCam);
         }
+        CameraManager.Instance.gameObject.GetComponent<CamerasFOVController>().GetLevelCams();
 
         GameManager.Instance.UnloadMemory();
         
@@ -102,13 +112,16 @@ public class LevelManager : MonoBehaviour
         for (int i = 0; i < startLevelTime; i++)
         {
             UIManager.Instance.SetStartLevelTimerText((startLevelTime - i).ToString("0"));
+            SoundManager.Instance.PlayOneShootAudio(Countdown);
 
             yield return new WaitForSeconds(1f);
         }
-        GameManager.Instance.currentPlayer.UnblockPlayer();
+        GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().UnblockPlayer();
         GameManager.Instance.levelStarted = true;
+        SoundManager.Instance.PlayOneShootAudio(CountdownEnd);
         UIManager.Instance.SetStartLevelTimerText("GO!");
         TimeManager.Instance.timerStarted = true;
+        SoundManager.Instance.MusicOnOff(true);
         yield return new WaitForSeconds(1f);
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(false);
         canGoToStartLevelGameplay = true;
@@ -118,8 +131,8 @@ public class LevelManager : MonoBehaviour
     public void OnLevelEnded()
     {
         GameManager.Instance.levelStarted = false;
-        GameManager.Instance.currentPlayer.BlockPlayer();
-        GameManager.Instance.currentPlayer.ResetPlayer();
+        GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().BlockPlayer();
+        //GameManager.Instance.currentPlayer.ResetPlayer();
         SetLevelPuntuationScreen();
     }
 
@@ -135,7 +148,8 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetPuntuationScreenActive(true);
         CameraManager.Instance.ChangeCam(CameraManager.Instance.winCam);
         GameManager.Instance.currentPlayer.gameObject.transform.eulerAngles = new Vector3(0,-180,0);
-        GameManager.Instance.currentPlayer.anim.SetBool("IsWin", true);
+        //GameManager.Instance.currentPlayer.anim.SetBool("IsWin", true);
+        SoundManager.Instance.PlayOneShootAudio(VictorySound);
         yield return new WaitForSeconds(0.1f);
         UIManager.Instance.SetTimerUIToWinScreen();
         yield return new WaitForSeconds(0.8f);
@@ -158,6 +172,7 @@ public class LevelManager : MonoBehaviour
     }
 
     private bool canGoToWorldSelect = true;
+    [HideInInspector]public bool isInWorldSelect = false;
     public void GoToWorldSelect()
     {
         if (canGoToWorldSelect)
@@ -168,18 +183,20 @@ public class LevelManager : MonoBehaviour
     private IEnumerator _GoToWorldSelect()
     {
         canGoToWorldSelect = false;
+        isInWorldSelect = true;
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1f);
         if (isStart)
         {
             GameManager.Instance.playerWork = false;
+            GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().BlockPlayer();
             startLevelGO.SetActive(false);
             isStart = false;
             GameManager.Instance.isInLobby = false;
             UIManager.Instance.SetInitialSceneUIActive(false);
         }
+        worldSelector.enabled = true;
         UIManager.Instance.SetSelectWorldScreenGOActive(true);
-
         UIManager.Instance.SetFade(false);
         canGoToWorldSelect = true;
     }
@@ -194,6 +211,8 @@ public class LevelManager : MonoBehaviour
     private IEnumerator _GoToInbetweenLevels()
     {
         canGoToLevelTrans = false;
+        isInWorldSelect = false;
+        worldSelector.enabled = false;
         inLevelTrans = true;
         UIManager.Instance.SetSelectWorldScreenGOActive(false);
         UIManager.Instance.SetGoToInBetweenBTNActive(false);
@@ -203,22 +222,23 @@ public class LevelManager : MonoBehaviour
         if (isStart)
         {
             GameManager.Instance.playerWork = false;
+            GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().BlockPlayer();
             startLevelGO.SetActive(false);      
             isStart = false;
             GameManager.Instance.isInLobby = false;
             UIManager.Instance.SetInitialSceneUIActive(false);
         }
         levelTransSceneGO.SetActive(true);
+        SoundManager.Instance.MusicOnOff(false);
         yield return new WaitForSeconds(1f);
-        GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
-        GameManager.Instance.currentPlayer.anim.SetBool("IsWin", false);
+        //GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
+        //GameManager.Instance.currentPlayer.anim.SetBool("IsWin", false);
         UIManager.Instance.SetTimerUIToIdle();
         UIManager.Instance.SetInlevelUIActive(false);
         UIManager.Instance.SetPuntuationScreenActive(false);
 
 
-        if ((GameManager.Instance.currentLevel < worlds[currentWorld].worldLevelsGO.Length && !GameManager.Instance.explorationMode)
-            || (GameManager.Instance.currentLevel < worlds[currentWorld].worldLevelsGO.Length - 1 && GameManager.Instance.explorationMode))
+        if ((GameManager.Instance.currentLevel < worlds[currentWorld].worldLevelsGO.Length))
         {
             SetNextLevel();
             UIManager.Instance.SetLevelCountText(GameManager.Instance.currentLevel + 1, worlds[currentWorld].worldLevelsGO.Length);
@@ -355,6 +375,7 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetGoToCreditsBTNActive(false);
         UIManager.Instance.SetFade(true);
         yield return new WaitForSeconds(1.5f);
+        SoundManager.Instance.LobbyMusicOnOff(true);
         levelTransSceneGO.SetActive(false);
         UIManager.Instance.SetCreditsScreenActive(true);
         yield return new WaitForEndOfFrame();
@@ -399,6 +420,7 @@ public class LevelManager : MonoBehaviour
         isStart = true;
         GameManager.Instance.isInLobby = true;
         UIManager.Instance.SetFade(true);
+        SoundManager.Instance.LobbyMusicOnOff(true);
         yield return new WaitForSeconds(1f);
         GameManager.Instance.currentLevel = 0;
         TimeManager.Instance.currentTime = TimeManager.Instance.startTime;
@@ -433,9 +455,9 @@ public class LevelManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         GameManager.Instance.currentPlayer.gameObject.transform.position = startLevelGO.GetComponent<Level>().playerStartTr.position;
-        GameManager.Instance.currentPlayer.ResetPlayer();
+        //GameManager.Instance.currentPlayer.ResetPlayer();
         CameraManager.Instance.ChangeCam(CameraManager.Instance.basePlayerCam);
-        GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
+        //GameManager.Instance.currentPlayer.anim.SetBool("IsLose", false);
         UIManager.Instance.SetTimerUIToIdle();
         UIManager.Instance.SetInlevelUIActive(false);
 
@@ -452,7 +474,7 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         UIManager.Instance.SetFade(false);
         GameManager.Instance.playerWork = true;
-        GameManager.Instance.currentPlayer.UnblockPlayer();
+        GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().UnblockPlayer();
         canGoToStartLevel = true;
     }
     private IEnumerator DestroyGOWithDelay(GameObject GO)

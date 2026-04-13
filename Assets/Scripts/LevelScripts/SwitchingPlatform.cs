@@ -7,6 +7,7 @@ public class SwitchingPlatform : MonoBehaviour
     [SerializeField] private GameObject switchingPlatformVisual;
     [SerializeField] private Animator switchingPlatformAnimator;
     [SerializeField] private bool switchPlatformState = false;
+    [SerializeField] private Collider platformCol;
 
     [SerializeField] private AudioSource switchPlatformAS;
     [SerializeField] private AudioClip switchAC;
@@ -18,7 +19,7 @@ public class SwitchingPlatform : MonoBehaviour
         {
             switchingPlatformAnimator.SetBool("SwitchingPlatformState", switchPlatformState);
         }
-        GameManager.Instance.currentPlayer.OnStartFlyEvent.AddListener(ChangePlatformState);
+        GameManager.Instance.currentPlayer.GetComponent<PlayerMovement>().OnStartFlyEvent.AddListener(ChangePlatformState);
     }
 
     private void ChangePlatformState()
@@ -26,5 +27,6 @@ public class SwitchingPlatform : MonoBehaviour
         switchPlatformAS.PlayOneShot(switchAC);
         switchPlatformState = !switchPlatformState;
         switchingPlatformAnimator.SetBool("SwitchingPlatformState", switchPlatformState);
+        platformCol.enabled = !switchPlatformState;
     }
 }

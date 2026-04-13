@@ -3,8 +3,6 @@ using System.Collections;
 using UnityEngine.Splines;
 using MyBox;
 using System.Collections.Generic;
-using FMODUnity;
-
 #if UNITY_EDITOR
 using UnityEditor.Callbacks;
 #endif
@@ -64,9 +62,9 @@ public class EnemyBehaviour : MonoBehaviour
     private Vector3 gunTr;
 
 
-    [Header("Audio")]
-    [SerializeField] StudioEventEmitter testEvent;
-
+    [Header("Sound Variables")]
+    [SerializeField] private AudioSource enemyAS;
+    [SerializeField] private AudioClip getHitAC, tpPlayerAC;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -98,7 +96,7 @@ public class EnemyBehaviour : MonoBehaviour
     private void Update()
     {
         if(enemyGunGO != null) enemyGunGO.transform.localPosition = gunTr;
-        if ((GameManager.Instance.levelStarted || forceEnemyToWork) && isAlive)
+        if (((GameManager.Instance != null && GameManager.Instance.levelStarted) || forceEnemyToWork) && isAlive)
         {
             MoveAlongSpline();
             Shoot();
@@ -107,7 +105,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void SetHealth(int healthModfier)
     {
-        if (!isInvulnerable && (GameManager.Instance.levelStarted || forceEnemyToWork))
+        if (!isInvulnerable && ((GameManager.Instance != null && GameManager.Instance.levelStarted) || forceEnemyToWork))
         { 
             currentEnemyHealth += healthModfier;
             if (currentEnemyHealth <= 0)
@@ -115,6 +113,7 @@ public class EnemyBehaviour : MonoBehaviour
                 EnemyDeath();
             }
 
+            enemyAS.PlayOneShot(getHitAC);
         }
     }
 
@@ -135,8 +134,27 @@ public class EnemyBehaviour : MonoBehaviour
 
         if(enemyBehaviourType == enemyOnHitTypes.TpOnKill)
         {
-            GameManager.Instance.currentPlayer.ForcedMovement(this.transform.position);
+            StartCoroutine(_PlayerTPMovement());
+            enemyAS.PlayOneShot(tpPlayerAC);
         }  
+    }
+
+    
+    private IEnumerator _PlayerTPMovement()
+    {
+        GameObject player = GameManager.Instance.currentPlayer;
+        Rigidbody rb = player.GetComponent<Rigidbody>();
+        player.GetComponent<PlayerBlock>().BlockPlayer();
+        rb.linearVelocity = Vector3.zero;
+        player.GetComponent<PlayerMovement>().playerCollider.enabled = false;
+        while (Vector3.Distance(this.transform.position, player.transform.position) > 1f)
+        {
+            rb.linearVelocity = (this.transform.position - player.transform.position).normalized * 100;
+            yield return null;
+        }
+        rb.linearVelocity = Vector3.zero;
+        player.GetComponent<PlayerMovement>().playerCollider.enabled = true;
+        player.GetComponent<PlayerBlock>().UnblockPlayer();
     }
 
     private void MoveAlongSpline()

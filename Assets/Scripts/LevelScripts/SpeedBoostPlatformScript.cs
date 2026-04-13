@@ -3,18 +3,37 @@ using UnityEngine;
 
 public class SpeedBoostPlatformScript : MonoBehaviour
 {
-    [SerializeField] private float speed_boost_multiplier;
-    [SerializeField] private float speed_boost_timer;
-    
-    public float speedBoostMultiplier
+    [SerializeField] private float speedBoostForce;
+    [SerializeField] private float speedBoostTime;
+    private float currentTime = 0;
+
+    private Rigidbody playerRb;
+    private PlayerMovement pMovement;
+
+    private void FixedUpdate()
     {
-        get { return speedBoostMultiplier; } private set { speedBoostMultiplier = speed_boost_multiplier;  }
+        if(currentTime > 0)
+        {
+            playerRb.AddForce(pMovement.moveDirection * speedBoostForce, ForceMode.Force);
+            if(pMovement.currentMoveSpeed < (pMovement.moveDirection * speedBoostForce).magnitude) pMovement.currentMoveSpeed = (pMovement.moveDirection * speedBoostForce).magnitude;
+            currentTime -= Time.deltaTime;
+        }
     }
 
-    public float speedBoostTimer
+    private void OnTriggerEnter(Collider other)
     {
-        get { return speedBoostTimer; }
-        private set { speedBoostTimer = speed_boost_timer; }
-    }
+        if (other.CompareTag("Player"))
+        {
+            playerRb = other.GetComponent<Rigidbody>();
+            pMovement = other.GetComponent<PlayerMovement>();
 
+            Vector3 boostDir = pMovement.moveDirection == Vector3.zero ? transform.forward : pMovement.moveDirection;
+            pMovement.ApplyExternalImpulse(boostDir, speedBoostForce / 10);
+
+            currentTime = speedBoostTime;
+
+        }    
+    }
 }
+
+

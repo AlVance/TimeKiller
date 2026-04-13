@@ -7,16 +7,21 @@ public class OffLimitsColController : MonoBehaviour
     private Level currentLevel;
     private void Start()
     {
-        if (this.transform.parent.TryGetComponent<Level>(out Level parentLevel))
+        if (this.transform.GetComponentInParent<Level>() != null)
         {
-            currentLevel = parentLevel;
+            currentLevel = this.transform.GetComponentInParent<Level>();
         }
     }
     private void OnTriggerEnter(Collider other)
     {
         if (currentLevel != null) 
         {
-            if(other.gameObject.tag == "Player") other.gameObject.GetComponent<PlayerController>().PlayerOffLimits(currentLevel.playerStartTr);
+            if(other.gameObject.tag == "Player")
+            {
+                GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().BlockPlayer();
+                GameManager.Instance.currentPlayer.transform.position = GameManager.Instance.currentLevelGO.GetComponent<Level>().playerStartTr.position;
+                GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().UnblockPlayer();
+            }
         } 
         else other.gameObject.transform.position = Vector3.zero;
     }

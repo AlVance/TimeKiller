@@ -1,11 +1,10 @@
 using UnityEngine;
-//using UnityEditor;
 using System.Collections;
 using System;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    public PlayerController currentPlayer;
+    public GameObject currentPlayer;
     public GameObject currentLevelGO;
     public int currentLevel = 0;
     private bool m_levelStarted = false;
@@ -13,6 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MobileDetector MD;
     private bool m_explorationMode = false;
     public bool isInLobby = false;
+    [SerializeField] private bool startAsExplorationMode = true;
     public bool explorationMode
     {
         get { return m_explorationMode; }
@@ -63,6 +63,8 @@ public class GameManager : MonoBehaviour
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
 #endif
+
+        explorationMode = startAsExplorationMode;
     }
     public void UnloadMemory()
     {
