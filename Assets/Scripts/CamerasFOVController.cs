@@ -24,10 +24,10 @@ public class CamerasFOVController : MonoBehaviour
     void Update()
     {
         Debug.Log(pRb.linearVelocity.sqrMagnitude);
-
-        if (currentFov > FOVCurve.Evaluate(pRb.linearVelocity.sqrMagnitude)) currentChangeSpeed = changeSpeed * 4;
+        float pSpeed = new Vector3(pRb.linearVelocity.x, pRb.linearVelocity.y / 2, pRb.linearVelocity.z).sqrMagnitude;
+        if (currentFov > FOVCurve.Evaluate(pSpeed)) currentChangeSpeed = changeSpeed * 4;
         else currentChangeSpeed = changeSpeed;
-       currentFov = Mathf.Lerp(currentFov, FOVCurve.Evaluate(pRb.linearVelocity.sqrMagnitude), changeSpeed * Time.deltaTime);
+       currentFov = Mathf.Lerp(currentFov, FOVCurve.Evaluate(pSpeed), changeSpeed * Time.deltaTime);
         if (currentFov <= initialFOV) currentFov = initialFOV;
         if (currentFov >= maxFOV) currentFov = maxFOV;
 

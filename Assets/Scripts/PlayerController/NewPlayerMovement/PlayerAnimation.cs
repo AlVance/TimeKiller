@@ -75,12 +75,8 @@ public class PlayerAnimation : MonoBehaviour
                 if (!playerAnim.GetCurrentAnimatorStateInfo(0).IsName("Drift")) playerAnim.SetTrigger("GoSlide");
                 break;
             case PlayerMovement.MovementStates.WallRunning:
-                if(pwallRun.wallLeft)
-                    playerAnim.SetTrigger("GoWallRideLeft");
-                //if (!playerAnim.GetCurrentAnimatorStateInfo(0).IsName("WallRideLeft")) playerAnim.SetTrigger("GoWallRideLeft");
-                else if (pwallRun.wallRight)
-                    playerAnim.SetTrigger("GoWallRideRight");
-                //if (!playerAnim.GetCurrentAnimatorStateInfo(0).IsName("WallRideRight")) playerAnim.SetTrigger("GoWallRideRight");
+                if (pwallRun.wallLeft) if (!playerAnim.GetCurrentAnimatorStateInfo(0).IsName("WallRideLeft")) playerAnim.SetTrigger("GoWallRideLeft");
+                if (pwallRun.wallRight) if (!playerAnim.GetCurrentAnimatorStateInfo(0).IsName("WallRideRight")) playerAnim.SetTrigger("GoWallRideRight");
                 break;
         }
 
