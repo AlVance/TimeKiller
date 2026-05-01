@@ -117,6 +117,7 @@ MonoBehaviour:
   followSmooth: 0
   followSpeed: 18
   followPlayer: 1
+  followRotation: 0
 --- !u!1 &7786933462621134809
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,6 +128,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5021240187960038350}
   - component: {fileID: 1029781640457686709}
+  - component: {fileID: 3783828984540293373}
   m_Layer: 0
   m_Name: CameraManager
   m_TagString: Untagged
@@ -167,6 +169,55 @@ MonoBehaviour:
   levelCamera: {fileID: 0}
   currentCam: {fileID: 2766742515124222743}
   winCam: {fileID: 2505865290102757383}
+--- !u!114 &3783828984540293373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7786933462621134809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80dfe429d589bf84c8f9b88c0c77eb67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialFOV: 70
+  maxFOV: 90
+  FOVCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 70
+      inSlope: 0.007000938
+      outSlope: 0.007000938
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 380.99905
+      value: 72.66735
+      inSlope: 0.010581705
+      outSlope: 0.010581705
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.36929035
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 2000
+      value: 100
+      inSlope: 0.016882416
+      outSlope: 0.016882416
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  currentFov: 0
+  changeSpeed: 2
 --- !u!1001 &4849926286096955666
 PrefabInstance:
   m_ObjectHideFlags: 0

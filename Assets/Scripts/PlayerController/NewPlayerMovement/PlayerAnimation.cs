@@ -7,11 +7,13 @@ public class PlayerAnimation : MonoBehaviour
     private PlayerMovement.MovementStates lastState;
 
     private PlayerShoot pShoot;
+    private PlayerWallRun pwallRun;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         pMovement = GetComponent<PlayerMovement>();
         pShoot = GetComponent<PlayerShoot>();
+        pwallRun = GetComponent<PlayerWallRun>();
     }
 
     // Update is called once per frame
@@ -71,6 +73,10 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case PlayerMovement.MovementStates.SlidingDown:
                 if (!playerAnim.GetCurrentAnimatorStateInfo(0).IsName("Drift")) playerAnim.SetTrigger("GoSlide");
+                break;
+            case PlayerMovement.MovementStates.WallRunning:
+                if (pwallRun.wallLeft) if (!playerAnim.GetCurrentAnimatorStateInfo(0).IsName("WallRideLeft")) playerAnim.SetTrigger("GoWallRideLeft");
+                if (pwallRun.wallRight) if (!playerAnim.GetCurrentAnimatorStateInfo(0).IsName("WallRideRight")) playerAnim.SetTrigger("GoWallRideRight");
                 break;
         }
 
