@@ -5,7 +5,6 @@ public class PlayerWallRun : MonoBehaviour
     private PlayerInputs pInputs;
     private Rigidbody rb;
     private PlayerMovement pMovement;
-    private PlayerShoot pShoot;
 
     [Header("WallRunning variables")]
     [SerializeField] private LayerMask groundMask;
@@ -32,7 +31,6 @@ public class PlayerWallRun : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         pInputs = GetComponent<PlayerInputs>();
         pMovement = GetComponent<PlayerMovement>();
-        pWallRun = GetComponent<PlayerWallRun>();
     }
 
     private void Update()
