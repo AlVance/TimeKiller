@@ -120,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
         if(speedText != null)speedText.text = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude.ToString("00.0") + "\n" + state;
 
         //MoveRotationStuff
-        if(!isAiming && !isSliding)
+        if(!isAiming)
         {
             if (moveDirection != Vector3.zero)
             {
