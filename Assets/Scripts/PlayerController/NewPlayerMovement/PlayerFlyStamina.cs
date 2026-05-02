@@ -58,7 +58,7 @@ public class PlayerFlyStamina : MonoBehaviour
             {
                 currentFuel -= fuelBurnSpeed * Time.deltaTime;
             }
-            else if(currentFuel < 0)
+            else if(currentFuel < 0 && canRecover)
             {
                 currentFuel = 0;
                 StartCoroutine(_RecoverDC());

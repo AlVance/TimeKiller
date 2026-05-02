@@ -120,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
         if(speedText != null)speedText.text = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude.ToString("00.0") + "\n" + state;
 
         //MoveRotationStuff
-        if(!isAiming)
+        if(!isAiming && !isSliding)
         {
             if (moveDirection != Vector3.zero)
             {
@@ -261,6 +261,8 @@ public class PlayerMovement : MonoBehaviour
     public float force = 10;
     private void MovePlayer()
     {
+        if (isSliding) return;
+
         moveDirection = pInputs.moveDirRelativeToCam;
         Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
@@ -276,28 +278,6 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(-slopeHit.normal * (force * rb.linearVelocity.sqrMagnitude / 2), ForceMode.Force);
         } 
         else rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10 * airMovementMultiplier, ForceMode.Force);
-        //else if (isFlying) rb.AddForce(moveDirection.normalized * currentMoveSpeed * 10 * airMovementMultiplier, ForceMode.Force);
-        //else
-        //{
-        //    // En el aire: aplicar fuerza independientemente en cada eje
-        //    if (moveDirection.x != 0)
-        //    {
-        //        if (Mathf.Abs(rb.linearVelocity.x) < currentMoveSpeed ||
-        //            Mathf.Sign(moveDirection.x) != Mathf.Sign(rb.linearVelocity.x))
-        //        {
-        //            rb.AddForce(new Vector3(moveDirection.x * currentMoveSpeed * 10 * airMovementMultiplier, 0, 0), ForceMode.Force);
-        //        }
-        //    }
-
-        //    if (moveDirection.z != 0)
-        //    {
-        //        if (Mathf.Abs(rb.linearVelocity.z) < currentMoveSpeed ||
-        //            Mathf.Sign(moveDirection.z) != Mathf.Sign(rb.linearVelocity.z))
-        //        {
-        //            rb.AddForce(new Vector3(0, 0, moveDirection.z * currentMoveSpeed * 10 * airMovementMultiplier), ForceMode.Force);
-        //        }
-        //    }
-        //}
     }
 
     
