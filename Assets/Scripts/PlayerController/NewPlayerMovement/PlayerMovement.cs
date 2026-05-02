@@ -261,7 +261,6 @@ public class PlayerMovement : MonoBehaviour
     public float force = 10;
     private void MovePlayer()
     {
-        if (isSliding) return;
 
         moveDirection = pInputs.moveDirRelativeToCam;
         Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
