@@ -18,8 +18,8 @@ public class PlayerWallRun : MonoBehaviour
     private RaycastHit leftWallHit;
     private RaycastHit rightWallHit;
     private RaycastHit groundHit;
-    private bool wallRight = false;
-    private bool wallLeft = false;
+    public bool wallRight = false;
+    public bool wallLeft = false;
 
     [Header("ExitWall")]
     [SerializeField] private float exitWallTime;
@@ -37,17 +37,9 @@ public class PlayerWallRun : MonoBehaviour
     {
         CheckWallHit();
 
-        if(wallRight || wallLeft && pInputs.moveDirRelativeToCam.sqrMagnitude > 0.1f && !exitWall)
+        if((wallRight || wallLeft) && pInputs.moveDirRelativeToCam.sqrMagnitude > 0.1f && !exitWall && !pMovement.isAiming)
         {
             if(!pMovement.isWallRunning)StartWallRun();
-
-            //currentWallRunTimer += Time.deltaTime;
-            //if(currentWallRunTimer >= maxWallRunTime)
-            //{
-            //    currentWallRunTimer = 0;
-            //    if (pMovement.isWallRunning) StopWallRun();
-            //    exitWall = true;
-            //}
         }
         else
         {
