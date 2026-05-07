@@ -46,6 +46,14 @@ public class PlayerGetHit : MonoBehaviour
         isInvulnerable = false;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "EnemyHitBox")
+        {
+            GetHit(other.gameObject.transform.position, 700);
+        }
+    }
+
     private void OnDisable()
     {
         isInvulnerable = true;
