@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using MoreMountains.Feedbacks;
 using Unity.VisualScripting;
@@ -47,7 +47,6 @@ public class JumpPlatformController : MonoBehaviour
                 pMovement.currentMoveSpeed = pMovement.standardMoveSpeed;
                 pMovement.extraForce = 0;
                 _rb.linearVelocity = Vector3.zero;
-                _rb.linearVelocity = Vector3.zero;
             }                
             else
                 _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
@@ -80,10 +79,15 @@ public class JumpPlatformController : MonoBehaviour
     private IEnumerator _BlockPlayerOnJump(PlayerMovement pM)
     {
         pM.movementBlocked = true;
+        float prevGravity = pM.currentGravityForce;
+        pM.currentGravityForce = 0; // ← detén gravedad
+
+        yield return new WaitForFixedUpdate(); // ← espera 1 FixedUpdate limpio
+        pM.currentGravityForce = prevGravity;
         yield return new WaitForSeconds(blockInputTime);
 
         if (pM.lastJumpPlatform == this)
-        {
+        {  
             pM.movementBlocked = false;
         }
     }
