@@ -418,7 +418,7 @@ public class UIManager : MonoBehaviour
     }
     public void SetMostTimeSavedSlidiers(float newValue)
     {
-        for (int i = 0; i < timeSavedSliders.Length; i++)
+        for (int i = 0; i < mostTimeSavedSliders.Length; i++)
         {
             mostTimeSavedSliders[i].value = newValue;
         }

@@ -23,7 +23,6 @@ public class CamerasFOVController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(pRb.linearVelocity.sqrMagnitude);
         float pSpeed = new Vector3(pRb.linearVelocity.x, pRb.linearVelocity.y / 2, pRb.linearVelocity.z).sqrMagnitude;
         if (currentFov > FOVCurve.Evaluate(pSpeed)) currentChangeSpeed = changeSpeed * 4;
         else currentChangeSpeed = changeSpeed;
