@@ -160,7 +160,7 @@ public class PlayerMovement : MonoBehaviour
             currentAcceleration = flyAcceleration;
             currentDeceleration = flyDeceleration;
         }
-        else if(isGrounded && rb.linearVelocity.magnitude > 0.1f)
+        else if(isGrounded && pInputs.moveDir.magnitude > 0.1f/*rb.linearVelocity.magnitude > 0.1f*/)
         {
             if (isSliding) 
             {
