@@ -17,6 +17,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] public AudioSource shootAS;
     [SerializeField] private AudioClip chargeShootAC, holdShootAC, setChargeAC, shootAC, hitAC;
     [SerializeField] private NearbyEnemyDetector enemyDetector;
+    [SerializeField] private GameObject model;
 
     private void Awake()
     {
@@ -56,10 +57,13 @@ public class Projectile : MonoBehaviour
             enemyDetector.enemyToAutoAim = null;
             enemyDetector.enemyList.Clear();
         }
+
+        
     }
     public void LaunchProjectile(Vector3 direction, float speed)
     {
         this.gameObject.transform.SetParent(null);
+        if(model != null) model.transform.rotation = Quaternion.LookRotation(direction);
         launchSize = this.gameObject.transform.localScale;
         launched = true;
         rb.isKinematic = false;
