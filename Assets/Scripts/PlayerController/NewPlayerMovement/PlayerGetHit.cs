@@ -33,9 +33,11 @@ public class PlayerGetHit : MonoBehaviour
 
     private IEnumerator _HitBlock(Vector3 _hitPos, float _hitForce)
     {
+        isHitted = true;
         pBlock.BlockPlayer();
         rb.AddForce((this.transform.position - _hitPos) * _hitForce, ForceMode.Force);
         yield return new WaitForSeconds(stunnedTime);
+        isHitted = false;
         pBlock.UnblockPlayer();
     }
 

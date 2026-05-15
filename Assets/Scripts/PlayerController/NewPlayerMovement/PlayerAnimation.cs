@@ -8,12 +8,14 @@ public class PlayerAnimation : MonoBehaviour
 
     private PlayerShoot pShoot;
     private PlayerWallRun pwallRun;
+    private PlayerGetHit pHit;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         pMovement = GetComponent<PlayerMovement>();
         pShoot = GetComponent<PlayerShoot>();
         pwallRun = GetComponent<PlayerWallRun>();
+        pHit = GetComponent<PlayerGetHit>();
     }
 
     // Update is called once per frame
@@ -84,6 +86,11 @@ public class PlayerAnimation : MonoBehaviour
         if(pShoot.didShoot)
         {
             playerAnim.SetTrigger("GoShoot");
+        }
+
+        if (pHit.isHitted)
+        {
+            if (!playerAnim.GetCurrentAnimatorStateInfo(0).IsName("Hitted")) playerAnim.SetTrigger("GoHit"); 
         }
     }
 }

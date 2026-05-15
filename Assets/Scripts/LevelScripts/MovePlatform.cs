@@ -14,10 +14,17 @@ public class MovePlatform : MonoBehaviour
     private int direction = -1;
     private bool hasStarted = false;
 
+    private Vector3 lastPosition;
+    private GameObject playerOnPlatform;
+    [SerializeField] private BoxCollider triggerCol;
+    private float triggerColDistance;
+
     private void Awake()
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
-        
+        lastPosition = transform.position;
+
+    
     }
     private IEnumerator Start()
     {
@@ -35,7 +42,25 @@ public class MovePlatform : MonoBehaviour
 
     private void FixedUpdate()
     {
-       if(hasStarted) MoveToWaypoint();
+       if(hasStarted)
+        {
+            Vector3 delta = transform.position - lastPosition;
+
+            if (playerOnPlatform != null && delta != Vector3.zero)
+            {
+                Rigidbody playerRb = playerOnPlatform.GetComponent<Rigidbody>();
+                playerRb.MovePosition(playerRb.position + delta);
+
+                if(Vector3.Distance(this.transform.position, playerOnPlatform.transform.position) > triggerCol.bounds.size.x)
+                {
+                    Debug.Log("out");
+                    playerOnPlatform = null;
+                }
+            }
+
+            lastPosition = transform.position;
+            MoveToWaypoint();
+        }
     }
     private void MoveToWaypoint()
     {
@@ -45,5 +70,21 @@ public class MovePlatform : MonoBehaviour
             if (currentWaypointsIndex >= waypointsList.Count - 1 || currentWaypointsIndex <= 0) direction *= -1;
         }
         rb.linearVelocity = (waypointsList[currentWaypointsIndex].position - this.transform.position).normalized * moveSpeed;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            Debug.Log("OnPlatform");
+            playerOnPlatform = other.gameObject;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            playerOnPlatform = null;
+        }
     }
 }
