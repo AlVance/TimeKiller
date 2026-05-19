@@ -37,7 +37,7 @@ public class PlayerWallRun : MonoBehaviour
     {
         CheckWallHit();
 
-        if(wallRight || wallLeft && pInputs.moveDirRelativeToCam.sqrMagnitude > 0.1f && !exitWall)
+        if((wallRight || wallLeft) && pInputs.moveDirRelativeToCam.sqrMagnitude > 0.1f && !exitWall && !pMovement.isAiming)
         {
             if(!pMovement.isWallRunning)StartWallRun();
         }

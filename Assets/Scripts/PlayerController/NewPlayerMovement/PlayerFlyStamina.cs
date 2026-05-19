@@ -46,7 +46,8 @@ public class PlayerFlyStamina : MonoBehaviour
             {
                 if (currentFuel < maxFlyFuel)
                 {
-                    currentFuel += fuelRecoverSpeed * Time.deltaTime;
+                    if(pMovement.isGrounded) currentFuel += fuelRecoverSpeed * Time.deltaTime;
+                    else currentFuel += fuelRecoverSpeed / 2 * Time.deltaTime;
                 }
                 else if (currentFuel > maxFlyFuel)
                     currentFuel = maxFlyFuel;
@@ -58,7 +59,7 @@ public class PlayerFlyStamina : MonoBehaviour
             {
                 currentFuel -= fuelBurnSpeed * Time.deltaTime;
             }
-            else if(currentFuel < 0)
+            else if(currentFuel < 0 && canRecover)
             {
                 currentFuel = 0;
                 StartCoroutine(_RecoverDC());

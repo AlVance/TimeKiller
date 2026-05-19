@@ -33,9 +33,11 @@ public class PlayerGetHit : MonoBehaviour
 
     private IEnumerator _HitBlock(Vector3 _hitPos, float _hitForce)
     {
+        isHitted = true;
         pBlock.BlockPlayer();
         rb.AddForce((this.transform.position - _hitPos) * _hitForce, ForceMode.Force);
         yield return new WaitForSeconds(stunnedTime);
+        isHitted = false;
         pBlock.UnblockPlayer();
     }
 
@@ -44,6 +46,14 @@ public class PlayerGetHit : MonoBehaviour
         isInvulnerable = true;
         yield return new WaitForSeconds(invulneravilityTime);
         isInvulnerable = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "EnemyHitBox")
+        {
+            GetHit(other.gameObject.transform.position, 700);
+        }
     }
 
     private void OnDisable()

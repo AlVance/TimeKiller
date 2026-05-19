@@ -76,12 +76,7 @@ public class PlayerShoot : MonoBehaviour
     {
         Vector3 aimDir = pInputs.aimDirRelativeToCam;
         if(aimDir != Vector3.zero) playerModel.transform.rotation = Quaternion.LookRotation(aimDir);
-        //else if(pInputs.moveDirRelativeToCam != Vector3.zero)
-        //{
-        //    playerModel.transform.rotation = Quaternion.LookRotation(transform.forward);
-        //    transform.localRotation = Quaternion.LookRotation(pInputs.moveDirRelativeToCam);
-        //    pInputs.lastAimDirRelativeToCam = Vector3.zero;
-        //}
+
     }
 
     private void EndAim()
@@ -107,14 +102,15 @@ public class PlayerShoot : MonoBehaviour
             if (currentProjectilePooled < projectilePool.Count - 1) ++currentProjectilePooled;
             else currentProjectilePooled = 0;
 
-            currentProjectileGO.GetComponent<PlayerProjectile>().ProjectileSetUp(projectileDamage, projectileRange, projectileSpawnPos);
-            currentProjectileGO.GetComponent<PlayerProjectile>().SetCharged();
+            PlayerProjectile proj = currentProjectileGO.GetComponent<PlayerProjectile>();
+            proj.ProjectileSetUp(projectileDamage, projectileRange, projectileSpawnPos);
+            proj.SetCharged();
 
             currentProjectileGO.transform.parent = null;
             Vector3 shootDir;
             if (pInputs.lastAimDirRelativeToCam == Vector3.zero) shootDir = this.transform.forward;
             else shootDir = pInputs.lastAimDirRelativeToCam;
-            currentProjectileGO.GetComponent<PlayerProjectile>().LaunchProjectile(shootDir + pInputs.moveDirRelativeToCam * moveDirShootInertia, projectileSpeed);
+            proj.LaunchProjectile(shootDir + pInputs.moveDirRelativeToCam * moveDirShootInertia, projectileSpeed);
             currentProjectileGO = null;
 
             StartCoroutine(_ShootCD());
