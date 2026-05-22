@@ -46,7 +46,7 @@ public class PlayerFlyStamina : MonoBehaviour
             {
                 if (currentFuel < maxFlyFuel)
                 {
-                    if(pMovement.isGrounded) currentFuel += fuelRecoverSpeed * Time.deltaTime;
+                    if(pMovement.isGrounded || pMovement.isWallRunning) currentFuel += fuelRecoverSpeed * Time.deltaTime;
                     else currentFuel += fuelRecoverSpeed / 2 * Time.deltaTime;
                 }
                 else if (currentFuel > maxFlyFuel)
