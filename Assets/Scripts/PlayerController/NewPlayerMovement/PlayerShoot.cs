@@ -59,10 +59,12 @@ public class PlayerShoot : MonoBehaviour
         if(pMovement.isAiming)Aim();
         if (pMovement.isAiming && (!pInputs.shootPressed || !canAim)) EndAim();
     }
-
+    Vector3 aimDir;
     private void StartAim()
     {
         pMovement.isAiming = true;
+        aimDir = this.transform.forward;
+
         weaponModel.transform.parent = handSocket;
         weaponModel.transform.localPosition = Vector3.zero;
         weaponModel.transform.localRotation = Quaternion.Euler(Vector3.zero);
@@ -74,8 +76,12 @@ public class PlayerShoot : MonoBehaviour
 
     private void Aim()
     {
-        Vector3 aimDir = pInputs.aimDirRelativeToCam;
-        if(aimDir != Vector3.zero) playerModel.transform.rotation = Quaternion.LookRotation(aimDir);
+        if(pInputs.aimDirRelativeToCam != Vector3.zero)
+        {
+            aimDir = pInputs.aimDirRelativeToCam;
+
+            playerModel.transform.rotation = Quaternion.LookRotation(aimDir);
+        }
 
     }
 
@@ -108,8 +114,9 @@ public class PlayerShoot : MonoBehaviour
 
             currentProjectileGO.transform.parent = null;
             Vector3 shootDir;
-            if (pInputs.lastAimDirRelativeToCam == Vector3.zero) shootDir = this.transform.forward;
-            else shootDir = pInputs.lastAimDirRelativeToCam;
+            shootDir = aimDir;
+            //if (pInputs.lastAimDirRelativeToCam == Vector3.zero) shootDir = this.transform.forward;
+            //else shootDir = pInputs.lastAimDirRelativeToCam;
             proj.LaunchProjectile(shootDir + pInputs.moveDirRelativeToCam * moveDirShootInertia, projectileSpeed);
             currentProjectileGO = null;
 
