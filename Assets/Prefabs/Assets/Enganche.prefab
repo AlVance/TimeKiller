@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8101185747414056336}
   - component: {fileID: 7758776912542840673}
   - component: {fileID: 1902471470054244249}
-  - component: {fileID: 7598903380330917165}
+  - component: {fileID: 4141350004734336661}
   m_Layer: 0
   m_Name: Enganche
   m_TagString: Untagged
@@ -6210,8 +6210,8 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2912516783398844296}
   m_Mesh: {fileID: 0}
---- !u!64 &7598903380330917165
-MeshCollider:
+--- !u!65 &4141350004734336661
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -6228,7 +6228,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 4.247546, y: 4.000014, z: 27.500008}
+  m_Center: {x: 0.49999955, y: 0.000011317427, z: 9.250003}

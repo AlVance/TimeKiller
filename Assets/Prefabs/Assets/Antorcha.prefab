@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5619679124317949984}
   - component: {fileID: 2109378415984199352}
   - component: {fileID: 2527104912559966151}
-  - component: {fileID: 4122161794918679813}
+  - component: {fileID: 2401128859936168495}
   m_Layer: 0
   m_Name: Antorcha
   m_TagString: Untagged
@@ -1538,8 +1538,8 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5982445683958864337}
   m_Mesh: {fileID: 0}
---- !u!64 &4122161794918679813
-MeshCollider:
+--- !u!65 &2401128859936168495
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1556,7 +1556,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 3.5, y: 6.5, z: 3.5}
+  m_Center: {x: -0.75, y: -1.75, z: -0.000000059604645}
