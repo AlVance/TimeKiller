@@ -12,7 +12,8 @@ public class ChangeLevelPlayerStart : MonoBehaviour
 
     private void Start()
     {
-        if (this.transform.parent.TryGetComponent<Level>(out Level parentLevel)) { level = parentLevel; } 
+        //if (this.transform.parent.TryGetComponent<Level>(out Level parentLevel)) { level = parentLevel; } 
+        if (GameManager.Instance.currentLevelGO.TryGetComponent<Level>(out Level parentLevel)) { level = parentLevel; }
     }
 
     private void OnTriggerEnter(Collider other)
