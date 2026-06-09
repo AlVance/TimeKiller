@@ -505,6 +505,22 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetGoToCreditsBTNActive(true);
     }
 
+
+    public void StartRun()
+    {
+        StartCoroutine(_StartRun());
+    }
+
+    private IEnumerator _StartRun()
+    {
+        GameManager.Instance.levelStarted = false;
+        GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().BlockPlayer();
+        GameManager.Instance.currentLevel = 0;
+        TimeManager.Instance.currentTime = TimeManager.Instance.startTime;
+        canGoToLevelTrans = true;
+        yield return new WaitForEndOfFrame();
+        GoToInbetweenLevels();
+    }
     // ─────────────────────────────────────────────
     //  HELPERS
     // ─────────────────────────────────────────────

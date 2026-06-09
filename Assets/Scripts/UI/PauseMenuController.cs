@@ -104,6 +104,17 @@ public class PauseMenuController : MonoBehaviour
         canAutodestroy = true;
     }
 
+
+    private bool canStartRun = true;
+    public void StartRun()
+    {
+        if (canStartRun)
+        {
+            GameManager.Instance.lM.StartRun();
+            OpenClosePauseMenu();
+        }
+    }
+
     private bool canReturnToLobby = true;
     public void ReturnToLobby()
     {

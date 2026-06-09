@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public GameObject currentPlayer;
     public GameObject currentLevelGO;
+    public LevelManager lM;
     public int currentLevel = 0;
     private bool m_levelStarted = false;
     public bool isMobile = false;
