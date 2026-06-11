@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject worldSelectUI;
     [SerializeField] private GameObject selectWorldBTN;
     [SerializeField] private TMP_Text gamemodeText;
+    [SerializeField] private GameObject modeSelectTextGO;
 
     [Header("Level data Variables")]
     [SerializeField] private TMP_Text levelCountText;
@@ -491,6 +492,11 @@ public class UIManager : MonoBehaviour
         worldSelectUI.SetActive(isActive);
         if(isActive) selectWorldBTN.GetComponent<Button>().Select();
         if (!isActive && currentBTN != null) currentBTN.GetComponent<Button>().Select();
+    }
+
+    public void SetModeSelectTextGOActive(bool isActive)
+    {
+        modeSelectTextGO.SetActive(isActive);
     }
     public void SetGameModeText(string newText)
     {

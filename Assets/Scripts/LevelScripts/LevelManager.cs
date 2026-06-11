@@ -1,7 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
@@ -50,9 +51,22 @@ public class LevelManager : MonoBehaviour
     private bool canGoToLevelTrans = true;  // separate: gated by level-end score animation
     private bool inLevelTrans = false;
 
+
+    private PlayerInput1 playerInput;
+
     // ─────────────────────────────────────────────
     //  INIT
     // ─────────────────────────────────────────────
+
+    private void Awake()
+    {
+        playerInput = new PlayerInput1();
+        playerInput.UI.Backward.performed += ctx =>
+        {
+            if (inLevelTrans && GameManager.Instance.currentLevel == 1) GameManager.Instance.ChangeGameMode();
+            Debug.Log("AAA");
+        };
+    }
 
     private void Start()
     {
@@ -293,6 +307,9 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetTimerUIToIdle();
         UIManager.Instance.SetInlevelUIActive(false);
         UIManager.Instance.SetPuntuationScreenActive(false);
+        if(GameManager.Instance.currentLevel == 0) UIManager.Instance.SetModeSelectTextGOActive(true);
+        else UIManager.Instance.SetModeSelectTextGOActive(false);
+
 
         if (GameManager.Instance.currentLevel < worlds[currentWorld].worldLevelsGO.Length)
         {
@@ -609,7 +626,18 @@ public class LevelManager : MonoBehaviour
         recordTimeSavedText.text = savedTime.ToString("0.00");
         mostCompletedLevelsText.text = completedLevels + " / 10";
     }
+
+    private void OnEnable()
+    {
+        playerInput.UI.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerInput.UI.Disable();
+    }
 }
+
 
 // ─────────────────────────────────────────────
 //  DATA
