@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GOLoaderByPlayerPrefs : MonoBehaviour
 {
-    [SerializeField] private string playerPrefsToLoad = "Level_0";
+    [SerializeField] private string playerPrefsToLoad = "CD_Level_0";
     [SerializeField] private GameObject GOToActive;
     [SerializeField] private bool load = true;
     

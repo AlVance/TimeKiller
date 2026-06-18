@@ -50,13 +50,13 @@ public class LeaderboardManager : MonoBehaviour
         {
             await UnityServices.InitializeAsync();
             if(!AuthenticationService.Instance.IsSignedIn) await AuthenticationService.Instance.SignInAnonymouslyAsync(); 
-            if (!PlayerPrefs.HasKey("PlayerName"))
+            if (!PlayerPrefs.HasKey("CD_PlayerName"))
             {
                 await AuthenticationService.Instance.UpdatePlayerNameAsync("*");
             }
             else
             {
-                await AuthenticationService.Instance.UpdatePlayerNameAsync(PlayerPrefs.GetString("PlayerName"));
+                await AuthenticationService.Instance.UpdatePlayerNameAsync(PlayerPrefs.GetString("CD_PlayerName"));
             }
         }
         StartCoroutine(CheckInternetConnection());
@@ -81,7 +81,7 @@ public class LeaderboardManager : MonoBehaviour
             noConectionGO.SetActive(false);
             //while (Application.isPlaying && leaderboardParent.activeInHierarchy)
             //{
-            await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, PlayerPrefs.GetFloat("MostTimeSaved"));
+            await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, PlayerPrefs.GetFloat("CD_MostTimeSaved"));
 
             LeaderboardScoresPage leaderboardScoresPage = await LeaderboardsService.Instance.GetScoresAsync(leaderboardID);
             foreach (Transform item in leaderboardContentParent) { Destroy(item.gameObject); }
@@ -94,11 +94,11 @@ public class LeaderboardManager : MonoBehaviour
             }
 
             var playerEntry = await LeaderboardsService.Instance.GetPlayerScoreAsync(leaderboardID);
-            leaderboardSelfScore.GetChild(1).GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetString("PlayerName");
-            leaderboardSelfScore.GetChild(2).GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetFloat("MostTimeSaved").ToString("0.00");
+            leaderboardSelfScore.GetChild(1).GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetString("CD_PlayerName");
+            leaderboardSelfScore.GetChild(2).GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetFloat("CD_MostTimeSaved").ToString("0.00");
             leaderboardSelfScore.GetChild(3).GetComponent<TextMeshProUGUI>().text = (playerEntry.Rank + 1).ToString();
 
-            if (PlayerPrefs.HasKey("PlayerName"))
+            if (PlayerPrefs.HasKey("CD_PlayerName"))
             {
                 ownRecordGO.SetActive(true);
                 notRegisteredTextGO.SetActive(false);
@@ -129,7 +129,7 @@ public class LeaderboardManager : MonoBehaviour
         {
             AuthenticationService.Instance.UpdatePlayerNameAsync(playerName);
         }
-        PlayerPrefs.SetString("PlayerName", playerName);
+        PlayerPrefs.SetString("CD_PlayerName", playerName);
         UIManager.Instance.profileNameField.text = "";
         CloseMenu();
         StartCoroutine(CheckInternetConnection());
