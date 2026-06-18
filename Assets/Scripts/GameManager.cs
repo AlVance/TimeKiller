@@ -50,6 +50,12 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
+        if(!PlayerPrefs.HasKey("FirstLog") || PlayerPrefs.GetInt("FirstLog") == 0)
+        {
+            PlayerPrefs.DeleteAll();
+            PlayerPrefs.SetInt("FirstLog", 1);
+        }
+
         levelStarted = false;
 
         isMobile = MD.IsRunningOnMobile();

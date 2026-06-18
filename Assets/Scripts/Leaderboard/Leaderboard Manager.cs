@@ -23,7 +23,7 @@ public class LeaderboardManager : MonoBehaviour
     [SerializeField] private GameObject ownRecordGO;
     [SerializeField] private GameObject notRegisteredTextGO;
 
-    private string leaderboardID = "Main_Leaderboard";
+    private string leaderboardID = "CD_MainLeaderboard";
 
     [Header("Profile setup")]
     [SerializeField] private GameObject profileSetupParent;
