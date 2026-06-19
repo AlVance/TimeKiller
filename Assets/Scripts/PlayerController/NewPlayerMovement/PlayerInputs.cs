@@ -10,6 +10,8 @@ public class PlayerInputs : MonoBehaviour
     public float verticalAxis;
     public float camBasedVerticalAxis;
 
+    private bool movePerformed = false;
+
     public Vector2 moveDir;
     public Vector3 moveDirRelativeToCam;
 
@@ -29,6 +31,13 @@ public class PlayerInputs : MonoBehaviour
         
     }
 
+    //private void Update()
+    //{
+    //    if (movePerformed)
+    //    {
+    //        moveDirRelativeToCam = GetV3RelativeToCamera(moveDir).normalized;
+    //    }
+    //}
     private void HandleInput()
     {
         //Move Input
@@ -43,11 +52,14 @@ public class PlayerInputs : MonoBehaviour
             moveDir = ctx.ReadValue<Vector2>().normalized;
 
             moveDirRelativeToCam = GetV3RelativeToCamera(moveDir).normalized;
+            movePerformed = true;
         };
         playerInput.PlayerControls.Move.canceled += ctx =>
         {
+            movePerformed = false;
             moveDir = Vector2.zero;
             moveDirRelativeToCam = GetV3RelativeToCamera(moveDir);
+            
         };
 
         //Fly Input

@@ -9,14 +9,14 @@ public class ChangeGameMode : MonoBehaviour
     private void Start()
     {
         anim = this.GetComponent<Animator>();        
-        if(PlayerPrefs.HasKey("GameMode"))
+        if(PlayerPrefs.HasKey("CD_GameMode"))
         {
-            if (PlayerPrefs.GetInt("GameMode") == 0) GameManager.Instance.explorationMode = true;
+            if (PlayerPrefs.GetInt("CD_GameMode") == 0) GameManager.Instance.explorationMode = true;
             else GameManager.Instance.explorationMode = false;
         }
         else
         {
-            PlayerPrefs.SetInt("GameMode", 0);
+            PlayerPrefs.SetInt("CD_GameMode", 0);
         }
     }
 

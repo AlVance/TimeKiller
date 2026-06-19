@@ -50,6 +50,12 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
+        //if(!PlayerPrefs.HasKey("FirstLog") || PlayerPrefs.GetInt("FirstLog") == 0)
+        //{
+        //    PlayerPrefs.DeleteAll();
+        //    PlayerPrefs.SetInt("FirstLog", 1);
+        //}
+
         levelStarted = false;
 
         isMobile = MD.IsRunningOnMobile();
@@ -85,8 +91,8 @@ public class GameManager : MonoBehaviour
     {
         explorationMode = !explorationMode;
 
-        if (explorationMode) PlayerPrefs.SetInt("GameMode", 0);
-        else PlayerPrefs.SetInt("GameMode", 1);
+        if (explorationMode) PlayerPrefs.SetInt("CD_GameMode", 0);
+        else PlayerPrefs.SetInt("CD_GameMode", 1);
     }
 }
 

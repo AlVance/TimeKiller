@@ -220,10 +220,10 @@ public class LevelManager : MonoBehaviour
 
         if (!GameManager.Instance.explorationMode)
         {
-            PlayerPrefs.SetInt("Level_" + (GameManager.Instance.currentLevel - 1), 1);
+            PlayerPrefs.SetInt("CD_Level_" + (GameManager.Instance.currentLevel - 1), 1);
 
-            if (PlayerPrefs.GetInt("CompletedLevels") < GameManager.Instance.currentLevel)
-                PlayerPrefs.SetInt("CompletedLevels", GameManager.Instance.currentLevel);
+            if (PlayerPrefs.GetInt("CD_CompletedLevels") < GameManager.Instance.currentLevel)
+                PlayerPrefs.SetInt("CD_CompletedLevels", GameManager.Instance.currentLevel);
         }
     }
 
@@ -479,8 +479,8 @@ public class LevelManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
 
             float currentScore = TimeManager.Instance.currentTime;
-            bool isNewRecord = !PlayerPrefs.HasKey("MostTimeSaved") ||
-                                  currentScore > PlayerPrefs.GetFloat("MostTimeSaved");
+            bool isNewRecord = !PlayerPrefs.HasKey("CD_MostTimeSaved") ||
+                                  currentScore > PlayerPrefs.GetFloat("CD_MostTimeSaved");
 
             // Animate current run score
             UIManager.Instance.SetTimeSavedSlidiers(0);
@@ -496,17 +496,17 @@ public class LevelManager : MonoBehaviour
 
             if (isNewRecord)
             {
-                PlayerPrefs.SetFloat("MostTimeSaved", currentScore);
+                PlayerPrefs.SetFloat("CD_MostTimeSaved", currentScore);
                 yield return StartCoroutine(AnimateSliderTo(currentScore, UIManager.Instance.SetMostTimeSavedSlidiers));
                 UIManager.Instance.SetNewRecordTextActive(true);
             }
             else
             {
-                yield return StartCoroutine(AnimateSliderTo(PlayerPrefs.GetFloat("MostTimeSaved"),
+                yield return StartCoroutine(AnimateSliderTo(PlayerPrefs.GetFloat("CD_MostTimeSaved"),
                                                             UIManager.Instance.SetMostTimeSavedSlidiers));
             }
 
-            if (!PlayerPrefs.HasKey("PlayerName"))
+            if (!PlayerPrefs.HasKey("CD_PlayerName"))
             {
                 yield return new WaitForSeconds(0.5f);
                 UIManager.Instance.SetProfileScreenGOActive(true);
@@ -617,8 +617,8 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private void UpdateLobbyStatsUI()
     {
-        float savedTime = PlayerPrefs.GetFloat("MostTimeSaved");
-        int completedLevels = PlayerPrefs.GetInt("CompletedLevels");
+        float savedTime = PlayerPrefs.GetFloat("CD_MostTimeSaved");
+        int completedLevels = PlayerPrefs.GetInt("CD_CompletedLevels");
 
         foreach (Slider s in recordTimeSavedSlidersLobby)
             s.value = savedTime;
