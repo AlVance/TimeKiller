@@ -422,6 +422,7 @@ public class PlayerMovement : MonoBehaviour
         state = MovementStates.Hitted;
         desiredMoveSpeed = standardMoveSpeed;
         currentMoveSpeed = standardMoveSpeed;
+        currentGravityForce = gravityForce;
         extraForce = 0;
         rb.linearVelocity = Vector3.zero;
     }

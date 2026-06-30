@@ -78,11 +78,11 @@ public class JumpPlatformController : MonoBehaviour
     private IEnumerator _BlockPlayerOnJump(PlayerMovement pM)
     {
         pM.movementBlocked = true;
-        float prevGravity = pM.currentGravityForce;
+        //float prevGravity = pM.currentGravityForce;
         pM.currentGravityForce = 0;
 
         yield return new WaitForFixedUpdate();
-        pM.currentGravityForce = prevGravity;
+        pM.currentGravityForce = pM.gravityForce;
         yield return new WaitForSeconds(blockInputTime);
 
         if (pM.lastJumpPlatform == this)
