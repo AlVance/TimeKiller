@@ -189,9 +189,14 @@ public class PlayerMovement : MonoBehaviour
         }
         else if(isGrounded && moveDirection == Vector3.zero)
         {
-            state = MovementStates.Idle;
-            currentMoveSpeed = startMoveSpeed;
-            desiredMoveSpeed = startMoveSpeed;
+            if (isSliding) state = MovementStates.Sliding;
+            else
+            {
+                state = MovementStates.Idle;
+                currentMoveSpeed = startMoveSpeed;
+                desiredMoveSpeed = startMoveSpeed;
+            }
+                
             
         }
         else if (!isGrounded)

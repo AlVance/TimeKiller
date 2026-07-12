@@ -32,7 +32,7 @@ public class CamerasFOVController : MonoBehaviour
 
         for (int i = 0; i < cams.Count; i++)
         {
-            cams[i].GetComponent<CinemachineCamera>().Lens.FieldOfView = currentFov;
+            if(cams[i].GetComponent<CinemachineCamera>() != null) cams[i].GetComponent<CinemachineCamera>().Lens.FieldOfView = currentFov;
         }
     }
 

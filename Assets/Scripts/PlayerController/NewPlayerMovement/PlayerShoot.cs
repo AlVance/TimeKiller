@@ -102,8 +102,6 @@ public class PlayerShoot : MonoBehaviour
     {
         if (!shootOnCD)
         {
-            Debug.Log("SHOOT!");
-
             currentProjectileGO = projectilePool[currentProjectilePooled];
             if (currentProjectilePooled < projectilePool.Count - 1) ++currentProjectilePooled;
             else currentProjectilePooled = 0;
