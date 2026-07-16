@@ -624,7 +624,7 @@ public class LevelManager : MonoBehaviour
             s.value = savedTime;
 
         recordTimeSavedText.text = savedTime.ToString("0.00");
-        mostCompletedLevelsText.text = completedLevels + " / 10";
+        mostCompletedLevelsText.text = completedLevels + " / 6";
     }
 
     private void OnEnable()
