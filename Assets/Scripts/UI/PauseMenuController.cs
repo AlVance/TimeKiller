@@ -100,7 +100,7 @@ public class PauseMenuController : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         GameManager.Instance.currentPlayer.transform.position = GameManager.Instance.currentLevelGO.GetComponent<Level>().playerStartTr.position;
         yield return new WaitForSeconds(0.2f);
-        GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().UnblockPlayer();
+        if(GameManager.Instance.levelStarted || GameManager.Instance.isInLobby) GameManager.Instance.currentPlayer.GetComponent<PlayerBlock>().UnblockPlayer();
         canAutodestroy = true;
     }
 
