@@ -156,8 +156,8 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.SetLevelOverviewActive(false);
         UIManager.Instance.startLevelTimerText.gameObject.SetActive(true);
 
-        if (GameManager.Instance.isMobile)
-            UIManager.Instance.SetMobileGameplayControlsActive(true);
+        //if (GameManager.Instance.isMobile)
+        //    UIManager.Instance.SetMobileGameplayControlsActive(true);
 
         for (int i = 0; i < startLevelTime; i++)
         {
@@ -394,6 +394,7 @@ public class LevelManager : MonoBehaviour
         levelTransSceneGO.SetActive(false);
         startLevelGO.SetActive(true);
         GameManager.Instance.currentLevelGO = startLevelGO;
+        CameraManager.Instance.gameObject.GetComponent<CamerasFOVController>().GetLevelCams();
 
         // Populate lobby stats
         UpdateLobbyStatsUI();
@@ -624,7 +625,7 @@ public class LevelManager : MonoBehaviour
             s.value = savedTime;
 
         recordTimeSavedText.text = savedTime.ToString("0.00");
-        mostCompletedLevelsText.text = completedLevels + " / 10";
+        mostCompletedLevelsText.text = completedLevels + " / 6";
     }
 
     private void OnEnable()
