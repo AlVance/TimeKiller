@@ -22,7 +22,7 @@ public class ChangeLevelPlayerStart : MonoBehaviour
         {
             level.playerStartTr = newPlayerStartTr;
 
-            rippleGO.GetComponent<MeshRenderer>().material.SetColor("_Wave_Color", matColor);
+            rippleGO.GetComponent<MeshRenderer>().material.SetColor("_Main_Color", matColor);
             playerGO.GetComponent<MeshRenderer>().material.SetColor("_Main_Color", matColor);
             playerGO.GetComponent<MeshRenderer>().material.SetColor("_Fresnel_Color", matColor);
 
