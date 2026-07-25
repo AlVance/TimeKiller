@@ -374,8 +374,8 @@ public class UIManager : MonoBehaviour
     public void SetCreditsScreenActive(bool isActive)
     {
         creditsUI.SetActive(isActive);
-        if (GameManager.Instance.explorationMode) creditsDownText.text = "You're ready to become a real Time Killer!";
-        else creditsDownText.text = "You're a real Time Killer <3";
+        if (GameManager.Instance.explorationMode) creditsDownText.text = "Time to start chrono drifting!";
+        else creditsDownText.text = "Chrono drifting until crashing!";
     }
     public void SetLevelNameText(string newText)
     {

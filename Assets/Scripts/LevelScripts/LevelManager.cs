@@ -64,7 +64,6 @@ public class LevelManager : MonoBehaviour
         playerInput.UI.Backward.performed += ctx =>
         {
             if (inLevelTrans && GameManager.Instance.currentLevel == 1) GameManager.Instance.ChangeGameMode();
-            Debug.Log("AAA");
         };
     }
 
