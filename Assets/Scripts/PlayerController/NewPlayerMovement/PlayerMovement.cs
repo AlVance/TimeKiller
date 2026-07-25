@@ -117,7 +117,7 @@ public class PlayerMovement : MonoBehaviour
         DampControl();
         SmoothSpeed();
 
-        if(speedText != null)speedText.text = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude.ToString("00.0") + "\n" + state;
+        if(speedText != null) speedText.text = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude.ToString("00.0");
 
         //MoveRotationStuff
         if(!isAiming)

@@ -21,8 +21,8 @@ public class GameManager : MonoBehaviour
         {
             m_explorationMode = value;
             UIManager.Instance.SetExplorationTagActive(value);
-            if (value) UIManager.Instance.SetGameModeText("Exploration Mode");
-            else UIManager.Instance.SetGameModeText("Chrono Drifter Mode");
+            if (value) UIManager.Instance.SetGameModeText("Exploration");
+            else UIManager.Instance.SetGameModeText("Chrono Drifter");
         }
     }
 
