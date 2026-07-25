@@ -465,13 +465,13 @@ public class UIManager : MonoBehaviour
         ExplorationModeTagGO.SetActive(isActive);
         if (isActive)
         {
-            startLvlExplorationScreen.SetActive(true);
-            startLvlTKScreen.SetActive(false);
+            //startLvlExplorationScreen.SetActive(true);
+            //startLvlTKScreen.SetActive(false);
         }
         else
         {
-            startLvlExplorationScreen.SetActive(false);
-            startLvlTKScreen.SetActive(true);
+            //startLvlExplorationScreen.SetActive(false);
+            //startLvlTKScreen.SetActive(true);
         }
     }
 
