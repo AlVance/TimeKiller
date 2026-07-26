@@ -5,6 +5,16 @@ public class LoadOnTrigger : MonoBehaviour
     [SerializeField] private GameObject[] objectsToLoad;
     [SerializeField] private bool load;
 
+    private void Start()
+    {
+        if (load)
+        {
+            for (int i = 0; i < objectsToLoad.Length; i++)
+            {
+                objectsToLoad[i].SetActive(false);
+            }
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Player")
