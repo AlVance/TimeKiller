@@ -156,6 +156,7 @@ public class PlayerShoot : MonoBehaviour
         weaponModel.transform.localPosition = Vector3.zero;
         weaponModel.transform.localRotation = Quaternion.Euler(Vector3.zero);
         endAimFeedBack.PlayFeedbacks();
+        aimGuideGO.SetActive(false);
 
         //EndAim();
     }
